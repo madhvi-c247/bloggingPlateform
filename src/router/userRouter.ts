@@ -8,6 +8,6 @@ router.post('/createUser',createUserController)
 router.put('/updateUser/:id', updateUserController);
 
 
-router.get('/retrievingUser', retrievingUserController);
+router.get('/retrievingUser/:id', retrievingUserController);
 
 export default router
