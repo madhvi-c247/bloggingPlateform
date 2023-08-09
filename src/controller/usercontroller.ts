@@ -18,7 +18,7 @@ const updateUserController =(req: Request, res: Response) => {
 }
 
 const retrievingUserController = async (req: Request, res: Response) => {
-  const result = await retrievingUser(req.body);
+  const result = await retrievingUser(req.params.id);
   console.log(result);
   return res.status(200).send(result);
 };
