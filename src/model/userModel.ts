@@ -28,4 +28,5 @@ const Userschema=new Schema({
     }
 
 })
+
 export default mongoose.model('User', Userschema);

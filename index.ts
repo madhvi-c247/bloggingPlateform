@@ -2,15 +2,14 @@ import express, { Express,Request,Response } from 'express'
 import UserRouter from './src/router/userRouter';
 import mongoose from 'mongoose';
 import articleRouter from './src/router/articleRouter';
+import { DB_URL } from './src/config/env';
+import port from './src/config/db';
+const app: Express = express();
 
-const app:Express=express();
-const port:number=3000;
-
-
-mongoose.connect('mongodb://127.0.0.1:27017/blogging')
-.then(()=>console.log('DB connected'))
-.catch(()=>console.log('errorin DB'))
-
+mongoose
+  .connect(DB_URL)
+  .then(() => console.log('DB connected'))
+  .catch(() => console.log('errorin DB'));
 app.use(express.json());
 app.use(express.urlencoded())
 

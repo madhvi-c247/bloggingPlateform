@@ -13,20 +13,17 @@ exports.retrievingUserController = exports.updateUserController = exports.create
 const userService_1 = require("../services/userService");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield (0, userService_1.creatUser)(req.body);
-    // console.log("running");
-    // console.log(req.body)
     return res.status(200).send(result);
 });
 exports.createUserController = createUserController;
-const updateUserController = (req, res) => {
-    const result = (0, userService_1.updateUser)(req.body, req.params.id);
-    // console.log('running');
+const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
     console.log(req.body);
     return res.status(200).send(result);
-};
+});
 exports.updateUserController = updateUserController;
 const retrievingUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield (0, userService_1.retrievingUser)(req.body);
+    const result = yield (0, userService_1.retrievingUser)(req.params.id);
     console.log(result);
     return res.status(200).send(result);
 });

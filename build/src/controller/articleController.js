@@ -9,12 +9,22 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.createUserArticle = void 0;
+exports.retrievingUserArticle = exports.updateUserArticle = exports.createUserArticle = void 0;
 const articleServices_1 = require("../services/articleServices");
 const createUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield (0, articleServices_1.creatarticle)(req.body);
-    console.log('running');
-    console.log(req.body);
     return res.status(200).send(result);
 });
 exports.createUserArticle = createUserArticle;
+const updateUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield (0, articleServices_1.updateArticle)(req.body, req.params.id);
+    console.log(req.body);
+    return res.status(200).send(result);
+});
+exports.updateUserArticle = updateUserArticle;
+const retrievingUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const result = yield (0, articleServices_1.retrievingArticle)(req.params.id);
+    console.log(result);
+    return res.status(200).send(result);
+});
+exports.retrievingUserArticle = retrievingUserArticle;

@@ -1,6 +1,15 @@
 import { Router } from 'express';
-import { createUserArticle } from '../controller/articleController';
+import {
+  createUserArticle,
+  updateUserArticle,
+  retrievingUserArticle,
+} from '../controller/articleController';
 
 const router = Router();
 router.post('/createArticle', createUserArticle);
+
+router.put('/updateArticle/:id', updateUserArticle);
+
+router.get('/retrievingArticle/:id', retrievingUserArticle);
+
 export default router;
