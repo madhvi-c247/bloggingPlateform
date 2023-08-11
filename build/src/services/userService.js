@@ -12,7 +12,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrievingUser = exports.updateUser = exports.creatUser = void 0;
+exports.deleteUser = exports.retrievingUser = exports.updateUser = exports.creatUser = void 0;
 const userModel_1 = __importDefault(require("../model/userModel"));
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
     yield userModel_1.default.create({
@@ -48,3 +48,9 @@ const retrievingUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return 'find';
 });
 exports.retrievingUser = retrievingUser;
+const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const find = yield userModel_1.default.findByIdAndDelete(id);
+    console.log(find);
+    return 'Deleted';
+});
+exports.deleteUser = deleteUser;

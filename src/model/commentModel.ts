@@ -1,19 +1,15 @@
 import mongoose, { Schema } from 'mongoose';
-import { ObjectId } from 'mongoose';
-const Articleschema = new Schema({
+
+const Commentschema = new Schema({
   //   userId: {
   //      type: mongoose.Schema.Types.ObjectId,
   //      ref: 'Users'
   //   },
+  username: {
+    type: String,
+    required: true,
+  },
   title: {
-    type: String,
-    required: true,
-  },
-  author: {
-    type: String,
-    required: true,
-  },
-  date: {
     type: String,
     required: true,
   },
@@ -22,4 +18,4 @@ const Articleschema = new Schema({
     required: true,
   },
 });
-export default mongoose.model('Article', Articleschema);
+export default mongoose.model('Comment', Commentschema);

@@ -12,14 +12,15 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrievingArticle = exports.updateArticle = exports.creatarticle = void 0;
+exports.deleteArticle = exports.retrievingArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
-const articleModel_2 = __importDefault(require("../model/articleModel"));
 const creatarticle = (obj) => __awaiter(void 0, void 0, void 0, function* () {
     yield articleModel_1.default.create({
         // id:obj.id,
-        article: obj.article,
+        article: obj.title,
+        author: obj.author,
         date: obj.date,
+        comment: obj.comment,
     });
     console.log(obj);
     return 'article created';
@@ -28,9 +29,9 @@ exports.creatarticle = creatarticle;
 const updateArticle = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
-        yield articleModel_2.default.findByIdAndUpdate(id, {
+        yield articleModel_1.default.findByIdAndUpdate(id, {
             $set: {
-                article: obj.article,
+                article: obj.title,
                 date: obj.date,
             },
         });
@@ -39,8 +40,14 @@ const updateArticle = function (obj, id) {
 };
 exports.updateArticle = updateArticle;
 const retrievingArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield articleModel_2.default.findById(id);
+    const find = yield articleModel_1.default.findById(id);
     console.log(find);
     return 'find';
 });
 exports.retrievingArticle = retrievingArticle;
+const deleteArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const find = yield articleModel_1.default.findByIdAndDelete(id);
+    console.log(find);
+    return 'Deleted';
+});
+exports.deleteArticle = deleteArticle;

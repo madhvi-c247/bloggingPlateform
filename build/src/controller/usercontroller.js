@@ -9,22 +9,48 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.retrievingUserController = exports.updateUserController = exports.createUserController = void 0;
+exports.deleteUserController = exports.retrievingUserController = exports.updateUserController = exports.createUserController = void 0;
 const userService_1 = require("../services/userService");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield (0, userService_1.creatUser)(req.body);
-    return res.status(200).send(result);
+    try {
+        const result = yield (0, userService_1.creatUser)(req.body);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
 });
 exports.createUserController = createUserController;
 const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
-    console.log(req.body);
-    return res.status(200).send(result);
+    try {
+        const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
+        console.log(req.body);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
 });
 exports.updateUserController = updateUserController;
 const retrievingUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = yield (0, userService_1.retrievingUser)(req.params.id);
-    console.log(result);
-    return res.status(200).send(result);
+    try {
+        const result = yield (0, userService_1.retrievingUser)(req.params.id);
+        console.log(result);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
 });
 exports.retrievingUserController = retrievingUserController;
+const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, userService_1.deleteUser)(req.params.id);
+        console.log(result);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
+});
+exports.deleteUserController = deleteUserController;

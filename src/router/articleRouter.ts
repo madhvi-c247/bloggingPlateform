@@ -3,6 +3,7 @@ import {
   createUserArticle,
   updateUserArticle,
   retrievingUserArticle,
+  deleteArticleController,
 } from '../controller/articleController';
 
 const router = Router();
@@ -12,4 +13,5 @@ router.put('/updateArticle/:id', updateUserArticle);
 
 router.get('/retrievingArticle/:id', retrievingUserArticle);
 
+router.delete('/deleteArticle/:id', deleteArticleController);
 export default router;

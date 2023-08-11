@@ -42,4 +42,10 @@ const retrievingUser = async (id: String) => {
   return 'find';
 };
 
-export { creatUser, updateUser, retrievingUser };
+const deleteUser = async (id: String) => {
+  const find = await Userschema.findByIdAndDelete(id);
+  console.log(find);
+  return 'Deleted';
+};
+
+export { creatUser, updateUser, retrievingUser, deleteUser };
