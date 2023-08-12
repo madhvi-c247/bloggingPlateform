@@ -7,19 +7,17 @@ const Articleschema = new Schema({
   //   },
   title: {
     type: String,
-    required: true,
+    // required: true,
   },
   author: {
     type: String,
-    required: true,
   },
   date: {
     type: String,
-    required: true,
+    // required: true,
   },
   comment: {
-    type: String,
-    required: true,
+    type: [String],
   },
 });
 export default mongoose.model('Article', Articleschema);

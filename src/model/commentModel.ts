@@ -5,15 +5,17 @@ const Commentschema = new Schema({
   //      type: mongoose.Schema.Types.ObjectId,
   //      ref: 'Users'
   //   },
-  username: {
+  name: {
     type: String,
-    required: true,
   },
   title: {
     type: String,
-    required: true,
   },
   comment: {
+    type: String,
+    required: true,
+  },
+  date: {
     type: String,
     required: true,
   },

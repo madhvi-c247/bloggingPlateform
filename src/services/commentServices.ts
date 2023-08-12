@@ -1,18 +1,27 @@
 import Commentschema from '../model/commentModel';
 import Articleschema from '../model/articleModel';
+import Userschema from '../model/userModel';
 interface reqObj {
-  // id:String
-  comment: string;
   title: string;
   username: string;
+  comment: string;
+  date: string;
 }
-const createComment = async (obj: reqObj) => {
+const createComment = async (obj: reqObj, id: String) => {
+  let user: any = await Userschema.findById(id);
+  const username = user.name;
+  console.log(username);
+
+  // let article: any = await Articleschema.findById(id);
+  // const art = article.title;
+
   console.log(obj);
   await Commentschema.create({
     // id:obj.id,
     title: obj.title,
-    Username: obj.username,
+    name: username,
     comment: obj.comment,
+    date: obj.date,
   });
   return 'Comment created';
 };
@@ -27,17 +36,17 @@ const createComment = async (obj: reqObj) => {
 //   });
 //   console.log('updating');
 // };
-const insertComment = async function (obj: reqObj, id: String) {
-  try {
-    await Commentschema.insertMany([
-      { comment: obj.comment },
-      { comment: obj.comment },
-      { comment: obj.comment },
-    ]);
-  } catch (e) {
-    console.log(e);
-  }
-};
+// const insertComment = async function (obj: reqObj, id: String) {
+//   try {
+//     await Commentschema.insertMany([
+//       { comment: obj.comment },
+//       { comment: obj.comment },
+//       { comment: obj.comment },
+//     ]);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 
 const updateComment = async function (obj: reqObj, id: String) {
   console.log(obj, id);
@@ -67,5 +76,5 @@ export {
   updateComment,
   retrievingComment,
   deleteComment,
-  insertComment,
+  // insertComment,
 };

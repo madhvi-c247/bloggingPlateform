@@ -12,26 +12,44 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteArticle = exports.retrievingArticle = exports.updateArticle = exports.creatarticle = void 0;
+exports.getComment = exports.deleteArticle = exports.retrievingArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
-const creatarticle = (obj) => __awaiter(void 0, void 0, void 0, function* () {
+const userModel_1 = __importDefault(require("../model/userModel"));
+const commentModel_1 = __importDefault(require("../model/commentModel"));
+const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = yield userModel_1.default.findById(id);
+    const username = user.name;
+    // console.log(user.name);
     yield articleModel_1.default.create({
         // id:obj.id,
-        article: obj.title,
-        author: obj.author,
+        title: obj.title,
+        author: username,
         date: obj.date,
-        comment: obj.comment,
+        // comment: obj.comment,
     });
-    console.log(obj);
+    // console.log(obj);
     return 'article created';
 });
 exports.creatarticle = creatarticle;
+const getComment = function (id) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let commentcollection = yield commentModel_1.default.findById(id);
+        const usercom = commentcollection.comment;
+        const date = commentcollection.date;
+        const Uname = commentcollection.name;
+        console.log(usercom, date, Uname);
+        yield articleModel_1.default.findByIdAndUpdate(id, {
+            comment: [Uname, usercom, date],
+        });
+    });
+};
+exports.getComment = getComment;
 const updateArticle = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
         yield articleModel_1.default.findByIdAndUpdate(id, {
             $set: {
-                article: obj.title,
+                title: obj.title,
                 date: obj.date,
             },
         });

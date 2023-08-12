@@ -12,16 +12,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.insertComment = exports.deleteComment = exports.retrievingComment = exports.updateComment = exports.createComment = void 0;
+exports.deleteComment = exports.retrievingComment = exports.updateComment = exports.createComment = void 0;
 const commentModel_1 = __importDefault(require("../model/commentModel"));
 const articleModel_1 = __importDefault(require("../model/articleModel"));
-const createComment = (obj) => __awaiter(void 0, void 0, void 0, function* () {
+const userModel_1 = __importDefault(require("../model/userModel"));
+const createComment = (obj, id) => __awaiter(void 0, void 0, void 0, function* () {
+    let user = yield userModel_1.default.findById(id);
+    const username = user.name;
+    console.log(username);
+    // let article: any = await Articleschema.findById(id);
+    // const art = article.title;
     console.log(obj);
     yield commentModel_1.default.create({
         // id:obj.id,
         title: obj.title,
-        Username: obj.username,
+        name: username,
         comment: obj.comment,
+        date: obj.date,
     });
     return 'Comment created';
 });
@@ -35,21 +42,17 @@ exports.createComment = createComment;
 //   });
 //   console.log('updating');
 // };
-const insertComment = function (obj, id) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            yield commentModel_1.default.insertMany([
-                { comment: obj.comment },
-                { comment: obj.comment },
-                { comment: obj.comment },
-            ]);
-        }
-        catch (e) {
-            console.log(e);
-        }
-    });
-};
-exports.insertComment = insertComment;
+// const insertComment = async function (obj: reqObj, id: String) {
+//   try {
+//     await Commentschema.insertMany([
+//       { comment: obj.comment },
+//       { comment: obj.comment },
+//       { comment: obj.comment },
+//     ]);
+//   } catch (e) {
+//     console.log(e);
+//   }
+// };
 const updateComment = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);

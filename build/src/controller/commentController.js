@@ -13,7 +13,7 @@ exports.deleteCommentController = exports.retrievingCommentController = exports.
 const commentServices_1 = require("../services/commentServices");
 const createCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.createComment)(req.body);
+        const result = yield (0, commentServices_1.createComment)(req.body, req.params.id);
         return res.status(200).send(result);
     }
     catch (error) {

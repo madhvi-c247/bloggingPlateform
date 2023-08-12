@@ -3,13 +3,13 @@ import {
   updateComment,
   retrievingComment,
   deleteComment,
-  insertComment,
+  // insertComment,
 } from '../services/commentServices';
 import { Request, Response } from 'express';
 
 const createCommentController = async (req: Request, res: Response) => {
   try {
-    const result = await createComment(req.body);
+    const result = await createComment(req.body, req.params.id);
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);

@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteArticleController = exports.retrievingUserArticle = exports.updateUserArticle = exports.createUserArticle = void 0;
+exports.getUserComment = exports.deleteArticleController = exports.retrievingUserArticle = exports.updateUserArticle = exports.createUserArticle = void 0;
 const articleServices_1 = require("../services/articleServices");
 const createUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, articleServices_1.creatarticle)(req.body);
+        const result = yield (0, articleServices_1.creatarticle)(req.params.id, req.body);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -32,6 +32,17 @@ const updateUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, functi
     }
 });
 exports.updateUserArticle = updateUserArticle;
+const getUserComment = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const result = yield (0, articleServices_1.getComment)(req.params.id);
+        console.log(result);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        return res.status(500).send(error);
+    }
+});
+exports.getUserComment = getUserComment;
 const retrievingUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, articleServices_1.retrievingArticle)(req.params.id);

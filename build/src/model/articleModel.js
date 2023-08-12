@@ -31,19 +31,17 @@ const Articleschema = new mongoose_1.Schema({
     //   },
     title: {
         type: String,
-        required: true,
+        // required: true,
     },
     author: {
         type: String,
-        required: true,
     },
     date: {
         type: String,
-        required: true,
+        // required: true,
     },
     comment: {
-        type: String,
-        required: true,
+        type: [String],
     },
 });
 exports.default = mongoose_1.default.model('Article', Articleschema);

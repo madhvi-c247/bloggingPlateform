@@ -8,7 +8,7 @@ import {
 } from '../controller/commentController';
 
 const router = Router();
-router.post('/createComment', createCommentController);
+router.post('/createComment/:id', createCommentController);
 
 router.put('/updateComment/:id', updateCommentController);
 

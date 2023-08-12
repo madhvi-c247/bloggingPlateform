@@ -1,7 +1,6 @@
 import mongoose from 'mongoose';
 import { DB_URL } from './env';
-// const port: number = 3000;
-// export default port;
+
 
 export default () => {
   mongoose
