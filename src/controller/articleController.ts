@@ -4,6 +4,7 @@ import {
   retrievingArticle,
   deleteArticle,
   getComment,
+  retrievingByCategory,
 } from '../services/articleServices';
 import { Request, Response } from 'express';
 
@@ -27,7 +28,7 @@ const updateUserArticle = async (req: Request, res: Response) => {
 };
 const getUserComment = async (req: Request, res: Response) => {
   try {
-    const result = await getComment(req.params.id);
+    const result = await getComment(req.body.id, req.body.id1);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
@@ -44,6 +45,15 @@ const retrievingUserArticle = async (req: Request, res: Response) => {
   }
 };
 
+const retrievingCategoryController = async (req: Request, res: Response) => {
+  try {
+    const result = await retrievingByCategory();
+    console.log(result);
+    return res.status(200).send(result);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
 const deleteArticleController = async (req: Request, res: Response) => {
   try {
     const result = await deleteArticle(req.params.id);
@@ -60,4 +70,5 @@ export {
   retrievingUserArticle,
   deleteArticleController,
   getUserComment,
+  retrievingCategoryController,
 };

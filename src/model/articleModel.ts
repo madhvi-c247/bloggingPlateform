@@ -9,6 +9,9 @@ const Articleschema = new Schema({
     type: String,
     // required: true,
   },
+  article: {
+    type: String,
+  },
   author: {
     type: String,
   },
@@ -16,8 +19,11 @@ const Articleschema = new Schema({
     type: String,
     // required: true,
   },
+  categories: {
+    type: [],
+  },
   comment: {
-    type: [String],
+    type: [],
   },
 });
 export default mongoose.model('Article', Articleschema);

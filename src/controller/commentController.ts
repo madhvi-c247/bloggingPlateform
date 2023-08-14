@@ -26,15 +26,6 @@ const updateCommentController = async (req: Request, res: Response) => {
   }
 };
 
-// const insertCommentController = async (req: Request, res: Response) => {
-//   try {
-//     const result = await insertComment(req.body, req.params.id);
-//     console.log(req.body);
-//     return res.status(200).send(result);
-//   } catch (error) {
-//     return res.status(500).send(error);
-//   }
-// };
 
 const retrievingCommentController = async (req: Request, res: Response) => {
   try {

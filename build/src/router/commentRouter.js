@@ -7,5 +7,4 @@ router.post('/createComment/:id', commentController_1.createCommentController);
 router.put('/updateComment/:id', commentController_1.updateCommentController);
 router.get('/retrievingComment/:id', commentController_1.retrievingCommentController);
 router.delete('/deleteComment/:id', commentController_1.deleteCommentController);
-// router.post('/insertComment/:id', insertCommentController);
 exports.default = router;

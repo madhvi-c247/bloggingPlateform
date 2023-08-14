@@ -5,11 +5,11 @@ import Commentschema from '../model/commentModel';
 interface reqObj {
   // id:String
   title: string;
+  article: string;
   author: string;
   date: Date;
-  comment: string;
-  usercomment: string;
-  comdate: string;
+  comment: [];
+  categories: [];
 }
 
 const creatarticle = async (id: String, obj: reqObj) => {
@@ -20,24 +20,30 @@ const creatarticle = async (id: String, obj: reqObj) => {
   await Articleschema.create({
     // id:obj.id,
     title: obj.title,
+    article: obj.article,
     author: username,
     date: obj.date,
-    // comment: obj.comment,
+    categories: obj.categories,
+    comment: obj.comment,
   });
   // console.log(obj);
   return 'article created';
 };
 
-const getComment = async function (id: String) {
+const getComment = async function (id: String, id1: String) {
   let commentcollection: any = await Commentschema.findById(id);
   const usercom = commentcollection.comment;
   const date = commentcollection.date;
-  const Uname = commentcollection.name;
+  const Uname = commentcollection.userName;
 
-  console.log(usercom, date, Uname);
-  await Articleschema.findByIdAndUpdate(id, {
-    comment: [Uname, usercom, date],
+  console.log(Uname);
+
+  const abc = await Articleschema.findByIdAndUpdate(id1, {
+    $push: {
+      comment: { userName: Uname, userComment: usercom, date: date },
+    },
   });
+  console.log(abc);
 };
 
 const updateArticle = async function (obj: reqObj, id: String) {
@@ -58,6 +64,19 @@ const retrievingArticle = async (id: String) => {
   return 'find';
 };
 
+const category: String = '';
+
+const retrievingByCategory = async () => {
+  if (category) {
+    const find = await Articleschema.find({ categories: '' });
+    console.log(find);
+    return 'find';
+  } else {
+    const find = await Articleschema.find({});
+    // console.log(find);
+  }
+};
+
 const deleteArticle = async (id: String) => {
   const find = await Articleschema.findByIdAndDelete(id);
   console.log(find);
@@ -69,5 +88,6 @@ export {
   updateArticle,
   retrievingArticle,
   deleteArticle,
+  retrievingByCategory,
   getComment,
 };

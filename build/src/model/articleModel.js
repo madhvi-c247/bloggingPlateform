@@ -33,6 +33,9 @@ const Articleschema = new mongoose_1.Schema({
         type: String,
         // required: true,
     },
+    article: {
+        type: String,
+    },
     author: {
         type: String,
     },
@@ -40,8 +43,11 @@ const Articleschema = new mongoose_1.Schema({
         type: String,
         // required: true,
     },
+    categories: {
+        type: [],
+    },
     comment: {
-        type: [String],
+        type: [],
     },
 });
 exports.default = mongoose_1.default.model('Article', Articleschema);

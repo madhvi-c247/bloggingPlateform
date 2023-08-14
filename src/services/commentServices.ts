@@ -6,47 +6,31 @@ interface reqObj {
   username: string;
   comment: string;
   date: string;
+  // articleId: object;
 }
 const createComment = async (obj: reqObj, id: String) => {
   let user: any = await Userschema.findById(id);
   const username = user.name;
   console.log(username);
 
-  // let article: any = await Articleschema.findById(id);
-  // const art = article.title;
+  let article: any = await Articleschema.findById('64d9ed5b4c24e578327ced07');
+  const art = article.title;
 
   console.log(obj);
+
+  console.log(username);
   await Commentschema.create({
     // id:obj.id,
-    title: obj.title,
-    name: username,
+    title: art,
+    userName: username,
     comment: obj.comment,
     date: obj.date,
+    // articleId: obj.articleId,
   });
   return 'Comment created';
 };
 
-// const insertComment = async function (obj: reqObj, id: String) {
-//   console.log(obj, id);
 
-//   await Commentschema.insertMany(id, {
-//     $set: {
-//       comment: obj.comment,
-//     },
-//   });
-//   console.log('updating');
-// };
-// const insertComment = async function (obj: reqObj, id: String) {
-//   try {
-//     await Commentschema.insertMany([
-//       { comment: obj.comment },
-//       { comment: obj.comment },
-//       { comment: obj.comment },
-//     ]);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
 
 const updateComment = async function (obj: reqObj, id: String) {
   console.log(obj, id);

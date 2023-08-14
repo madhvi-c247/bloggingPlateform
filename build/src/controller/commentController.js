@@ -32,15 +32,6 @@ const updateCommentController = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.updateCommentController = updateCommentController;
-// const insertCommentController = async (req: Request, res: Response) => {
-//   try {
-//     const result = await insertComment(req.body, req.params.id);
-//     console.log(req.body);
-//     return res.status(200).send(result);
-//   } catch (error) {
-//     return res.status(500).send(error);
-//   }
-// };
 const retrievingCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, commentServices_1.retrievingComment)(req.params.id);

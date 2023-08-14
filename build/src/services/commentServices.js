@@ -20,39 +20,21 @@ const createComment = (obj, id) => __awaiter(void 0, void 0, void 0, function* (
     let user = yield userModel_1.default.findById(id);
     const username = user.name;
     console.log(username);
-    // let article: any = await Articleschema.findById(id);
-    // const art = article.title;
+    let article = yield articleModel_1.default.findById('64d9ed5b4c24e578327ced07');
+    const art = article.title;
     console.log(obj);
+    console.log(username);
     yield commentModel_1.default.create({
         // id:obj.id,
-        title: obj.title,
-        name: username,
+        title: art,
+        userName: username,
         comment: obj.comment,
         date: obj.date,
+        // articleId: obj.articleId,
     });
     return 'Comment created';
 });
 exports.createComment = createComment;
-// const insertComment = async function (obj: reqObj, id: String) {
-//   console.log(obj, id);
-//   await Commentschema.insertMany(id, {
-//     $set: {
-//       comment: obj.comment,
-//     },
-//   });
-//   console.log('updating');
-// };
-// const insertComment = async function (obj: reqObj, id: String) {
-//   try {
-//     await Commentschema.insertMany([
-//       { comment: obj.comment },
-//       { comment: obj.comment },
-//       { comment: obj.comment },
-//     ]);
-//   } catch (e) {
-//     console.log(e);
-//   }
-// };
 const updateComment = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
