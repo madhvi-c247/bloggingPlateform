@@ -1,10 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { ObjectId } from 'mongoose';
 const Articleschema = new Schema({
-  //   userId: {
-  //      type: mongoose.Schema.Types.ObjectId,
-  //      ref: 'Users'
-  //   },
   title: {
     type: String,
     // required: true,
@@ -20,7 +16,9 @@ const Articleschema = new Schema({
     // required: true,
   },
   categories: {
-    type: [],
+    type: String,
+    enum: ['GK', 'IT', 'News', 'AI', 'Thought'],
+    default: 'GK',
   },
   comment: {
     type: [],

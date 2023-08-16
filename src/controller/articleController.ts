@@ -26,6 +26,7 @@ const updateUserArticle = async (req: Request, res: Response) => {
     return res.status(500).send(error);
   }
 };
+
 const getUserComment = async (req: Request, res: Response) => {
   try {
     const result = await getComment(req.body.id, req.body.id1);
@@ -35,6 +36,8 @@ const getUserComment = async (req: Request, res: Response) => {
     return res.status(500).send(error);
   }
 };
+
+
 const retrievingUserArticle = async (req: Request, res: Response) => {
   try {
     const result = await retrievingArticle(req.params.id);
@@ -47,13 +50,16 @@ const retrievingUserArticle = async (req: Request, res: Response) => {
 
 const retrievingCategoryController = async (req: Request, res: Response) => {
   try {
-    const result = await retrievingByCategory();
+    const result = await retrievingByCategory(req.body.categories);
     console.log(result);
+    // console.log(req.params.categories);
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);
   }
 };
+
+
 const deleteArticleController = async (req: Request, res: Response) => {
   try {
     const result = await deleteArticle(req.params.id);

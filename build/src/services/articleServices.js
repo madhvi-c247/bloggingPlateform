@@ -16,10 +16,10 @@ exports.getComment = exports.retrievingByCategory = exports.deleteArticle = expo
 const articleModel_1 = __importDefault(require("../model/articleModel"));
 const userModel_1 = __importDefault(require("../model/userModel"));
 const commentModel_1 = __importDefault(require("../model/commentModel"));
+// create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
     let user = yield userModel_1.default.findById(id);
     const username = user.name;
-    // console.log(user.name);
     yield articleModel_1.default.create({
         // id:obj.id,
         title: obj.title,
@@ -33,6 +33,7 @@ const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* ()
     return 'article created';
 });
 exports.creatarticle = creatarticle;
+// get comment :-
 const getComment = function (id, id1) {
     return __awaiter(this, void 0, void 0, function* () {
         let commentcollection = yield commentModel_1.default.findById(id);
@@ -49,6 +50,7 @@ const getComment = function (id, id1) {
     });
 };
 exports.getComment = getComment;
+// update Article :-
 const updateArticle = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
@@ -62,25 +64,26 @@ const updateArticle = function (obj, id) {
     });
 };
 exports.updateArticle = updateArticle;
+// get Article:-
 const retrievingArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.findById(id);
     console.log(find);
     return 'find';
 });
 exports.retrievingArticle = retrievingArticle;
-const category = '';
-const retrievingByCategory = () => __awaiter(void 0, void 0, void 0, function* () {
-    if (category) {
-        const find = yield articleModel_1.default.find({ categories: '' });
+// get Article by categories :-
+const retrievingByCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
+    const find = yield articleModel_1.default.find({ categories: category });
+    if (find) {
         console.log(find);
-        return 'find';
     }
     else {
-        const find = yield articleModel_1.default.find({});
-        // console.log(find);
+        console.log('Not found ');
     }
+    return 'find';
 });
 exports.retrievingByCategory = retrievingByCategory;
+// delete Article :-
 const deleteArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.findByIdAndDelete(id);
     console.log(find);

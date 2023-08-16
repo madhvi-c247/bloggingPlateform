@@ -16,6 +16,7 @@ exports.deleteComment = exports.retrievingComment = exports.updateComment = expo
 const commentModel_1 = __importDefault(require("../model/commentModel"));
 const articleModel_1 = __importDefault(require("../model/articleModel"));
 const userModel_1 = __importDefault(require("../model/userModel"));
+// create Comment :-
 const createComment = (obj, id) => __awaiter(void 0, void 0, void 0, function* () {
     let user = yield userModel_1.default.findById(id);
     const username = user.name;
@@ -35,6 +36,7 @@ const createComment = (obj, id) => __awaiter(void 0, void 0, void 0, function* (
     return 'Comment created';
 });
 exports.createComment = createComment;
+// update Article :-
 const updateComment = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
@@ -47,12 +49,14 @@ const updateComment = function (obj, id) {
     });
 };
 exports.updateComment = updateComment;
+// get Comment :-
 const retrievingComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.findById(id);
     console.log(find);
     return 'find';
 });
 exports.retrievingComment = retrievingComment;
+// delete Comment :-
 const deleteComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield commentModel_1.default.findByIdAndDelete(id);
     console.log(find);

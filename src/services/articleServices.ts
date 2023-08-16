@@ -9,14 +9,15 @@ interface reqObj {
   author: string;
   date: Date;
   comment: [];
-  categories: [];
+  categories: String;
 }
+
+// create Article :-
 
 const creatarticle = async (id: String, obj: reqObj) => {
   let user: any = await Userschema.findById(id);
   const username = user.name;
-  // console.log(user.name);
-
+  
   await Articleschema.create({
     // id:obj.id,
     title: obj.title,
@@ -29,6 +30,8 @@ const creatarticle = async (id: String, obj: reqObj) => {
   // console.log(obj);
   return 'article created';
 };
+
+// get comment :-
 
 const getComment = async function (id: String, id1: String) {
   let commentcollection: any = await Commentschema.findById(id);
@@ -46,6 +49,8 @@ const getComment = async function (id: String, id1: String) {
   console.log(abc);
 };
 
+// update Article :-
+
 const updateArticle = async function (obj: reqObj, id: String) {
   console.log(obj, id);
 
@@ -58,24 +63,27 @@ const updateArticle = async function (obj: reqObj, id: String) {
   console.log('updating');
 };
 
+// get Article:-
+
 const retrievingArticle = async (id: String) => {
   const find = await Articleschema.findById(id);
   console.log(find);
   return 'find';
 };
 
-const category: String = '';
+// get Article by categories :-
 
-const retrievingByCategory = async () => {
-  if (category) {
-    const find = await Articleschema.find({ categories: '' });
+const retrievingByCategory = async (category: String) => {
+  const find = await Articleschema.find({ categories: category });
+  if (find) {
     console.log(find);
-    return 'find';
   } else {
-    const find = await Articleschema.find({});
-    // console.log(find);
+    console.log('Not found ');
   }
+  return 'find';
 };
+
+// delete Article :-
 
 const deleteArticle = async (id: String) => {
   const find = await Articleschema.findByIdAndDelete(id);

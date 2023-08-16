@@ -12,20 +12,52 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUser = exports.retrievingUser = exports.updateUser = exports.creatUser = void 0;
+exports.login = exports.deleteUser = exports.retrievingUser = exports.updateUser = exports.creatUser = void 0;
 const userModel_1 = __importDefault(require("../model/userModel"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
+const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+//create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
-    yield userModel_1.default.create({
-        name: obj.name,
-        email: obj.email,
-        password: obj.password,
-        age: obj.age,
-        number: obj.number,
-    });
-    console.log(obj);
-    return 'user created';
+    try {
+        yield userModel_1.default.create({
+            name: obj.name,
+            email: obj.email,
+            password: (obj.password = yield bcrypt_1.default.hash(obj.password, 10)),
+            age: obj.age,
+            number: obj.number,
+        });
+        return 'user created';
+    }
+    catch (error) {
+        console.log(error);
+    }
 });
 exports.creatUser = creatUser;
+// Login user :-
+const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const loginObj = req.body;
+        const user = yield userModel_1.default.findOne({
+            email: loginObj.email,
+        });
+        if (!user) {
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+        const passwordMatch = yield bcrypt_1.default.compare(loginObj.password, user.password);
+        if (!passwordMatch) {
+            return res.status(400).json({ message: 'Invalid username or password' });
+        }
+        const token = jsonwebtoken_1.default.sign({ email: user.email, name: user.name }, 'ZXCVBNM', {
+            expiresIn: '1h',
+        });
+        res.json({ message: 'Logged in sucessful', token });
+    }
+    catch (error) {
+        console.log(error);
+    }
+});
+exports.login = login;
+// update User :-
 const updateUser = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
@@ -42,12 +74,16 @@ const updateUser = function (obj, id) {
     });
 };
 exports.updateUser = updateUser;
-const retrievingUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield userModel_1.default.findById(id);
-    console.log(find);
-    return 'find';
+// get User:-
+const retrievingUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
+    console.log(authUser);
+    const getUser = yield userModel_1.default.findOne({
+        email: authUser.email,
+    });
+    return getUser;
 });
 exports.retrievingUser = retrievingUser;
+// delete user :-
 const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield userModel_1.default.findByIdAndDelete(id);
     console.log(find);

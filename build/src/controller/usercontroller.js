@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteUserController = exports.retrievingUserController = exports.updateUserController = exports.createUserController = void 0;
+exports.loginController = exports.deleteUserController = exports.retrievingUserController = exports.updateUserController = exports.createUserController = void 0;
 const userService_1 = require("../services/userService");
 const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -21,6 +21,10 @@ const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
     }
 });
 exports.createUserController = createUserController;
+const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield (0, userService_1.login)(req, res);
+});
+exports.loginController = loginController;
 const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
@@ -34,8 +38,9 @@ const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.updateUserController = updateUserController;
 const retrievingUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, userService_1.retrievingUser)(req.params.id);
-        console.log(result);
+        // console.log(req.body);
+        const result = yield (0, userService_1.retrievingUser)(req.body);
+        // console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {

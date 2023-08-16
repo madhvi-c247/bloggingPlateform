@@ -25,10 +25,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
 const Articleschema = new mongoose_1.Schema({
-    //   userId: {
-    //      type: mongoose.Schema.Types.ObjectId,
-    //      ref: 'Users'
-    //   },
     title: {
         type: String,
         // required: true,
@@ -44,7 +40,9 @@ const Articleschema = new mongoose_1.Schema({
         // required: true,
     },
     categories: {
-        type: [],
+        type: String,
+        enum: ['GK', 'IT', 'News', 'AI', 'Thought'],
+        default: 'GK',
     },
     comment: {
         type: [],

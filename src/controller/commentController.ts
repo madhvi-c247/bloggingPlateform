@@ -3,7 +3,6 @@ import {
   updateComment,
   retrievingComment,
   deleteComment,
-  // insertComment,
 } from '../services/commentServices';
 import { Request, Response } from 'express';
 
@@ -25,7 +24,6 @@ const updateCommentController = async (req: Request, res: Response) => {
     return res.status(500).send(error);
   }
 };
-
 
 const retrievingCommentController = async (req: Request, res: Response) => {
   try {
@@ -52,5 +50,4 @@ export {
   updateCommentController,
   retrievingCommentController,
   deleteCommentController,
-  // insertCommentController,
 };

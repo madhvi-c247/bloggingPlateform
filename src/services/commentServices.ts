@@ -8,6 +8,9 @@ interface reqObj {
   date: string;
   // articleId: object;
 }
+
+// create Comment :-
+
 const createComment = async (obj: reqObj, id: String) => {
   let user: any = await Userschema.findById(id);
   const username = user.name;
@@ -30,7 +33,7 @@ const createComment = async (obj: reqObj, id: String) => {
   return 'Comment created';
 };
 
-
+// update Article :-
 
 const updateComment = async function (obj: reqObj, id: String) {
   console.log(obj, id);
@@ -43,11 +46,15 @@ const updateComment = async function (obj: reqObj, id: String) {
   console.log('updating');
 };
 
+// get Comment :-
+
 const retrievingComment = async (id: String) => {
   const find = await Articleschema.findById(id);
   console.log(find);
   return 'find';
 };
+
+// delete Comment :-
 
 const deleteComment = async (id: String) => {
   const find = await Commentschema.findByIdAndDelete(id);
@@ -60,5 +67,5 @@ export {
   updateComment,
   retrievingComment,
   deleteComment,
-  // insertComment,
+
 };

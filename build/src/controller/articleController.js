@@ -56,8 +56,9 @@ const retrievingUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, fu
 exports.retrievingUserArticle = retrievingUserArticle;
 const retrievingCategoryController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, articleServices_1.retrievingByCategory)();
+        const result = yield (0, articleServices_1.retrievingByCategory)(req.body.categories);
         console.log(result);
+        // console.log(req.params.categories);
         return res.status(200).send(result);
     }
     catch (error) {
