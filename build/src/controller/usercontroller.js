@@ -38,9 +38,7 @@ const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, fun
 exports.updateUserController = updateUserController;
 const retrievingUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // console.log(req.body);
         const result = yield (0, userService_1.retrievingUser)(req.body);
-        // console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {

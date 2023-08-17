@@ -32,9 +32,9 @@ const updateUserController = async (req: Request, res: Response) => {
 
 const retrievingUserController = async (req: Request, res: Response) => {
   try {
-    // console.log(req.body);
+    
     const result = await retrievingUser(req.body);
-    // console.log(result);
+  
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);
