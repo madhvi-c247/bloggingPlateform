@@ -1,14 +1,14 @@
 import {
   createComment,
   updateComment,
-  retrievingComment,
+  getComment,
   deleteComment,
 } from '../services/commentServices';
 import { Request, Response } from 'express';
 
 const createCommentController = async (req: Request, res: Response) => {
   try {
-    const result = await createComment(req.body, req.params.id);
+    const result = await createComment(req.body);
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);
@@ -25,10 +25,10 @@ const updateCommentController = async (req: Request, res: Response) => {
   }
 };
 
-const retrievingCommentController = async (req: Request, res: Response) => {
+const getCommentController = async (req: Request, res: Response) => {
   try {
-    const result = await retrievingComment(req.params.id);
-    console.log(result);
+    const result = await getComment(req.params.id);
+
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);
@@ -48,6 +48,6 @@ const deleteCommentController = async (req: Request, res: Response) => {
 export {
   createCommentController,
   updateCommentController,
-  retrievingCommentController,
+  getCommentController,
   deleteCommentController,
 };

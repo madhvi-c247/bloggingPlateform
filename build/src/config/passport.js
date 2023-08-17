@@ -28,7 +28,6 @@ exports.default = passport_1.default.use(new JwtStrategy(opts, function (jwt_pay
         }
         else {
             return done(null, false);
-            // or you could create a new account
         }
     });
 }));

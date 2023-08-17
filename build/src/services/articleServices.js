@@ -12,44 +12,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getComment = exports.retrievingByCategory = exports.deleteArticle = exports.retrievingArticle = exports.updateArticle = exports.creatarticle = void 0;
+exports.getAllArticle = exports.retrievingByCategory = exports.deleteArticle = exports.getArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
-const userModel_1 = __importDefault(require("../model/userModel"));
-const commentModel_1 = __importDefault(require("../model/commentModel"));
 // create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
-    let user = yield userModel_1.default.findById(id);
-    const username = user.name;
     yield articleModel_1.default.create({
         // id:obj.id,
         title: obj.title,
         article: obj.article,
-        author: username,
+        author: id,
         date: obj.date,
         categories: obj.categories,
-        comment: obj.comment,
     });
     // console.log(obj);
     return 'article created';
 });
 exports.creatarticle = creatarticle;
-// get comment :-
-const getComment = function (id, id1) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let commentcollection = yield commentModel_1.default.findById(id);
-        const usercom = commentcollection.comment;
-        const date = commentcollection.date;
-        const Uname = commentcollection.userName;
-        console.log(Uname);
-        const abc = yield articleModel_1.default.findByIdAndUpdate(id1, {
-            $push: {
-                comment: { userName: Uname, userComment: usercom, date: date },
-            },
-        });
-        console.log(abc);
-    });
-};
-exports.getComment = getComment;
 // update Article :-
 const updateArticle = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
@@ -57,20 +35,31 @@ const updateArticle = function (obj, id) {
         yield articleModel_1.default.findByIdAndUpdate(id, {
             $set: {
                 title: obj.title,
+                article: obj.article,
+                author: obj.author,
                 date: obj.date,
+                categories: obj.categories,
             },
         });
         console.log('updating');
+        return 'comment get';
     });
 };
 exports.updateArticle = updateArticle;
+//get All Article
+const getAllArticle = () => __awaiter(void 0, void 0, void 0, function* () {
+    const find = yield articleModel_1.default.find();
+    console.log(find);
+    return 'All found';
+});
+exports.getAllArticle = getAllArticle;
 // get Article:-
-const retrievingArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
+const getArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.findById(id);
     console.log(find);
     return 'find';
 });
-exports.retrievingArticle = retrievingArticle;
+exports.getArticle = getArticle;
 // get Article by categories :-
 const retrievingByCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.find({ categories: category });
@@ -80,7 +69,7 @@ const retrievingByCategory = (category) => __awaiter(void 0, void 0, void 0, fun
     else {
         console.log('Not found ');
     }
-    return 'find';
+    return 'found';
 });
 exports.retrievingByCategory = retrievingByCategory;
 // delete Article :-

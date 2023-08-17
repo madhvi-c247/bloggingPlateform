@@ -2,13 +2,16 @@ import { Router } from 'express';
 import {
   createUserController,
   updateUserController,
-  retrievingUserController,
+  getUserController,
   deleteUserController,
   loginController,
+  getAllUserController,
 } from '../controller/usercontroller';
 
+import { body } from 'express-validator';
 import passport from '../config/passport';
-import { session } from 'passport';
+
+import authorization from '../middleware/auth';
 
 const router = Router();
 router.post('/createUser', createUserController);
@@ -16,13 +19,30 @@ router.post('/createUser', createUserController);
 router.put('/updateUser/:id', updateUserController);
 
 router.get(
-  '/retrievingUser',
+  '/getAllUser',
   passport.authenticate('jwt', { session: false }),
-  retrievingUserController
+  authorization('admin'),
+  getAllUserController
 );
 
-router.post('/login', loginController);
+router.get(
+  '/getUser',
+  passport.authenticate('jwt', { session: false }),
+  getUserController
+);
 
-router.delete('/deleteUser/:id', deleteUserController);
+router.post(
+  '/login',
+  body('email').notEmpty(),
+  body('password').notEmpty(),
+  loginController
+);
+
+router.delete(
+  '/deleteUser/:id',
+  passport.authenticate('jwt', { session: false }),
+  authorization('admin'),
+  deleteUserController
+);
 
 export default router

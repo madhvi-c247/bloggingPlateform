@@ -27,25 +27,24 @@ const mongoose_1 = __importStar(require("mongoose"));
 const Articleschema = new mongoose_1.Schema({
     title: {
         type: String,
-        // required: true,
+        required: true,
     },
     article: {
         type: String,
+        required: true,
     },
     author: {
-        type: String,
+        type: mongoose_1.default.Schema.Types.ObjectId,
+        ref: 'user',
     },
     date: {
         type: String,
-        // required: true,
+        required: true,
     },
     categories: {
         type: String,
         enum: ['GK', 'IT', 'News', 'AI', 'Thought'],
         default: 'GK',
-    },
-    comment: {
-        type: [],
     },
 });
 exports.default = mongoose_1.default.model('Article', Articleschema);

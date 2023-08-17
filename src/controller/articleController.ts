@@ -1,10 +1,10 @@
 import {
   creatarticle,
   updateArticle,
-  retrievingArticle,
+  getArticle,
   deleteArticle,
-  getComment,
   retrievingByCategory,
+  getAllArticle,
 } from '../services/articleServices';
 import { Request, Response } from 'express';
 
@@ -27,9 +27,9 @@ const updateUserArticle = async (req: Request, res: Response) => {
   }
 };
 
-const getUserComment = async (req: Request, res: Response) => {
+const getAllArticleController = async (req: Request, res: Response) => {
   try {
-    const result = await getComment(req.body.id, req.body.id1);
+    const result = await getAllArticle();
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
@@ -37,10 +37,9 @@ const getUserComment = async (req: Request, res: Response) => {
   }
 };
 
-
 const retrievingUserArticle = async (req: Request, res: Response) => {
   try {
-    const result = await retrievingArticle(req.params.id);
+    const result = await getArticle(req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
@@ -59,7 +58,6 @@ const retrievingCategoryController = async (req: Request, res: Response) => {
   }
 };
 
-
 const deleteArticleController = async (req: Request, res: Response) => {
   try {
     const result = await deleteArticle(req.params.id);
@@ -75,6 +73,6 @@ export {
   updateUserArticle,
   retrievingUserArticle,
   deleteArticleController,
-  getUserComment,
   retrievingCategoryController,
+  getAllArticleController,
 };

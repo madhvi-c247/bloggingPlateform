@@ -1,9 +1,10 @@
 import {
   creatUser,
   updateUser,
-  retrievingUser,
+  getUser,
   deleteUser,
   login,
+  getAllUser,
 } from '../services/userService';
 import { Request, Response } from 'express';
 
@@ -30,11 +31,20 @@ const updateUserController = async (req: Request, res: Response) => {
   }
 };
 
-const retrievingUserController = async (req: Request, res: Response) => {
+const getUserController = async (req: Request, res: Response) => {
   try {
-    
-    const result = await retrievingUser(req.body);
-  
+    const result = await getUser(req.body);
+    console.log(result);
+    return res.status(200).send(result);
+  } catch (error) {
+    return res.status(500).send(error);
+  }
+};
+
+const getAllUserController = async (req: Request, res: Response) => {
+  try {
+    const result = await getAllUser();
+    console.log(result);
     return res.status(200).send(result);
   } catch (error) {
     return res.status(500).send(error);
@@ -54,7 +64,8 @@ const deleteUserController = async (req: Request, res: Response) => {
 export {
   createUserController,
   updateUserController,
-  retrievingUserController,
+  getUserController,
   deleteUserController,
   loginController,
+  getAllUserController,
 };

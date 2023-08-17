@@ -2,17 +2,9 @@ import Userschema from '../model/userModel';
 import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-interface userInterface {
-  name: string;
-  email: string;
-  password: string;
-  age: number;
-  number: number;
-}
-interface loginInterface {
-  email: string;
-  password: string;
-}
+import { validationResult } from 'express-validator';
+import userInterface from '../interface/userInterface';
+import loginInterface from '../interface/loginInterface';
 
 //create user :-
 
@@ -24,6 +16,7 @@ const creatUser = async (obj: userInterface) => {
       password: (obj.password = await bcrypt.hash(obj.password, 10)),
       age: obj.age,
       number: obj.number,
+      role: obj.role,
     });
     return 'user created';
   } catch (error) {
@@ -35,6 +28,12 @@ const creatUser = async (obj: userInterface) => {
 
 const login = async (req: Request, res: Response) => {
   try {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      return res.send({ errors: result['errors'][0] });
+    }
+
     const loginObj: loginInterface = req.body;
 
     const user: userInterface | null = await Userschema.findOne({
@@ -83,14 +82,23 @@ const updateUser = async function (obj: userInterface, id: String) {
 
 // get User:-
 
-const retrievingUser = async (
+const getUser = async (
   authUser: loginInterface
 ): Promise<userInterface | null> => {
   console.log(authUser);
   const getUser: userInterface | null = await Userschema.findOne({
     email: authUser.email,
   });
+  console.log(getUser);
   return getUser;
+};
+
+//all user get (Admin)
+
+const getAllUser = async () => {
+  const find = await Userschema.find();
+  console.log(find);
+  return find;
 };
 
 // delete user :-
@@ -101,4 +109,4 @@ const deleteUser = async (id: String) => {
   return 'Deleted';
 };
 
-export { creatUser, updateUser, retrievingUser, deleteUser, login };
+export { creatUser, updateUser, getUser, deleteUser, login, getAllUser };

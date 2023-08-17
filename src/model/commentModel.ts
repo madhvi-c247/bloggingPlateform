@@ -1,15 +1,13 @@
 import mongoose, { Schema } from 'mongoose';
 
 const Commentschema = new Schema({
-  // articleId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   ref: 'article',
-  // },
-  userName: {
-    type: String,
+  articleId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'article',
   },
-  title: {
-    type: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'user',
   },
   comment: {
     type: String,

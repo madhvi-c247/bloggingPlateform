@@ -9,11 +9,11 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCommentController = exports.retrievingCommentController = exports.updateCommentController = exports.createCommentController = void 0;
+exports.deleteCommentController = exports.getCommentController = exports.updateCommentController = exports.createCommentController = void 0;
 const commentServices_1 = require("../services/commentServices");
 const createCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.createComment)(req.body, req.params.id);
+        const result = yield (0, commentServices_1.createComment)(req.body);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -32,17 +32,16 @@ const updateCommentController = (req, res) => __awaiter(void 0, void 0, void 0, 
     }
 });
 exports.updateCommentController = updateCommentController;
-const retrievingCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.retrievingComment)(req.params.id);
-        console.log(result);
+        const result = yield (0, commentServices_1.getComment)(req.params.id);
         return res.status(200).send(result);
     }
     catch (error) {
         return res.status(500).send(error);
     }
 });
-exports.retrievingCommentController = retrievingCommentController;
+exports.getCommentController = getCommentController;
 const deleteCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, commentServices_1.deleteComment)(req.params.id);

@@ -7,6 +7,6 @@ router.post('/createArticle/:id', articleController_1.createUserArticle);
 router.put('/updateArticle/:id', articleController_1.updateUserArticle);
 router.get('/retrievingArticle/:id', articleController_1.retrievingUserArticle);
 router.delete('/deleteArticle/:id', articleController_1.deleteArticleController);
-router.get('/getComment', articleController_1.getUserComment);
+router.get('/getAllArticle', articleController_1.getAllArticleController);
 router.get('/retrievingCategoryArticle', articleController_1.retrievingCategoryController);
 exports.default = router;

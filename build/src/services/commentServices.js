@@ -12,31 +12,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteComment = exports.retrievingComment = exports.updateComment = exports.createComment = void 0;
+exports.deleteComment = exports.getComment = exports.updateComment = exports.createComment = void 0;
 const commentModel_1 = __importDefault(require("../model/commentModel"));
-const articleModel_1 = __importDefault(require("../model/articleModel"));
-const userModel_1 = __importDefault(require("../model/userModel"));
 // create Comment :-
-const createComment = (obj, id) => __awaiter(void 0, void 0, void 0, function* () {
-    let user = yield userModel_1.default.findById(id);
-    const username = user.name;
-    console.log(username);
-    let article = yield articleModel_1.default.findById('64d9ed5b4c24e578327ced07');
-    const art = article.title;
+const createComment = (obj) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(obj);
-    console.log(username);
     yield commentModel_1.default.create({
-        // id:obj.id,
-        title: art,
-        userName: username,
+        userId: obj.userId,
+        articleId: obj.articleId,
         comment: obj.comment,
         date: obj.date,
-        // articleId: obj.articleId,
     });
     return 'Comment created';
 });
 exports.createComment = createComment;
-// update Article :-
+// update comment :-
 const updateComment = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
         console.log(obj, id);
@@ -49,13 +39,6 @@ const updateComment = function (obj, id) {
     });
 };
 exports.updateComment = updateComment;
-// get Comment :-
-const retrievingComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield articleModel_1.default.findById(id);
-    console.log(find);
-    return 'find';
-});
-exports.retrievingComment = retrievingComment;
 // delete Comment :-
 const deleteComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield commentModel_1.default.findByIdAndDelete(id);
@@ -63,3 +46,12 @@ const deleteComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return 'Deleted';
 });
 exports.deleteComment = deleteComment;
+//get comments by article id
+const getComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    const find = yield commentModel_1.default.find({
+        articleId: id,
+    });
+    console.log(find);
+    return find;
+});
+exports.getComment = getComment;

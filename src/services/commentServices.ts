@@ -1,41 +1,24 @@
 import Commentschema from '../model/commentModel';
 import Articleschema from '../model/articleModel';
 import Userschema from '../model/userModel';
-interface reqObj {
-  title: string;
-  username: string;
-  comment: string;
-  date: string;
-  // articleId: object;
-}
-
+import commentInterface from '../interface/commentInterface';
 // create Comment :-
 
-const createComment = async (obj: reqObj, id: String) => {
-  let user: any = await Userschema.findById(id);
-  const username = user.name;
-  console.log(username);
-
-  let article: any = await Articleschema.findById('64d9ed5b4c24e578327ced07');
-  const art = article.title;
-
+const createComment = async (obj: commentInterface) => {
   console.log(obj);
 
-  console.log(username);
   await Commentschema.create({
-    // id:obj.id,
-    title: art,
-    userName: username,
+    userId: obj.userId,
+    articleId: obj.articleId,
     comment: obj.comment,
     date: obj.date,
-    // articleId: obj.articleId,
   });
   return 'Comment created';
 };
 
-// update Article :-
+// update comment :-
 
-const updateComment = async function (obj: reqObj, id: String) {
+const updateComment = async function (obj: commentInterface, id: String) {
   console.log(obj, id);
 
   await Commentschema.findByIdAndUpdate(id, {
@@ -46,14 +29,6 @@ const updateComment = async function (obj: reqObj, id: String) {
   console.log('updating');
 };
 
-// get Comment :-
-
-const retrievingComment = async (id: String) => {
-  const find = await Articleschema.findById(id);
-  console.log(find);
-  return 'find';
-};
-
 // delete Comment :-
 
 const deleteComment = async (id: String) => {
@@ -62,10 +37,14 @@ const deleteComment = async (id: String) => {
   return 'Deleted';
 };
 
-export {
-  createComment,
-  updateComment,
-  retrievingComment,
-  deleteComment,
+//get comments by article id
 
+const getComment = async (id: String) => {
+  const find = await Commentschema.find({
+    articleId: id,
+  });
+  console.log(find);
+  return find;
 };
+
+export { createComment, updateComment, getComment, deleteComment };

@@ -12,10 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.login = exports.deleteUser = exports.retrievingUser = exports.updateUser = exports.creatUser = void 0;
+exports.getAllUser = exports.login = exports.deleteUser = exports.getUser = exports.updateUser = exports.creatUser = void 0;
 const userModel_1 = __importDefault(require("../model/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+const express_validator_1 = require("express-validator");
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -25,6 +26,7 @@ const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
             password: (obj.password = yield bcrypt_1.default.hash(obj.password, 10)),
             age: obj.age,
             number: obj.number,
+            role: obj.role,
         });
         return 'user created';
     }
@@ -36,6 +38,10 @@ exports.creatUser = creatUser;
 // Login user :-
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        const result = (0, express_validator_1.validationResult)(req);
+        if (!result.isEmpty()) {
+            return res.send({ errors: result['errors'][0] });
+        }
         const loginObj = req.body;
         const user = yield userModel_1.default.findOne({
             email: loginObj.email,
@@ -75,14 +81,22 @@ const updateUser = function (obj, id) {
 };
 exports.updateUser = updateUser;
 // get User:-
-const retrievingUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
+const getUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
     console.log(authUser);
     const getUser = yield userModel_1.default.findOne({
         email: authUser.email,
     });
+    console.log(getUser);
     return getUser;
 });
-exports.retrievingUser = retrievingUser;
+exports.getUser = getUser;
+//all user get (Admin)
+const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
+    const find = yield userModel_1.default.find();
+    console.log(find);
+    return find;
+});
+exports.getAllUser = getAllUser;
 // delete user :-
 const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield userModel_1.default.findByIdAndDelete(id);
