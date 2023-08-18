@@ -9,30 +9,26 @@ import loginInterface from '../interface/loginInterface';
 //create user :-
 
 const creatUser = async (obj: userInterface) => {
-  try {
-    await Userschema.create({
-      name: obj.name,
-      email: obj.email,
-      password: (obj.password = await bcrypt.hash(obj.password, 10)),
-      age: obj.age,
-      number: obj.number,
-      role: obj.role,
-    });
-    return 'user created';
-  } catch (error) {
-    console.log(error);
-  }
+  const create = await Userschema.create({
+    name: obj.name,
+    email: obj.email,
+    password: (obj.password = await bcrypt.hash(obj.password, 10)),
+    age: obj.age,
+    number: obj.number,
+    role: obj.role,
+  });
+  return create;
 };
 
 // Login user :-
 
 const login = async (req: Request, res: Response) => {
   try {
-    const result = validationResult(req);
+    // const result = validationResult(req);
 
-    if (!result.isEmpty()) {
-      return res.send({ errors: result['errors'][0] });
-    }
+    // if (!result.isEmpty()) {
+    //   return res.send({ errors: result['errors'][0] });
+    // }
 
     const loginObj: loginInterface = req.body;
 
@@ -59,15 +55,13 @@ const login = async (req: Request, res: Response) => {
 
     res.json({ message: 'Logged in sucessful', token });
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 
 // update User :-
 
 const updateUser = async function (obj: userInterface, id: String) {
-  console.log(obj, id);
-
   await Userschema.findByIdAndUpdate(id, {
     $set: {
       name: obj.name,

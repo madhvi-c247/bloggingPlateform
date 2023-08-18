@@ -16,32 +16,26 @@ exports.getAllUser = exports.login = exports.deleteUser = exports.getUser = expo
 const userModel_1 = __importDefault(require("../model/userModel"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const express_validator_1 = require("express-validator");
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        yield userModel_1.default.create({
-            name: obj.name,
-            email: obj.email,
-            password: (obj.password = yield bcrypt_1.default.hash(obj.password, 10)),
-            age: obj.age,
-            number: obj.number,
-            role: obj.role,
-        });
-        return 'user created';
-    }
-    catch (error) {
-        console.log(error);
-    }
+    const create = yield userModel_1.default.create({
+        name: obj.name,
+        email: obj.email,
+        password: (obj.password = yield bcrypt_1.default.hash(obj.password, 10)),
+        age: obj.age,
+        number: obj.number,
+        role: obj.role,
+    });
+    return create;
 });
 exports.creatUser = creatUser;
 // Login user :-
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = (0, express_validator_1.validationResult)(req);
-        if (!result.isEmpty()) {
-            return res.send({ errors: result['errors'][0] });
-        }
+        // const result = validationResult(req);
+        // if (!result.isEmpty()) {
+        //   return res.send({ errors: result['errors'][0] });
+        // }
         const loginObj = req.body;
         const user = yield userModel_1.default.findOne({
             email: loginObj.email,
@@ -59,14 +53,13 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         res.json({ message: 'Logged in sucessful', token });
     }
     catch (error) {
-        console.log(error);
+        return error;
     }
 });
 exports.login = login;
 // update User :-
 const updateUser = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(obj, id);
         yield userModel_1.default.findByIdAndUpdate(id, {
             $set: {
                 name: obj.name,

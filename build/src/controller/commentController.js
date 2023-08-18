@@ -11,45 +11,45 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteCommentController = exports.getCommentController = exports.updateCommentController = exports.createCommentController = void 0;
 const commentServices_1 = require("../services/commentServices");
-const createCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, commentServices_1.createComment)(req.body);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.createCommentController = createCommentController;
-const updateCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, commentServices_1.updateComment)(req.body, req.params.id);
         console.log(req.body);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.updateCommentController = updateCommentController;
-const getCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, commentServices_1.getComment)(req.params.id);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.getCommentController = getCommentController;
-const deleteCommentController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, commentServices_1.deleteComment)(req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.deleteCommentController = deleteCommentController;

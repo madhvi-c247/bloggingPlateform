@@ -12,11 +12,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllArticle = exports.retrievingByCategory = exports.deleteArticle = exports.getArticle = exports.updateArticle = exports.creatarticle = void 0;
+exports.getAllArticle = exports.getByCategory = exports.deleteArticle = exports.getArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
-    yield articleModel_1.default.create({
+    const article = yield articleModel_1.default.create({
         // id:obj.id,
         title: obj.title,
         article: obj.article,
@@ -25,14 +27,13 @@ const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* ()
         categories: obj.categories,
     });
     // console.log(obj);
-    return 'article created';
+    return article;
 });
 exports.creatarticle = creatarticle;
 // update Article :-
 const updateArticle = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        console.log(obj, id);
-        yield articleModel_1.default.findByIdAndUpdate(id, {
+        const update = yield articleModel_1.default.findByIdAndUpdate(id, {
             $set: {
                 title: obj.title,
                 article: obj.article,
@@ -42,7 +43,7 @@ const updateArticle = function (obj, id) {
             },
         });
         console.log('updating');
-        return 'comment get';
+        return update;
     });
 };
 exports.updateArticle = updateArticle;
@@ -50,18 +51,18 @@ exports.updateArticle = updateArticle;
 const getAllArticle = () => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.find();
     console.log(find);
-    return 'All found';
+    return find;
 });
 exports.getAllArticle = getAllArticle;
 // get Article:-
 const getArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.findById(id);
     console.log(find);
-    return 'find';
+    return find;
 });
 exports.getArticle = getArticle;
 // get Article by categories :-
-const retrievingByCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
+const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.find({ categories: category });
     if (find) {
         console.log(find);
@@ -69,13 +70,12 @@ const retrievingByCategory = (category) => __awaiter(void 0, void 0, void 0, fun
     else {
         console.log('Not found ');
     }
-    return 'found';
+    return find;
 });
-exports.retrievingByCategory = retrievingByCategory;
+exports.getByCategory = getByCategory;
 // delete Article :-
 const deleteArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield articleModel_1.default.findByIdAndDelete(id);
-    console.log(find);
-    return 'Deleted';
+    const deleteArticle = yield articleModel_1.default.findByIdAndDelete(id);
+    return deleteArticle;
 });
 exports.deleteArticle = deleteArticle;

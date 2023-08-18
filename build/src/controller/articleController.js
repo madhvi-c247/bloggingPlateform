@@ -9,71 +9,71 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllArticleController = exports.retrievingCategoryController = exports.deleteArticleController = exports.retrievingUserArticle = exports.updateUserArticle = exports.createUserArticle = void 0;
+exports.getAllArticleController = exports.getCategoryController = exports.deleteArticleController = exports.getUserArticle = exports.updateUserArticle = exports.createUserArticle = void 0;
 const articleServices_1 = require("../services/articleServices");
-const createUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createUserArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, articleServices_1.creatarticle)(req.params.id, req.body);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.createUserArticle = createUserArticle;
-const updateUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, articleServices_1.updateArticle)(req.body, req.params.id);
         console.log(req.body);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.updateUserArticle = updateUserArticle;
-const getAllArticleController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllArticleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, articleServices_1.getAllArticle)();
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.getAllArticleController = getAllArticleController;
-const retrievingUserArticle = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, articleServices_1.getArticle)(req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
-exports.retrievingUserArticle = retrievingUserArticle;
-const retrievingCategoryController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getUserArticle = getUserArticle;
+const getCategoryController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, articleServices_1.retrievingByCategory)(req.body.categories);
+        const result = yield (0, articleServices_1.getByCategory)(req.body.categories);
         console.log(result);
         // console.log(req.params.categories);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
-exports.retrievingCategoryController = retrievingCategoryController;
-const deleteArticleController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+exports.getCategoryController = getCategoryController;
+const deleteArticleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, articleServices_1.deleteArticle)(req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.deleteArticleController = deleteArticleController;

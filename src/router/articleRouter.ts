@@ -2,9 +2,9 @@ import { Router } from 'express';
 import {
   createUserArticle,
   updateUserArticle,
-  retrievingUserArticle,
+  getUserArticle,
   deleteArticleController,
-  retrievingCategoryController,
+  getCategoryController,
   getAllArticleController,
 } from '../controller/articleController';
 
@@ -13,11 +13,11 @@ router.post('/createArticle/:id', createUserArticle);
 
 router.put('/updateArticle/:id', updateUserArticle);
 
-router.get('/retrievingArticle/:id', retrievingUserArticle);
+router.get('/getArticle/:id', getUserArticle);
 
 router.delete('/deleteArticle/:id', deleteArticleController);
 
 router.get('/getAllArticle', getAllArticleController);
 
-router.get('/retrievingCategoryArticle', retrievingCategoryController);
+router.get('/getCategoryArticle', getCategoryController);
 export default router;

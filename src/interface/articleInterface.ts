@@ -2,8 +2,8 @@ interface articleInterface {
   // id:String
   title: string;
   article: string;
-  author: string;
-  date: Date;
+  author: object;
+  date: string;
   categories: String;
 }
 

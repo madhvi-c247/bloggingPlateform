@@ -1,12 +1,12 @@
 import Articleschema from '../model/articleModel';
-import Userschema from '../model/userModel';
-import Commentschema from '../model/commentModel';
 import articleInterface from '../interface/articleInterface';
+import mongoose from 'mongoose';
+const ObjectId = mongoose.Types.ObjectId;
 
 // create Article :-
 
 const creatarticle = async (id: String, obj: articleInterface) => {
-  await Articleschema.create({
+  const article = await Articleschema.create({
     // id:obj.id,
     title: obj.title,
     article: obj.article,
@@ -15,15 +15,13 @@ const creatarticle = async (id: String, obj: articleInterface) => {
     categories: obj.categories,
   });
   // console.log(obj);
-  return 'article created';
+  return article;
 };
 
 // update Article :-
 
 const updateArticle = async function (obj: articleInterface, id: String) {
-  console.log(obj, id);
-
-  await Articleschema.findByIdAndUpdate(id, {
+  const update = await Articleschema.findByIdAndUpdate(id, {
     $set: {
       title: obj.title,
       article: obj.article,
@@ -33,7 +31,7 @@ const updateArticle = async function (obj: articleInterface, id: String) {
     },
   });
   console.log('updating');
-  return 'comment get';
+  return update;
 };
 
 //get All Article
@@ -41,7 +39,7 @@ const updateArticle = async function (obj: articleInterface, id: String) {
 const getAllArticle = async () => {
   const find = await Articleschema.find();
   console.log(find);
-  return 'All found';
+  return find;
 };
 
 // get Article:-
@@ -49,27 +47,27 @@ const getAllArticle = async () => {
 const getArticle = async (id: String) => {
   const find = await Articleschema.findById(id);
   console.log(find);
-  return 'find';
+  return find;
 };
 
 // get Article by categories :-
 
-const retrievingByCategory = async (category: String) => {
+const getByCategory = async (category: String) => {
   const find = await Articleschema.find({ categories: category });
   if (find) {
     console.log(find);
   } else {
     console.log('Not found ');
   }
-  return 'found';
+  return find;
 };
 
 // delete Article :-
 
 const deleteArticle = async (id: String) => {
-  const find = await Articleschema.findByIdAndDelete(id);
-  console.log(find);
-  return 'Deleted';
+  const deleteArticle = await Articleschema.findByIdAndDelete(id);
+
+  return deleteArticle;
 };
 
 export {
@@ -77,6 +75,6 @@ export {
   updateArticle,
   getArticle,
   deleteArticle,
-  retrievingByCategory,
+  getByCategory,
   getAllArticle,
 };

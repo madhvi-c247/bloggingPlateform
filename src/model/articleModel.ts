@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
-
-const Articleschema = new Schema({
+import articleInterface from '../interface/articleInterface';
+const Articleschema = new Schema<articleInterface>({
   title: {
     type: String,
     required: true,
@@ -23,4 +23,4 @@ const Articleschema = new Schema({
     default: 'GK',
   },
 });
-export default mongoose.model('Article', Articleschema);
+export default mongoose.model<articleInterface>('Article', Articleschema);

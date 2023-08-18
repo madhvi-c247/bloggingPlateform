@@ -6,58 +6,86 @@ import {
   login,
   getAllUser,
 } from '../services/userService';
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-const createUserController = async (req: Request, res: Response) => {
+const createUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await creatUser(req.body);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const loginController = async (req: Request, res: Response) => {
-  return await login(req, res);
+const loginController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    return await login(req, res);
+  } catch (error) {
+    next(error);
+  }
 };
 
-const updateUserController = async (req: Request, res: Response) => {
+const updateUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await updateUser(req.body, req.params.id);
     console.log(req.body);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const getUserController = async (req: Request, res: Response) => {
+const getUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await getUser(req.body);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const getAllUserController = async (req: Request, res: Response) => {
+const getAllUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await getAllUser();
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const deleteUserController = async (req: Request, res: Response) => {
+const deleteUserController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await deleteUser(req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 

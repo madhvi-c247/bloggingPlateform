@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
+import commentInterface from '../interface/commentInterface';
 
-const Commentschema = new Schema({
+const Commentschema = new Schema<commentInterface>({
   articleId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'article',
@@ -18,4 +19,4 @@ const Commentschema = new Schema({
     required: true,
   },
 });
-export default mongoose.model('Comment', Commentschema);
+export default mongoose.model<commentInterface>('Comment', Commentschema);

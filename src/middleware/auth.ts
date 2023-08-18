@@ -1,10 +1,11 @@
 import { log } from 'console';
 import { Request, Response, NextFunction } from 'express';
+import userInterface from '../interface/userInterface';
 
 const authorization = (role: string) => {
   console.log(role);
   return (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
+    const user: userInterface | undefined = req.user as userInterface;
 
     console.log('authorization', user);
     if (user.role === role) {

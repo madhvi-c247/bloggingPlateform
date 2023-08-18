@@ -7,7 +7,7 @@ import {
   loginController,
   getAllUserController,
 } from '../controller/usercontroller';
-
+import error from '../middleware/validator';
 import { body } from 'express-validator';
 import passport from '../config/passport';
 

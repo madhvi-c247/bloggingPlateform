@@ -3,76 +3,99 @@ import {
   updateArticle,
   getArticle,
   deleteArticle,
-  retrievingByCategory,
+  getByCategory,
   getAllArticle,
 } from '../services/articleServices';
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-const createUserArticle = async (req: Request, res: Response) => {
+const createUserArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await creatarticle(req.params.id, req.body);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const updateUserArticle = async (req: Request, res: Response) => {
+const updateUserArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await updateArticle(req.body, req.params.id);
     console.log(req.body);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const getAllArticleController = async (req: Request, res: Response) => {
+const getAllArticleController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await getAllArticle();
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const retrievingUserArticle = async (req: Request, res: Response) => {
+const getUserArticle = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await getArticle(req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
-
-const retrievingCategoryController = async (req: Request, res: Response) => {
+const getCategoryController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
-    const result = await retrievingByCategory(req.body.categories);
+    const result = await getByCategory(req.body.categories);
     console.log(result);
     // console.log(req.params.categories);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
-const deleteArticleController = async (req: Request, res: Response) => {
+const deleteArticleController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   try {
     const result = await deleteArticle(req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
-    return res.status(500).send(error);
+    next(error);
   }
 };
 
 export {
   createUserArticle,
   updateUserArticle,
-  retrievingUserArticle,
+  getUserArticle,
   deleteArticleController,
-  retrievingCategoryController,
+  getCategoryController,
   getAllArticleController,
 };

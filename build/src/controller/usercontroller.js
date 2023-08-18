@@ -11,61 +11,66 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUserController = exports.loginController = exports.deleteUserController = exports.getUserController = exports.updateUserController = exports.createUserController = void 0;
 const userService_1 = require("../services/userService");
-const createUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const createUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.creatUser)(req.body);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.createUserController = createUserController;
-const loginController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    return yield (0, userService_1.login)(req, res);
+const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        return yield (0, userService_1.login)(req, res);
+    }
+    catch (error) {
+        next(error);
+    }
 });
 exports.loginController = loginController;
-const updateUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
         console.log(req.body);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.updateUserController = updateUserController;
-const getUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.getUser)(req.body);
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.getUserController = getUserController;
-const getAllUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.getAllUser)();
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.getAllUserController = getAllUserController;
-const deleteUserController = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.deleteUser)(req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
-        return res.status(500).send(error);
+        next(error);
     }
 });
 exports.deleteUserController = deleteUserController;
