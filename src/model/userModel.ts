@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
 import userInterface from '../interface/userInterface';
 
-const Userschema = new mongoose.Schema<userInterface>({
+const Userschema = new Schema<userInterface>({
   name: {
     type: String,
     required: true,

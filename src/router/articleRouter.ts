@@ -8,6 +8,7 @@ import {
   getAllArticleController,
 } from '../controller/articleController';
 
+
 const router = Router();
 router.post('/createArticle/:id', createUserArticle);
 

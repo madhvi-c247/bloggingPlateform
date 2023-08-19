@@ -18,7 +18,7 @@ const createComment = async (obj: commentInterface) => {
 
 // update comment :-
 
-const updateComment = async function (obj: commentInterface, id: String) {
+const updateComment = async function (obj: commentInterface, id: string) {
   const update = await Commentschema.findByIdAndUpdate(id, {
     $set: {
       comment: obj.comment,
@@ -29,7 +29,7 @@ const updateComment = async function (obj: commentInterface, id: String) {
 
 // delete Comment :-
 
-const deleteComment = async (id: String) => {
+const deleteComment = async (id: string) => {
   const deletecomment = await Commentschema.findByIdAndDelete(id);
 
   return deletecomment;
@@ -52,11 +52,6 @@ const getComment = async (id: string) => {
       },
     },
     { $unwind: '$article_name' },
-    // {
-    //   $addFields: {
-    //     article: '$article_name.article',
-    //   },
-    // },
 
     //user id
     {
@@ -68,11 +63,7 @@ const getComment = async (id: string) => {
       },
     },
     { $unwind: '$user' },
-    // {
-    //   $addFields: {
-    //     name: '$user.name',
-    //   },
-    // },
+
     {
       $project: {
         article: '$article_name.article',

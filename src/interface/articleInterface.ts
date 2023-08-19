@@ -4,7 +4,7 @@ interface articleInterface {
   article: string;
   author: object;
   date: string;
-  categories: String;
+  categories: string;
 }
 
 export default articleInterface;

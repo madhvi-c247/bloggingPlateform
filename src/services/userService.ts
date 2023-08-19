@@ -2,7 +2,7 @@ import Userschema from '../model/userModel';
 import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { validationResult } from 'express-validator';
+// import { validationResult } from 'express-validator';
 import userInterface from '../interface/userInterface';
 import loginInterface from '../interface/loginInterface';
 
@@ -61,7 +61,7 @@ const login = async (req: Request, res: Response) => {
 
 // update User :-
 
-const updateUser = async function (obj: userInterface, id: String) {
+const updateUser = async function (obj: userInterface, id: string) {
   await Userschema.findByIdAndUpdate(id, {
     $set: {
       name: obj.name,
@@ -97,7 +97,7 @@ const getAllUser = async () => {
 
 // delete user :-
 
-const deleteUser = async (id: String) => {
+const deleteUser = async (id: string) => {
   const find = await Userschema.findByIdAndDelete(id);
   console.log(find);
   return 'Deleted';

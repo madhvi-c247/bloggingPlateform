@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const errorLast = (err, req, res, next) => {
+const errorLast = (err, req, res) => {
     res.status(500);
     res.send('Something went wrong!!!');
 };

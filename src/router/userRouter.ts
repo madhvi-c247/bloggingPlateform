@@ -8,7 +8,7 @@ import {
   getAllUserController,
 } from '../controller/usercontroller';
 import error from '../middleware/validator';
-import { body } from 'express-validator';
+// import { body } from 'express-validator';
 import passport from '../config/passport';
 
 import authorization from '../middleware/auth';
@@ -31,12 +31,7 @@ router.get(
   getUserController
 );
 
-router.post(
-  '/login',
-  body('email').notEmpty(),
-  body('password').notEmpty(),
-  loginController
-);
+router.post('/login', error, loginController);
 
 router.delete(
   '/deleteUser/:id',

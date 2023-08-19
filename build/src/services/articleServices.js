@@ -49,27 +49,81 @@ const updateArticle = function (obj, id) {
 exports.updateArticle = updateArticle;
 //get All Article
 const getAllArticle = () => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield articleModel_1.default.find();
+    const find = yield articleModel_1.default.aggregate([
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'author',
+                foreignField: '_id',
+                as: 'user',
+            },
+        },
+        { $unwind: '$user' },
+        {
+            $project: {
+                title: 1,
+                article: 1,
+                author: '$user.name',
+                date: 1,
+                categories: 1,
+            },
+        },
+    ]);
     console.log(find);
     return find;
 });
 exports.getAllArticle = getAllArticle;
 // get Article:-
 const getArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield articleModel_1.default.findById(id);
+    const find = yield articleModel_1.default.aggregate([
+        { $match: { _id: new ObjectId(id) } },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'author',
+                foreignField: '_id',
+                as: 'user',
+            },
+        },
+        { $unwind: '$user' },
+        {
+            $project: {
+                title: 1,
+                article: 1,
+                author: '$user.name',
+                date: 1,
+                categories: 1,
+            },
+        },
+    ]);
     console.log(find);
     return find;
 });
 exports.getArticle = getArticle;
 // get Article by categories :-
 const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield articleModel_1.default.find({ categories: category });
-    if (find) {
-        console.log(find);
-    }
-    else {
-        console.log('Not found ');
-    }
+    const find = yield articleModel_1.default.aggregate([
+        { $match: { categories: category } },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'author',
+                foreignField: '_id',
+                as: 'user',
+            },
+        },
+        { $unwind: '$user' },
+        {
+            $project: {
+                title: 1,
+                article: 1,
+                author: '$user.name',
+                date: 1,
+                categories: 1,
+            },
+        },
+    ]);
+    console.log(find);
     return find;
 });
 exports.getByCategory = getByCategory;

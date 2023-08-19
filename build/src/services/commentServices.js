@@ -60,11 +60,6 @@ const getComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
             },
         },
         { $unwind: '$article_name' },
-        // {
-        //   $addFields: {
-        //     article: '$article_name.article',
-        //   },
-        // },
         //user id
         {
             $lookup: {
@@ -75,11 +70,6 @@ const getComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
             },
         },
         { $unwind: '$user' },
-        // {
-        //   $addFields: {
-        //     name: '$user.name',
-        //   },
-        // },
         {
             $project: {
                 article: '$article_name.article',

@@ -5,6 +5,7 @@ import userModel from '../model/userModel';
 const JwtStrategy = passportJWT.Strategy;
 const ExtractJwt = passportJWT.ExtractJwt;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const opts: any = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = 'ZXCVBNM';

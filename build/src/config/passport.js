@@ -17,6 +17,7 @@ const passport_jwt_1 = __importDefault(require("passport-jwt"));
 const userModel_1 = __importDefault(require("../model/userModel"));
 const JwtStrategy = passport_jwt_1.default.Strategy;
 const ExtractJwt = passport_jwt_1.default.ExtractJwt;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = 'ZXCVBNM';

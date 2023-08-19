@@ -11,13 +11,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const express_validator_2 = require("express-validator");
-const error = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    const result = (0, express_validator_2.validationResult)(req);
-    if ((0, express_validator_1.body)('email').notEmpty() && (0, express_validator_1.body)('password').notEmpty()) {
-        console.log('error');
-    }
-    else if (!result.isEmpty()) {
-        return res.send({ errors: result['errors'][0] });
-    }
-});
+const error = [
+    (0, express_validator_1.body)('email').notEmpty() && (0, express_validator_1.body)('password').notEmpty(),
+    (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = (0, express_validator_2.validationResult)(req);
+        if (!result.isEmpty()) {
+            return res.send({ errors: result['errors'][0] });
+        }
+    }),
+];
 exports.default = error;
