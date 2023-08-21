@@ -3,7 +3,7 @@ interface articleInterface {
   title: string;
   article: string;
   author: object;
-  date: string;
+  date: Date;
   categories: string;
 }
 

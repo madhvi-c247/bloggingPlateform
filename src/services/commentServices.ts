@@ -75,8 +75,13 @@ const getComment = async (id: string) => {
   console.log('article comment ', find);
   return find;
 };
-// const getComment = async (id: String) => {
-//   const find = await Commentschema.findOne({ _id: id }).populate('articles');
+
+// get comment by populate :-
+// const getComment = async (id:string) => {
+//   const find = await Commentschema.find({ articleId: id}).populate(
+//     'articleId',
+//     'article'
+//   ).populate("userId",'name').populate("comment","date");
 //   console.log(find);
 //   return find;
 // };

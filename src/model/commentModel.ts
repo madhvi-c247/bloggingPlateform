@@ -4,19 +4,19 @@ import commentInterface from '../interface/commentInterface';
 const Commentschema = new Schema<commentInterface>({
   articleId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'article',
+    ref: 'Article',
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'user',
+    ref: 'User',
   },
   comment: {
     type: String,
     required: true,
   },
   date: {
-    type: String,
-    required: true,
+    type: Date,
+    default: Date.now,
   },
 });
 export default mongoose.model<commentInterface>('Comment', Commentschema);

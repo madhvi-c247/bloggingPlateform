@@ -3,20 +3,21 @@ import articleInterface from '../interface/articleInterface';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 
+
 const ObjectId = mongoose.Types.ObjectId;
 
 // create Article :-
 
 const creatarticle = async (id: string, obj: articleInterface) => {
   const article = await Articleschema.create({
-    // id:obj.id,
+    
     title: obj.title,
     article: obj.article,
     author: id,
     date: obj.date,
     categories: obj.categories,
   });
-  // console.log(obj);
+  
   return article;
 };
 
@@ -36,9 +37,37 @@ const updateArticle = async function (obj: articleInterface, id: string) {
   return update;
 };
 
+interface get{
+  field:string,
+  sortDirection:number,
+  search:string
+}
+
 //get All Article
 
-const getAllArticle = async () => {
+const getAllArticle = async (sortobj:get) => {
+let sort={}
+const field:string= sortobj.field
+const sortDirection:number=sortobj.sortDirection
+     const columns=['title']
+    sort={createdAt:-1};
+   if(field)
+   {
+    sort={[field]:sortDirection}
+   }
+
+
+   const search=sortobj.search;
+   if(search && search !=="All")
+   {
+     const searchString=search.trim()
+     const or =[];
+     columns.forEach((col)=>{
+      or.push({[col]:{$regex:`.*${searchString}.*`,$option:"i"}})
+     })
+
+   }
+
   const find = await Articleschema.aggregate([
     {
       $lookup: {
@@ -49,15 +78,21 @@ const getAllArticle = async () => {
       },
     },
     { $unwind: '$user' },
+
     {
       $project: {
-        title: 1,
-        article: 1,
+        _id: 0,
+        title: {
+          $toLower: '$title',
+        },
+        article: "$article",
         author: '$user.name',
-        date: 1,
-        categories: 1,
+        date: "$date",
+        categories: "categories",
       },
     },
+    { $sort: sort },
+    { $limit: 5},
   ]);
   console.log(find);
   return find;
@@ -77,6 +112,7 @@ const getArticle = async (id: string) => {
       },
     },
     { $unwind: '$user' },
+    
     {
       $project: {
         title: 1,
@@ -105,6 +141,7 @@ const getByCategory = async (category: string) => {
       },
     },
     { $unwind: '$user' },
+    { $limit: 3 },
     {
       $project: {
         title: 1,
@@ -118,6 +155,7 @@ const getByCategory = async (category: string) => {
   console.log(find);
   return find;
 };
+//filter 
 
 // delete Article :-
 

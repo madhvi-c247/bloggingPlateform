@@ -41,7 +41,7 @@ const getAllArticleController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getAllArticle();
+    const result = await getAllArticle(req.body);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {

@@ -21,5 +21,5 @@ app.use('/comment', commentRouter_1.default);
 app.use(errorHandler_1.default);
 app.use(errorLast_1.default);
 app.listen(env_1.port, () => {
-    console.log("server active");
+    console.log('server active');
 });

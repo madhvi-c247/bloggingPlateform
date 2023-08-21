@@ -1,4 +1,4 @@
-import express, { Express,Request,Response } from 'express'
+import express, { Express } from 'express';
 import UserRouter from './src/router/userRouter';
 import articleRouter from './src/router/articleRouter';
 import dbConnection from './src/config/db';
@@ -19,6 +19,6 @@ app.use('/comment', commentRouter);
 app.use(errorHandler);
 app.use(errorLast);
 
-app.listen(port, () =>{
-    console.log("server active")
-})
+app.listen(port, () => {
+  console.log('server active');
+});

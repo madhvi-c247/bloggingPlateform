@@ -14,12 +14,12 @@ const Articleschema = new Schema<articleInterface>({
     ref: 'user',
   },
   date: {
-    type: String,
-    required: true,
+    type: Date,
+    default: Date.now,
   },
   categories: {
     type: String,
-    enum: ['GK', 'IT', 'News', 'AI', 'Thought'],
+    enum: ['GK', 'IT', 'Sports', 'AI', 'Thought'],
     default: 'GK',
   },
 });

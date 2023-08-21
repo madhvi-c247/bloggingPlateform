@@ -34,7 +34,7 @@ const updateUserArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 exports.updateUserArticle = updateUserArticle;
 const getAllArticleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, articleServices_1.getAllArticle)();
+        const result = yield (0, articleServices_1.getAllArticle)(req.body);
         console.log(result);
         return res.status(200).send(result);
     }

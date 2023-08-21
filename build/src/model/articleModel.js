@@ -38,12 +38,12 @@ const Articleschema = new mongoose_1.Schema({
         ref: 'user',
     },
     date: {
-        type: String,
-        required: true,
+        type: Date,
+        default: Date.now,
     },
     categories: {
         type: String,
-        enum: ['GK', 'IT', 'News', 'AI', 'Thought'],
+        enum: ['GK', 'IT', 'Sports', 'AI', 'Thought'],
         default: 'GK',
     },
 });

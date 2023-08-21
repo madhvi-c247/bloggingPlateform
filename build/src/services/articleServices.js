@@ -19,14 +19,12 @@ const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
     const article = yield articleModel_1.default.create({
-        // id:obj.id,
         title: obj.title,
         article: obj.article,
         author: id,
         date: obj.date,
         categories: obj.categories,
     });
-    // console.log(obj);
     return article;
 });
 exports.creatarticle = creatarticle;
@@ -48,7 +46,23 @@ const updateArticle = function (obj, id) {
 };
 exports.updateArticle = updateArticle;
 //get All Article
-const getAllArticle = () => __awaiter(void 0, void 0, void 0, function* () {
+const getAllArticle = (sortobj) => __awaiter(void 0, void 0, void 0, function* () {
+    let sort = {};
+    const field = sortobj.field;
+    const sortDirection = sortobj.sortDirection;
+    const columns = ['title'];
+    sort = { createdAt: -1 };
+    if (field) {
+        sort = { [field]: sortDirection };
+    }
+    const search = sortobj.search;
+    if (search && search !== "All") {
+        const searchString = search.trim();
+        const or = [];
+        columns.forEach((col) => {
+            or.push({ [col]: { $regex: `.*${searchString}.*`, $option: "i" } });
+        });
+    }
     const find = yield articleModel_1.default.aggregate([
         {
             $lookup: {
@@ -61,13 +75,18 @@ const getAllArticle = () => __awaiter(void 0, void 0, void 0, function* () {
         { $unwind: '$user' },
         {
             $project: {
-                title: 1,
-                article: 1,
+                _id: 0,
+                title: {
+                    $toLower: '$title',
+                },
+                article: "$article",
                 author: '$user.name',
-                date: 1,
-                categories: 1,
+                date: "$date",
+                categories: "categories",
             },
         },
+        { $sort: sort },
+        { $limit: 5 },
     ]);
     console.log(find);
     return find;
@@ -113,6 +132,7 @@ const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* 
             },
         },
         { $unwind: '$user' },
+        { $limit: 3 },
         {
             $project: {
                 title: 1,
@@ -127,6 +147,7 @@ const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* 
     return find;
 });
 exports.getByCategory = getByCategory;
+//filter 
 // delete Article :-
 const deleteArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const deleteArticle = yield articleModel_1.default.findByIdAndDelete(id);
