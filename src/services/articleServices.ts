@@ -1,8 +1,9 @@
 import Articleschema from '../model/articleModel';
-import articleInterface from '../interface/articleInterface';
+import { articleInterface, filterInterface } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
-
+import { ParsedQs } from 'qs';
+// import { query } from 'express';
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -10,14 +11,13 @@ const ObjectId = mongoose.Types.ObjectId;
 
 const creatarticle = async (id: string, obj: articleInterface) => {
   const article = await Articleschema.create({
-    
     title: obj.title,
     article: obj.article,
     author: id,
     date: obj.date,
     categories: obj.categories,
   });
-  
+
   return article;
 };
 
@@ -37,38 +37,44 @@ const updateArticle = async function (obj: articleInterface, id: string) {
   return update;
 };
 
-interface get{
-  field:string,
-  sortDirection:number,
-  search:string
+interface getAllArticleInterface {
+  field: string;
+  sortDirection: number;
 }
 
 //get All Article
 
-const getAllArticle = async (sortobj:get) => {
-let sort={}
-const field:string= sortobj.field
-const sortDirection:number=sortobj.sortDirection
-     const columns=['title']
-    sort={createdAt:-1};
-   if(field)
-   {
-    sort={[field]:sortDirection}
-   }
+const getAllArticle = async (
+  sortobj: getAllArticleInterface,
+  query: ParsedQs
+) => {
+  let sort = {};
+  const field: string = sortobj.field;
+  const sortDirection: number = sortobj.sortDirection;
+  let { search, page, limit } = query;
 
+  sort = { createdAt: -1 };
+  if (field) {
+    sort = { [field]: sortDirection };
+  }
 
-   const search=sortobj.search;
-   if(search && search !=="All")
-   {
-     const searchString=search.trim()
-     const or =[];
-     columns.forEach((col)=>{
-      or.push({[col]:{$regex:`.*${searchString}.*`,$option:"i"}})
-     })
+  const columns = ['categories', 'title'];
 
-   }
+  let filterQuery: filterInterface = {};
+  let or: { [x: string]: { $regex: string; $options: string } }[] = [];
 
-  const find = await Articleschema.aggregate([
+  if (typeof search == 'string') {
+    const searchString = search.trim();
+
+    columns.forEach((col) => {
+      or.push({ [col]: { $regex: `.*${searchString}.*`, $options: 'i' } });
+    });
+    filterQuery.$or = or;
+    console.log('filterquery________________________', filterQuery);
+  }
+
+  const aggregateQuery = Articleschema.aggregate([
+    { $match: filterQuery },
     {
       $lookup: {
         from: 'users',
@@ -85,17 +91,31 @@ const sortDirection:number=sortobj.sortDirection
         title: {
           $toLower: '$title',
         },
-        article: "$article",
+        article: '$article',
         author: '$user.name',
-        date: "$date",
-        categories: "categories",
+        date: '$date',
+        categories: '$categories',
       },
     },
     { $sort: sort },
-    { $limit: 5},
+    // { $limit: },
   ]);
-  console.log(find);
-  return find;
+  console.log(aggregateQuery);
+
+  const options = {
+    search,
+    page,
+    limit,
+  };
+
+  const response = await Articleschema.aggregatePaginate(
+    aggregateQuery,
+    options
+  )
+    .then((result: []) => result)
+    .catch((err: Error) => console.log(err));
+  console.log(response);
+  return response;
 };
 
 // get Article:-
@@ -112,7 +132,7 @@ const getArticle = async (id: string) => {
       },
     },
     { $unwind: '$user' },
-    
+
     {
       $project: {
         title: 1,
@@ -155,7 +175,7 @@ const getByCategory = async (category: string) => {
   console.log(find);
   return find;
 };
-//filter 
+ 
 
 // delete Article :-
 

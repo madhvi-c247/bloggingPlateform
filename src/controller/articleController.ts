@@ -7,7 +7,7 @@ import {
   getAllArticle,
 } from '../services/articleServices';
 import { NextFunction, Request, Response } from 'express';
-
+import { queryInterface } from '../interface/Interfaces';
 const createUserArticle = async (
   req: Request,
   res: Response,
@@ -41,8 +41,8 @@ const getAllArticleController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getAllArticle(req.body);
-    console.log(result);
+    const result = await getAllArticle(req.body, req.query);
+
     return res.status(200).send(result);
   } catch (error) {
     next(error);

@@ -3,8 +3,8 @@ import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
 // import { validationResult } from 'express-validator';
-import userInterface from '../interface/userInterface';
-import loginInterface from '../interface/loginInterface';
+import { userInterface, loginInterface } from '../interface/Interfaces';
+
 
 //create user :-
 

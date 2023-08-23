@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import commentInterface from '../interface/commentInterface';
+import { commentInterface } from '../interface/Interfaces';
 
 const Commentschema = new Schema<commentInterface>({
   articleId: {

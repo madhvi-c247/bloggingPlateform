@@ -1,5 +1,5 @@
 import Commentschema from '../model/commentModel';
-import commentInterface from '../interface/commentInterface';
+import { commentInterface } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 const ObjectId = mongoose.Types.ObjectId;

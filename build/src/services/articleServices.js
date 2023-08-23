@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllArticle = exports.getByCategory = exports.deleteArticle = exports.getArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
+// import { query } from 'express';
 const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
@@ -46,24 +47,28 @@ const updateArticle = function (obj, id) {
 };
 exports.updateArticle = updateArticle;
 //get All Article
-const getAllArticle = (sortobj) => __awaiter(void 0, void 0, void 0, function* () {
+const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, function* () {
     let sort = {};
     const field = sortobj.field;
     const sortDirection = sortobj.sortDirection;
-    const columns = ['title'];
+    let { search, page, limit } = query;
     sort = { createdAt: -1 };
     if (field) {
         sort = { [field]: sortDirection };
     }
-    const search = sortobj.search;
-    if (search && search !== "All") {
+    const columns = ['categories', 'title'];
+    let filterQuery = {};
+    let or = [];
+    if (typeof search == 'string') {
         const searchString = search.trim();
-        const or = [];
         columns.forEach((col) => {
-            or.push({ [col]: { $regex: `.*${searchString}.*`, $option: "i" } });
+            or.push({ [col]: { $regex: `.*${searchString}.*`, $options: 'i' } });
         });
+        filterQuery.$or = or;
+        console.log('filterquery________________________', filterQuery);
     }
-    const find = yield articleModel_1.default.aggregate([
+    const aggregateQuery = articleModel_1.default.aggregate([
+        { $match: filterQuery },
         {
             $lookup: {
                 from: 'users',
@@ -79,17 +84,26 @@ const getAllArticle = (sortobj) => __awaiter(void 0, void 0, void 0, function* (
                 title: {
                     $toLower: '$title',
                 },
-                article: "$article",
+                article: '$article',
                 author: '$user.name',
-                date: "$date",
-                categories: "categories",
+                date: '$date',
+                categories: '$categories',
             },
         },
         { $sort: sort },
-        { $limit: 5 },
+        // { $limit: },
     ]);
-    console.log(find);
-    return find;
+    console.log(aggregateQuery);
+    const options = {
+        search,
+        page,
+        limit,
+    };
+    const response = yield articleModel_1.default.aggregatePaginate(aggregateQuery, options)
+        .then((result) => result)
+        .catch((err) => console.log(err));
+    console.log(response);
+    return response;
 });
 exports.getAllArticle = getAllArticle;
 // get Article:-
@@ -147,7 +161,6 @@ const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* 
     return find;
 });
 exports.getByCategory = getByCategory;
-//filter 
 // delete Article :-
 const deleteArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const deleteArticle = yield articleModel_1.default.findByIdAndDelete(id);

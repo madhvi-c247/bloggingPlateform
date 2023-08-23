@@ -22,8 +22,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const mongoose_aggregate_paginate_v2_1 = __importDefault(require("mongoose-aggregate-paginate-v2"));
 const Articleschema = new mongoose_1.Schema({
     title: {
         type: String,
@@ -47,4 +51,5 @@ const Articleschema = new mongoose_1.Schema({
         default: 'GK',
     },
 });
+Articleschema.plugin(mongoose_aggregate_paginate_v2_1.default);
 exports.default = mongoose_1.default.model('Article', Articleschema);

@@ -1,5 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
-import articleInterface from '../interface/articleInterface';
+import { articleInterface } from '../interface/Interfaces';
+import mongoosePaginate from 'mongoose-aggregate-paginate-v2';
 const Articleschema = new Schema<articleInterface>({
   title: {
     type: String,
@@ -23,4 +24,6 @@ const Articleschema = new Schema<articleInterface>({
     default: 'GK',
   },
 });
+Articleschema.plugin(mongoosePaginate);
+
 export default mongoose.model<articleInterface>('Article', Articleschema);
