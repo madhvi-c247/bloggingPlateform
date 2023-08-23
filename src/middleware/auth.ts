@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import userInterface from '../interface/userInterface';
+import { userInterface } from '../interface/Interfaces';
 
 const authorization = (role: string) => {
   console.log(role);

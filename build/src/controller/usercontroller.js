@@ -23,6 +23,7 @@ const createUserController = (req, res, next) => __awaiter(void 0, void 0, void 
 exports.createUserController = createUserController;
 const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
+        console.log(userService_1.login);
         return yield (0, userService_1.login)(req, res);
     }
     catch (error) {
@@ -34,6 +35,7 @@ const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
         console.log(req.body);
+        console.log('response________________', res);
         return res.status(200).send(result);
     }
     catch (error) {

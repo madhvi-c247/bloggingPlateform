@@ -18,24 +18,13 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
-    const create = yield userModel_1.default.create({
-        name: obj.name,
-        email: obj.email,
-        password: (obj.password = yield bcrypt_1.default.hash(obj.password, 10)),
-        age: obj.age,
-        number: obj.number,
-        role: obj.role,
-    });
+    const create = yield userModel_1.default.create(obj);
     return create;
 });
 exports.creatUser = creatUser;
 // Login user :-
 const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const result = validationResult(req);
-        // if (!result.isEmpty()) {
-        //   return res.send({ errors: result['errors'][0] });
-        // }
         const loginObj = req.body;
         const user = yield userModel_1.default.findOne({
             email: loginObj.email,
@@ -60,16 +49,20 @@ exports.login = login;
 // update User :-
 const updateUser = function (obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        yield userModel_1.default.findByIdAndUpdate(id, {
-            $set: {
+        try {
+            const result = yield userModel_1.default.findByIdAndUpdate(id, {
                 name: obj.name,
                 email: obj.email,
                 password: obj.password,
                 age: obj.age,
                 number: obj.number,
-            },
-        });
-        console.log('updating');
+                role: obj.role,
+            });
+            return result;
+        }
+        catch (error) {
+            return error;
+        }
     });
 };
 exports.updateUser = updateUser;

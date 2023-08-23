@@ -3,7 +3,7 @@ import { articleInterface, filterInterface } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 import { ParsedQs } from 'qs';
-// import { query } from 'express';
+
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -70,11 +70,11 @@ const getAllArticle = async (
       or.push({ [col]: { $regex: `.*${searchString}.*`, $options: 'i' } });
     });
     filterQuery.$or = or;
-    console.log('filterquery________________________', filterQuery);
   }
-
+  console.log('limit-----', limit);
   const aggregateQuery = Articleschema.aggregate([
     { $match: filterQuery },
+
     {
       $lookup: {
         from: 'users',
@@ -98,7 +98,8 @@ const getAllArticle = async (
       },
     },
     { $sort: sort },
-    // { $limit: },
+    // { $limit: limit },
+    // { $skip: page },
   ]);
   console.log(aggregateQuery);
 
@@ -115,7 +116,7 @@ const getAllArticle = async (
     .then((result: []) => result)
     .catch((err: Error) => console.log(err));
   console.log(response);
-  return response;
+  return aggregateQuery;
 };
 
 // get Article:-

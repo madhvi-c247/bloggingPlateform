@@ -22,8 +22,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const bcrypt_1 = __importDefault(require("bcrypt"));
 const Userschema = new mongoose_1.Schema({
     name: {
         type: String,
@@ -53,4 +57,48 @@ const Userschema = new mongoose_1.Schema({
         default: 'normal',
     },
 });
+Userschema.pre(['save'], function (next) {
+    const user = this;
+    bcrypt_1.default.genSalt(10, (err, salt) => {
+        if (err) {
+            return next(err);
+        }
+        bcrypt_1.default.hash(user.password, salt, (err, hash) => {
+            if (err) {
+                return next(err);
+            }
+            user.password = hash;
+            next();
+        });
+    });
+});
+Userschema.pre(['findOneAndUpdate'], function (next) {
+    let update = Object.assign({}, this.getUpdate());
+    if (update.password) {
+        bcrypt_1.default.genSalt(10, (err, salt) => {
+            if (err) {
+                return next(err);
+            }
+            bcrypt_1.default.hash(update.password, salt, (err, hash) => {
+                if (err) {
+                    return next(err);
+                }
+                update.password = hash;
+                this.setUpdate(update);
+                next();
+            });
+        });
+    }
+    else {
+        next();
+    }
+});
+Userschema.methods.validatePassword = function (candidatePassword) {
+    bcrypt_1.default.compare(candidatePassword, this.password, (error, isSuccess) => {
+        if (error) {
+            return false;
+        }
+        return true;
+    });
+};
 exports.default = mongoose_1.default.model('User', Userschema);

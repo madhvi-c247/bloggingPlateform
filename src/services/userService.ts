@@ -2,21 +2,14 @@ import Userschema from '../model/userModel';
 import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-// import { validationResult } from 'express-validator';
+
 import { userInterface, loginInterface } from '../interface/Interfaces';
 
 
 //create user :-
 
 const creatUser = async (obj: userInterface) => {
-  const create = await Userschema.create({
-    name: obj.name,
-    email: obj.email,
-    password: (obj.password = await bcrypt.hash(obj.password, 10)),
-    age: obj.age,
-    number: obj.number,
-    role: obj.role,
-  });
+  const create = await Userschema.create(obj);
   return create;
 };
 
@@ -24,12 +17,6 @@ const creatUser = async (obj: userInterface) => {
 
 const login = async (req: Request, res: Response) => {
   try {
-    // const result = validationResult(req);
-
-    // if (!result.isEmpty()) {
-    //   return res.send({ errors: result['errors'][0] });
-    // }
-
     const loginObj: loginInterface = req.body;
 
     const user: userInterface | null = await Userschema.findOne({
@@ -62,16 +49,19 @@ const login = async (req: Request, res: Response) => {
 // update User :-
 
 const updateUser = async function (obj: userInterface, id: string) {
-  await Userschema.findByIdAndUpdate(id, {
-    $set: {
+  try {
+    const result = await Userschema.findByIdAndUpdate(id, {
       name: obj.name,
       email: obj.email,
       password: obj.password,
       age: obj.age,
       number: obj.number,
-    },
-  });
-  console.log('updating');
+      role: obj.role,
+    });
+    return result;
+  } catch (error) {
+    return error;
+  }
 };
 
 // get User:-

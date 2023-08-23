@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllArticle = exports.getByCategory = exports.deleteArticle = exports.getArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
-// import { query } from 'express';
 const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
@@ -65,8 +64,8 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
             or.push({ [col]: { $regex: `.*${searchString}.*`, $options: 'i' } });
         });
         filterQuery.$or = or;
-        console.log('filterquery________________________', filterQuery);
     }
+    console.log('limit-----', limit);
     const aggregateQuery = articleModel_1.default.aggregate([
         { $match: filterQuery },
         {
@@ -91,7 +90,8 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
             },
         },
         { $sort: sort },
-        // { $limit: },
+        // { $limit: limit },
+        // { $skip: page },
     ]);
     console.log(aggregateQuery);
     const options = {
@@ -103,7 +103,7 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
         .then((result) => result)
         .catch((err) => console.log(err));
     console.log(response);
-    return response;
+    return aggregateQuery;
 });
 exports.getAllArticle = getAllArticle;
 // get Article:-

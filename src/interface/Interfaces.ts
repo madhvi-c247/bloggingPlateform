@@ -37,6 +37,7 @@ interface queryInterface {
 interface filterInterface {
   $or?: { [x: string]: { $regex: string; $options: string } }[];
 }
+
 export {
   articleInterface,
   commentInterface,

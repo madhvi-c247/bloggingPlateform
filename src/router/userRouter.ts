@@ -7,12 +7,12 @@ import {
   loginController,
   getAllUserController,
 } from '../controller/usercontroller';
-import error from '../middleware/validator';
+import errorValidator from '../middleware/validator';
 // import { body } from 'express-validator';
 import passport from '../config/passport';
 
 import authorization from '../middleware/auth';
-
+import { adminrole } from '../helper/constant';
 const router = Router();
 router.post('/createUser', createUserController);
 
@@ -21,7 +21,7 @@ router.put('/updateUser/:id', updateUserController);
 router.get(
   '/getAllUser',
   passport.authenticate('jwt', { session: false }),
-  authorization('admin'),
+  authorization(adminrole),
   getAllUserController
 );
 
@@ -31,12 +31,11 @@ router.get(
   getUserController
 );
 
-router.post('/login', error, loginController);
+router.post('/login', errorValidator, loginController);
 
 router.delete(
   '/deleteUser/:id',
   passport.authenticate('jwt', { session: false }),
-  authorization('admin'),
   deleteUserController
 );
 
