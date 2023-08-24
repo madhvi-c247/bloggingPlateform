@@ -34,7 +34,7 @@ const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
 exports.updateCommentController = updateCommentController;
 const getCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.getComment)(req.params.id);
+        const result = yield (0, commentServices_1.getComment)(req.body);
         return res.status(200).send(result);
     }
     catch (error) {

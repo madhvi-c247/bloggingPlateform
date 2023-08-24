@@ -16,8 +16,8 @@ app.use(express.urlencoded());
 app.use('/user', UserRouter);
 app.use('/article', articleRouter);
 app.use('/comment', commentRouter);
-// app.use(errorHandler);
-// app.use(errorLast);
+app.use(errorHandler);
+app.use(errorLast);
 
 app.listen(port, () => {
   console.log('server active');

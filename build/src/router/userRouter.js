@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = require("express");
 const usercontroller_1 = require("../controller/usercontroller");
 const validator_1 = __importDefault(require("../middleware/validator"));
-// import { body } from 'express-validator';
 const passport_1 = __importDefault(require("../config/passport"));
 const auth_1 = __importDefault(require("../middleware/auth"));
 const constant_1 = require("../helper/constant");

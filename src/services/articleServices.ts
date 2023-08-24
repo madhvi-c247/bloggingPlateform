@@ -71,7 +71,7 @@ const getAllArticle = async (
     });
     filterQuery.$or = or;
   }
-  console.log('limit-----', limit);
+
   const aggregateQuery = Articleschema.aggregate([
     { $match: filterQuery },
 
@@ -98,12 +98,12 @@ const getAllArticle = async (
       },
     },
     { $sort: sort },
-    // { $limit: limit },
-    // { $skip: page },
+    // { $limit: parseInt(limit) },
+    // { $skip: parseInt(page) },
   ]);
   console.log(aggregateQuery);
 
-  const options = {
+  const options: object = {
     search,
     page,
     limit,
@@ -113,10 +113,10 @@ const getAllArticle = async (
     aggregateQuery,
     options
   )
-    .then((result: []) => result)
+    .then((result) => result)
     .catch((err: Error) => console.log(err));
   console.log(response);
-  return aggregateQuery;
+  return response;
 };
 
 // get Article:-

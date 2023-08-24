@@ -1,7 +1,8 @@
-import mongoose, { Schema } from 'mongoose'
+import mongoose, { Schema, AggregatePaginateModel } from 'mongoose';
 import { userInterface } from '../interface/Interfaces';
 import bcrypt from 'bcrypt';
 import { error } from 'console';
+import mongoosePaginate from 'mongoose-aggregate-paginate-v2';
 const Userschema = new Schema<userInterface>({
   name: {
     type: String,
@@ -80,13 +81,16 @@ Userschema.pre(['findOneAndUpdate'], function (next) {
   }
 });
 
-Userschema.methods.validatePassword = function (candidatePassword: string) {
-  bcrypt.compare(candidatePassword, this.password, (error, isSuccess) => {
-    if (error) {
-      return false;
-    }
-    return true;
-  });
+Userschema.methods.validatePassword = async function (
+  candidatePassword: string,
+  user: string
+) {
+  return await bcrypt.compare(candidatePassword, user);
 };
 
-export default mongoose.model<userInterface>('User', Userschema);
+Userschema.plugin(mongoosePaginate);
+
+export default mongoose.model<
+  userInterface,
+  AggregatePaginateModel<userInterface>
+>('User', Userschema);

@@ -45,10 +45,10 @@ const deleteComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
     return deletecomment;
 });
 exports.deleteComment = deleteComment;
-// get comments by article id
-const getComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('found', id);
-    const find = yield commentModel_1.default.aggregate([
+const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
+    let { id, page, limit } = pagination;
+    console.log(id, pagination);
+    const aggregateQuery = commentModel_1.default.aggregate([
         { $match: { articleId: new ObjectId(id) } },
         // Article id
         {
@@ -72,13 +72,19 @@ const getComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
         { $unwind: '$user' },
         {
             $project: {
+                _id: 0,
                 article: '$article_name.article',
                 name: '$user.name',
                 comment: 1,
             },
         },
     ]);
-    console.log('article comment ', find);
-    return find;
+    const options = { id, page, limit };
+    const response = yield commentModel_1.default.aggregatePaginate(aggregateQuery, options)
+        .then((result) => result)
+        .catch((err) => console.log(err));
+    console.log(response);
+    // return response;
+    return aggregateQuery;
 });
 exports.getComment = getComment;

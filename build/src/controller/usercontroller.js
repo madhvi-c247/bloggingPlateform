@@ -34,8 +34,6 @@ exports.loginController = loginController;
 const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
-        console.log(req.body);
-        console.log('response________________', res);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -56,7 +54,7 @@ const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 exports.getUserController = getUserController;
 const getAllUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, userService_1.getAllUser)();
+        const result = yield (0, userService_1.getAllUser)(req.body);
         console.log(result);
         return res.status(200).send(result);
     }

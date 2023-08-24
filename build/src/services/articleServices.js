@@ -65,7 +65,6 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
         });
         filterQuery.$or = or;
     }
-    console.log('limit-----', limit);
     const aggregateQuery = articleModel_1.default.aggregate([
         { $match: filterQuery },
         {
@@ -90,8 +89,8 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
             },
         },
         { $sort: sort },
-        // { $limit: limit },
-        // { $skip: page },
+        // { $limit: parseInt(limit) },
+        // { $skip: parseInt(page) },
     ]);
     console.log(aggregateQuery);
     const options = {
@@ -103,7 +102,7 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
         .then((result) => result)
         .catch((err) => console.log(err));
     console.log(response);
-    return aggregateQuery;
+    return response;
 });
 exports.getAllArticle = getAllArticle;
 // get Article:-

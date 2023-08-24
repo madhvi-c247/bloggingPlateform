@@ -39,7 +39,7 @@ const getCommentController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getComment(req.params.id);
+    const result = await getComment(req.body);
 
     return res.status(200).send(result);
   } catch (error) {

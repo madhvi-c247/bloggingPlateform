@@ -1,4 +1,4 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, AggregatePaginateModel } from 'mongoose';
 import { articleInterface } from '../interface/Interfaces';
 import mongoosePaginate from 'mongoose-aggregate-paginate-v2';
 const Articleschema = new Schema<articleInterface>({
@@ -26,4 +26,7 @@ const Articleschema = new Schema<articleInterface>({
 });
 Articleschema.plugin(mongoosePaginate);
 
-export default mongoose.model<articleInterface>('Article', Articleschema);
+export default mongoose.model<
+  articleInterface,
+  AggregatePaginateModel<articleInterface>
+>('Article', Articleschema);

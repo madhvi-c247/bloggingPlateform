@@ -1,3 +1,5 @@
+import * as core from 'express';
+
 interface articleInterface {
   // id:String
   title: string;
@@ -26,6 +28,7 @@ interface userInterface {
   age: number;
   number: number;
   role: string;
+  validatePassword(candidatePassword: string, user: string): boolean;
 }
 
 interface queryInterface {
@@ -45,4 +48,5 @@ export {
   userInterface,
   queryInterface,
   filterInterface,
+  // query,
 };

@@ -7,7 +7,7 @@ import {
   getAllArticle,
 } from '../services/articleServices';
 import { NextFunction, Request, Response } from 'express';
-import { queryInterface } from '../interface/Interfaces';
+
 const createUserArticle = async (
   req: Request,
   res: Response,

@@ -8,11 +8,14 @@ import {
   getAllUserController,
 } from '../controller/usercontroller';
 import errorValidator from '../middleware/validator';
-// import { body } from 'express-validator';
+
 import passport from '../config/passport';
 
 import authorization from '../middleware/auth';
 import { adminrole } from '../helper/constant';
+
+
+
 const router = Router();
 router.post('/createUser', createUserController);
 
@@ -38,5 +41,8 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   deleteUserController
 );
+
+
+
 
 export default router

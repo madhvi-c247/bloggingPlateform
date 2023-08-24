@@ -2,6 +2,7 @@ import Commentschema from '../model/commentModel';
 import { commentInterface } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
+import { log } from 'console';
 const ObjectId = mongoose.Types.ObjectId;
 
 // create Comment :-
@@ -37,11 +38,18 @@ const deleteComment = async (id: string) => {
 
 // get comments by article id
 
-const getComment = async (id: string) => {
-  console.log('found', id);
-  const find = await Commentschema.aggregate([
-    { $match: { articleId: new ObjectId(id) } },
+interface paging {
+  id: string;
+  page: number;
+  limit: number;
+}
 
+const getComment = async (pagination: paging) => {
+  let { id, page, limit } = pagination;
+
+  console.log(id, pagination);
+  const aggregateQuery = Commentschema.aggregate([
+    { $match: { articleId: new ObjectId(id) } },
     // Article id
     {
       $lookup: {
@@ -63,17 +71,25 @@ const getComment = async (id: string) => {
       },
     },
     { $unwind: '$user' },
-
     {
       $project: {
+        _id: 0,
         article: '$article_name.article',
         name: '$user.name',
         comment: 1,
       },
     },
   ]);
-  console.log('article comment ', find);
-  return find;
+  const options: object = { id, page, limit };
+  const response = await Commentschema.aggregatePaginate(
+    aggregateQuery,
+    options
+  )
+    .then((result) => result)
+    .catch((err: Error) => console.log(err));
+  console.log(response);
+  // return response;
+  return aggregateQuery;
 };
 
 // get comment by populate :-

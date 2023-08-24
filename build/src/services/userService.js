@@ -14,7 +14,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUser = exports.login = exports.deleteUser = exports.getUser = exports.updateUser = exports.creatUser = void 0;
 const userModel_1 = __importDefault(require("../model/userModel"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+// import bcrypt from 'bcrypt';
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
@@ -32,7 +32,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!user) {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
-        const passwordMatch = yield bcrypt_1.default.compare(loginObj.password, user.password);
+        const passwordMatch = yield user.validatePassword(loginObj.password, user.password);
         if (!passwordMatch) {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
@@ -68,25 +68,42 @@ const updateUser = function (obj, id) {
 exports.updateUser = updateUser;
 // get User:-
 const getUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log(authUser);
     const getUser = yield userModel_1.default.findOne({
         email: authUser.email,
     });
-    console.log(getUser);
     return getUser;
 });
 exports.getUser = getUser;
-//all user get (Admin)
-const getAllUser = () => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield userModel_1.default.find();
-    console.log(find);
-    return find;
+const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
+    // const find = await Userschema.find();
+    // return find;
+    let { limit, page } = pagination;
+    const aggregateQuery = userModel_1.default.aggregate([
+        {
+            $project: {
+                _id: 0,
+                name: "$name",
+                email: "$email",
+                age: "$age",
+                number: "$number",
+                role: "$role"
+            },
+        },
+    ]);
+    const options = {
+        page,
+        limit,
+    };
+    const response = yield userModel_1.default.aggregatePaginate(aggregateQuery, options)
+        .then((result) => result)
+        .catch((err) => console.log(err));
+    console.log(response);
+    return response;
 });
 exports.getAllUser = getAllUser;
 // delete user :-
 const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const find = yield userModel_1.default.findByIdAndDelete(id);
-    console.log(find);
-    return 'Deleted';
+    const deleted = yield userModel_1.default.findByIdAndDelete(id);
+    return deleted;
 });
 exports.deleteUser = deleteUser;

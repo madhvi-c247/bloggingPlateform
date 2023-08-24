@@ -1,8 +1,7 @@
 import Userschema from '../model/userModel';
-import bcrypt from 'bcrypt';
+// import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-
 import { userInterface, loginInterface } from '../interface/Interfaces';
 
 
@@ -27,7 +26,7 @@ const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    const passwordMatch = await bcrypt.compare(
+    const passwordMatch = await user.validatePassword(
       loginObj.password,
       user.password
     );
@@ -69,28 +68,59 @@ const updateUser = async function (obj: userInterface, id: string) {
 const getUser = async (
   authUser: loginInterface
 ): Promise<userInterface | null> => {
-  console.log(authUser);
+ 
   const getUser: userInterface | null = await Userschema.findOne({
     email: authUser.email,
   });
-  console.log(getUser);
+
   return getUser;
 };
 
 //all user get (Admin)
+interface paging {
+  limit: number;
+  page: number;
+}
 
-const getAllUser = async () => {
-  const find = await Userschema.find();
-  console.log(find);
-  return find;
+const getAllUser = async (pagination:paging) => {
+  // const find = await Userschema.find();
+  // return find;
+  let {  limit,page } = pagination;
+
+  const aggregateQuery = Userschema.aggregate([
+
+    {
+      $project: {
+        _id:0,
+        name:"$name",
+        email:"$email",
+        age:"$age",
+        number:"$number",
+        role:"$role"
+      },
+    },
+  ]);
+const options: object = {
+    page,
+    limit,
+  };
+
+  const response = await Userschema.aggregatePaginate(
+    aggregateQuery,
+    options
+  )
+    .then((result) => result)
+    .catch((err: Error) => console.log(err));
+  console.log(response);
+  return response;
 };
+ 
 
 // delete user :-
 
 const deleteUser = async (id: string) => {
-  const find = await Userschema.findByIdAndDelete(id);
-  console.log(find);
-  return 'Deleted';
+  const deleted= await Userschema.findByIdAndDelete(id);
+  return deleted
 };
 
 export { creatUser, updateUser, getUser, deleteUser, login, getAllUser };

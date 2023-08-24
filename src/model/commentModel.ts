@@ -1,5 +1,6 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, AggregatePaginateModel } from 'mongoose';
 import { commentInterface } from '../interface/Interfaces';
+import mongoosePaginate from 'mongoose-aggregate-paginate-v2';
 
 const Commentschema = new Schema<commentInterface>({
   articleId: {
@@ -19,4 +20,10 @@ const Commentschema = new Schema<commentInterface>({
     default: Date.now,
   },
 });
-export default mongoose.model<commentInterface>('Comment', Commentschema);
+
+Commentschema.plugin(mongoosePaginate);
+
+export default mongoose.model<
+  commentInterface,
+  AggregatePaginateModel<commentInterface>
+>('Comment', Commentschema);

@@ -12,14 +12,14 @@ import { normalrole } from '../helper/constant';
 const router = Router();
 router.post(
   '/createComment',
-  passport.authenticate('jwt', { session: false }),
-  authorization(normalrole),
+  // passport.authenticate('jwt', { session: false }),
+  // authorization(normalrole),
   createCommentController
 );
 
 router.put('/updateComment/:id', updateCommentController);
 
-router.get('/getComment/:id', getCommentController);
+router.get('/getComment', getCommentController);
 
 router.delete('/deleteComment/:id', deleteCommentController);
 

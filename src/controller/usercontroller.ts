@@ -41,8 +41,7 @@ const updateUserController = async (
 ) => {
   try {
     const result = await updateUser(req.body, req.params.id);
-    console.log(req.body);
-    console.log('response________________', res);
+
     return res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -69,7 +68,7 @@ const getAllUserController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await getAllUser();
+    const result = await getAllUser(req.body);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
