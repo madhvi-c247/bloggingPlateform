@@ -69,7 +69,6 @@ const deleteComment = (user, id) => __awaiter(void 0, void 0, void 0, function* 
 exports.deleteComment = deleteComment;
 const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
     let { id, page, limit } = pagination;
-    console.log(id, pagination);
     const aggregateQuery = commentModel_1.default.aggregate([
         { $match: { articleId: new ObjectId(id) } },
         // Article id

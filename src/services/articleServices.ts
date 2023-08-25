@@ -28,17 +28,6 @@ const updateArticle = async function (
   obj: articleInterface,
   id: string
 ) {
-  // const update = await Articleschema.findByIdAndUpdate(id, {
-  //   $set: {
-  //     title: obj.title,
-  //     article: obj.article,
-  //     author: obj.author,
-  //     date: obj.date,
-  //     categories: obj.categories,
-  //   },
-  // });
-
-  // return update;
   const Id = user._id.toString();
   console.log(Id, id);
   if (Id == id) {
@@ -53,7 +42,7 @@ const updateArticle = async function (
         },
       }
     );
-    console.log('------' + update);
+
     return update;
   } else {
     throw new Error('User id is not correct');

@@ -31,16 +31,6 @@ exports.creatarticle = creatarticle;
 // update Article :-
 const updateArticle = function (user, obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const update = await Articleschema.findByIdAndUpdate(id, {
-        //   $set: {
-        //     title: obj.title,
-        //     article: obj.article,
-        //     author: obj.author,
-        //     date: obj.date,
-        //     categories: obj.categories,
-        //   },
-        // });
-        // return update;
         const Id = user._id.toString();
         console.log(Id, id);
         if (Id == id) {
@@ -52,7 +42,6 @@ const updateArticle = function (user, obj, id) {
                     categories: obj.categories,
                 },
             });
-            console.log('------' + update);
             return update;
         }
         else {

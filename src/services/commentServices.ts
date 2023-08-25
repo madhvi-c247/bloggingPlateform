@@ -80,7 +80,6 @@ interface paging {
 const getComment = async (pagination: paging) => {
   let { id, page, limit } = pagination;
 
-  console.log(id, pagination);
   const aggregateQuery = Commentschema.aggregate([
     { $match: { articleId: new ObjectId(id) } },
     // Article id
