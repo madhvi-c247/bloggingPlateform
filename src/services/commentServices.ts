@@ -22,6 +22,7 @@ const createComment = async (obj: commentInterface) => {
 
 const updateComment = async function (obj: commentInterface, id: string) {
   //first compare authenticated user id and comment userId.
+  // give proper error also
   const update = await Commentschema.findByIdAndUpdate(id, {
     $set: {
       comment: obj.comment,
