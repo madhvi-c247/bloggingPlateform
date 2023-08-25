@@ -12,6 +12,11 @@ const commentRouter_1 = __importDefault(require("./src/router/commentRouter"));
 const errorHandler_1 = __importDefault(require("./src/middleware/errorHandler"));
 const errorLast_1 = __importDefault(require("./src/middleware/errorLast"));
 const app = (0, express_1.default)();
+app.set('view engine', 'ejs');
+app.get('/home', (req, res) => {
+    let animals = [{ name: 'Alligator' }, { name: 'Crocodile' }];
+    res.render('home', { animals: animals });
+});
 (0, db_1.default)();
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded());

@@ -29,19 +29,35 @@ const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.creatarticle = creatarticle;
 // update Article :-
-const updateArticle = function (obj, id) {
+const updateArticle = function (user, obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const update = yield articleModel_1.default.findByIdAndUpdate(id, {
-            $set: {
-                title: obj.title,
-                article: obj.article,
-                author: obj.author,
-                date: obj.date,
-                categories: obj.categories,
-            },
-        });
-        console.log('updating');
-        return update;
+        // const update = await Articleschema.findByIdAndUpdate(id, {
+        //   $set: {
+        //     title: obj.title,
+        //     article: obj.article,
+        //     author: obj.author,
+        //     date: obj.date,
+        //     categories: obj.categories,
+        //   },
+        // });
+        // return update;
+        const Id = user._id.toString();
+        console.log(Id, id);
+        if (Id == id) {
+            const update = yield articleModel_1.default.findOneAndUpdate({ author: id }, {
+                $set: {
+                    title: obj.title,
+                    article: obj.article,
+                    date: obj.date,
+                    categories: obj.categories,
+                },
+            });
+            console.log('------' + update);
+            return update;
+        }
+        else {
+            throw new Error('User id is not correct');
+        }
     });
 };
 exports.updateArticle = updateArticle;
@@ -128,7 +144,6 @@ const getArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
             },
         },
     ]);
-    console.log(find);
     return find;
 });
 exports.getArticle = getArticle;
@@ -156,13 +171,18 @@ const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* 
             },
         },
     ]);
-    console.log(find);
     return find;
 });
 exports.getByCategory = getByCategory;
 // delete Article :-
-const deleteArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const deleteArticle = yield articleModel_1.default.findByIdAndDelete(id);
-    return deleteArticle;
+const deleteArticle = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const Id = user._id.toString();
+    if (Id == id) {
+        const deletearticle = yield articleModel_1.default.findOneAndDelete({ author: id });
+        return deletearticle;
+    }
+    else {
+        throw new Error('User id is not correct');
+    }
 });
 exports.deleteArticle = deleteArticle;

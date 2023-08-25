@@ -47,21 +47,27 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.login = login;
 // update User :-
-const updateUser = function (obj, id) {
+const updateUser = function (user, obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const result = yield userModel_1.default.findByIdAndUpdate(id, {
-                name: obj.name,
-                email: obj.email,
-                password: obj.password,
-                age: obj.age,
-                number: obj.number,
-                role: obj.role,
-            });
-            return result;
+        const Id = user._id.toString();
+        if (Id == id) {
+            try {
+                const result = yield userModel_1.default.findByIdAndUpdate(id, {
+                    name: obj.name,
+                    email: obj.email,
+                    password: obj.password,
+                    age: obj.age,
+                    number: obj.number,
+                    role: obj.role,
+                });
+                return result;
+            }
+            catch (error) {
+                return error;
+            }
         }
-        catch (error) {
-            return error;
+        else {
+            throw new Error('User id is not correct');
         }
     });
 };
@@ -82,11 +88,11 @@ const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* (
         {
             $project: {
                 _id: 0,
-                name: "$name",
-                email: "$email",
-                age: "$age",
-                number: "$number",
-                role: "$role"
+                name: '$name',
+                email: '$email',
+                age: '$age',
+                number: '$number',
+                role: '$role',
             },
         },
     ]);
@@ -102,8 +108,15 @@ const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* (
 });
 exports.getAllUser = getAllUser;
 // delete user :-
-const deleteUser = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const deleted = yield userModel_1.default.findByIdAndDelete(id);
-    return deleted;
+const deleteUser = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    // const deleted= await Userschema.findByIdAndDelete(id);
+    const Id = user._id.toString();
+    if (Id == id) {
+        const deleted = yield userModel_1.default.findOneAndDelete({ _id: id });
+        return deleted;
+    }
+    else {
+        throw new Error('User id is not correct');
+    }
 });
 exports.deleteUser = deleteUser;

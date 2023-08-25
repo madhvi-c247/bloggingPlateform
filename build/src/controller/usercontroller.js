@@ -33,7 +33,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
 exports.loginController = loginController;
 const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, userService_1.updateUser)(req.body, req.params.id);
+        const result = yield (0, userService_1.updateUser)(req.user, req.body, req.params.id);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -65,7 +65,7 @@ const getAllUserController = (req, res, next) => __awaiter(void 0, void 0, void 
 exports.getAllUserController = getAllUserController;
 const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, userService_1.deleteUser)(req.params.id);
+        const result = yield (0, userService_1.deleteUser)(req.user, req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }

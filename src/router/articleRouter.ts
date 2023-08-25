@@ -8,16 +8,31 @@ import {
   getAllArticleController,
 } from '../controller/articleController';
 import multer from 'multer';
+import passport from '../config/passport';
+
+import authorization from '../middleware/auth';
+import { normalrole } from '../helper/constant';
+
 // let upload = multer({ dest: 'uploads/' });
 
 const router = Router();
 router.post('/createArticle/:id', createUserArticle);
 
-router.put('/updateArticle/:id', updateUserArticle);
+router.put(
+  '/updateArticle/:id',
+  passport.authenticate('jwt', { session: false }),
+  authorization(normalrole),
+  updateUserArticle
+);
 
 router.get('/getArticle/:id', getUserArticle);
 
-router.delete('/deleteArticle/:id', deleteArticleController);
+router.delete(
+  '/deleteArticle/:id',
+  passport.authenticate('jwt', { session: false }),
+  authorization(normalrole),
+  deleteArticleController
+);
 
 router.get('/getAllArticle', getAllArticleController);
 

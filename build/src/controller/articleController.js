@@ -23,7 +23,7 @@ const createUserArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, 
 exports.createUserArticle = createUserArticle;
 const updateUserArticle = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, articleServices_1.updateArticle)(req.body, req.params.id);
+        const result = yield (0, articleServices_1.updateArticle)(req.user, req.body, req.params.id);
         console.log(req.body);
         return res.status(200).send(result);
     }
@@ -67,7 +67,7 @@ const getCategoryController = (req, res, next) => __awaiter(void 0, void 0, void
 exports.getCategoryController = getCategoryController;
 const deleteArticleController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, articleServices_1.deleteArticle)(req.params.id);
+        const result = yield (0, articleServices_1.deleteArticle)(req.user, req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }

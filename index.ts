@@ -6,8 +6,19 @@ import { port } from './src/config/env';
 import commentRouter from './src/router/commentRouter';
 import errorHandler from './src/middleware/errorHandler';
 import errorLast from './src/middleware/errorLast';
+import ejs from 'ejs';
 
 const app: Express = express();
+
+app.set('view engine', 'ejs');
+
+app.get('/home', (req, res) => {
+  let animals = [{ name: 'Alligator' }, { name: 'Crocodile' }];
+  res.render('home', { animals: animals });
+});
+
+
+
 
 dbConnection();
 app.use(express.json());

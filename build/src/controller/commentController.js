@@ -13,7 +13,8 @@ exports.deleteCommentController = exports.getCommentController = exports.updateC
 const commentServices_1 = require("../services/commentServices");
 const createCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.createComment)(req.body);
+        const result = yield (0, commentServices_1.createComment)(req.user, req.body);
+        // console.log('----------------------------------', req.body, req.user);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -23,7 +24,7 @@ const createCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
 exports.createCommentController = createCommentController;
 const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.updateComment)(req.body, req.params.id);
+        const result = yield (0, commentServices_1.updateComment)(req.user, req.body, req.params.id);
         console.log(req.body);
         return res.status(200).send(result);
     }
@@ -42,9 +43,21 @@ const getCommentController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.getCommentController = getCommentController;
+// const getCommentidController = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const result = await getcommentid(req.params.id);
+//     return res.status(200).send(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
 const deleteCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.deleteComment)(req.params.id);
+        const result = yield (0, commentServices_1.deleteComment)(req.user, req.params.id);
         console.log(result);
         return res.status(200).send(result);
     }

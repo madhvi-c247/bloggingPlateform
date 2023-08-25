@@ -3,6 +3,7 @@ import {
   updateComment,
   getComment,
   deleteComment,
+  // getcommentid,
 } from '../services/commentServices';
 import { NextFunction, Request, Response } from 'express';
 
@@ -12,7 +13,8 @@ const createCommentController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await createComment(req.body);
+    const result = await createComment(req.user, req.body);
+    // console.log('----------------------------------', req.body, req.user);
     return res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -25,7 +27,7 @@ const updateCommentController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await updateComment(req.body, req.params.id);
+    const result = await updateComment(req.user, req.body, req.params.id);
     console.log(req.body);
     return res.status(200).send(result);
   } catch (error) {
@@ -47,13 +49,27 @@ const getCommentController = async (
   }
 };
 
+// const getCommentidController = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+//   try {
+//     const result = await getcommentid(req.params.id);
+
+//     return res.status(200).send(result);
+//   } catch (error) {
+//     next(error);
+//   }
+// };
+
 const deleteCommentController = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
   try {
-    const result = await deleteComment(req.params.id);
+    const result = await deleteComment(req.user, req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
@@ -66,4 +82,5 @@ export {
   updateCommentController,
   getCommentController,
   deleteCommentController,
+  // getCommentidController,
 };

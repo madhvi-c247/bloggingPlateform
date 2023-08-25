@@ -12,14 +12,16 @@ import errorValidator from '../middleware/validator';
 import passport from '../config/passport';
 
 import authorization from '../middleware/auth';
-import { adminrole } from '../helper/constant';
-
-
+import { adminrole, normalrole } from '../helper/constant';
 
 const router = Router();
 router.post('/createUser', createUserController);
 
-router.put('/updateUser/:id', updateUserController);
+router.put(
+  '/updateUser/:id',
+  passport.authenticate('jwt', { session: false }),
+  updateUserController
+);
 
 router.get(
   '/getAllUser',

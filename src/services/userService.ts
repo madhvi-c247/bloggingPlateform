@@ -47,19 +47,24 @@ const login = async (req: Request, res: Response) => {
 
 // update User :-
 
-const updateUser = async function (obj: userInterface, id: string) {
-  try {
-    const result = await Userschema.findByIdAndUpdate(id, {
-      name: obj.name,
-      email: obj.email,
-      password: obj.password,
-      age: obj.age,
-      number: obj.number,
-      role: obj.role,
-    });
-    return result;
-  } catch (error) {
-    return error;
+const updateUser = async function (user: any, obj: userInterface, id: string) {
+  const Id = user._id.toString();
+  if (Id == id) {
+    try {
+      const result = await Userschema.findByIdAndUpdate(id, {
+        name: obj.name,
+        email: obj.email,
+        password: obj.password,
+        age: obj.age,
+        number: obj.number,
+        role: obj.role,
+      });
+      return result;
+    } catch (error) {
+      return error;
+    }
+  } else {
+    throw new Error('User id is not correct');
   }
 };
 
@@ -68,7 +73,6 @@ const updateUser = async function (obj: userInterface, id: string) {
 const getUser = async (
   authUser: loginInterface
 ): Promise<userInterface | null> => {
- 
   const getUser: userInterface | null = await Userschema.findOne({
     email: authUser.email,
   });
@@ -82,45 +86,47 @@ interface paging {
   page: number;
 }
 
-const getAllUser = async (pagination:paging) => {
+const getAllUser = async (pagination: paging) => {
   // const find = await Userschema.find();
   // return find;
-  let {  limit,page } = pagination;
+  let { limit, page } = pagination;
 
   const aggregateQuery = Userschema.aggregate([
-
     {
       $project: {
-        _id:0,
-        name:"$name",
-        email:"$email",
-        age:"$age",
-        number:"$number",
-        role:"$role"
+        _id: 0,
+        name: '$name',
+        email: '$email',
+        age: '$age',
+        number: '$number',
+        role: '$role',
       },
     },
   ]);
-const options: object = {
+  const options: object = {
     page,
     limit,
   };
 
-  const response = await Userschema.aggregatePaginate(
-    aggregateQuery,
-    options
-  )
+  const response = await Userschema.aggregatePaginate(aggregateQuery, options)
     .then((result) => result)
     .catch((err: Error) => console.log(err));
   console.log(response);
   return response;
 };
- 
 
 // delete user :-
 
-const deleteUser = async (id: string) => {
-  const deleted= await Userschema.findByIdAndDelete(id);
-  return deleted
+const deleteUser = async (user: any, id: string) => {
+  // const deleted= await Userschema.findByIdAndDelete(id);
+  const Id = user._id.toString();
+
+  if (Id == id) {
+    const deleted = await Userschema.findOneAndDelete({ _id: id });
+    return deleted;
+  } else {
+    throw new Error('User id is not correct');
+  }
 };
 
 export { creatUser, updateUser, getUser, deleteUser, login, getAllUser };

@@ -1,8 +1,13 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
-const errorLast = (err: Error, req: Request, res: Response) => {
+const errorLast = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   res.status(500);
-  console.log('------------------------', res);
   res.send('Something went wrong!!!');
+  next();
 };
 export default errorLast;

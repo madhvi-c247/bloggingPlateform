@@ -4,6 +4,7 @@ import {
   updateCommentController,
   getCommentController,
   deleteCommentController,
+  // getCommentidController,
 } from '../controller/commentController';
 import passport from '../config/passport';
 
@@ -12,16 +13,28 @@ import { normalrole } from '../helper/constant';
 const router = Router();
 router.post(
   '/createComment',
-  // passport.authenticate('jwt', { session: false }),
-  // authorization(normalrole),
+  passport.authenticate('jwt', { session: false }),
+  authorization(normalrole),
   createCommentController
 );
 
-router.put('/updateComment/:id', updateCommentController);
+router.put(
+  '/updateComment/:id',
+  passport.authenticate('jwt', { session: false }),
+  authorization(normalrole),
+  updateCommentController
+);
 
 router.get('/getComment', getCommentController);
 
-router.delete('/deleteComment/:id', deleteCommentController);
+// router.get('/getCommentid/:id', getCommentidController);
+
+router.delete(
+  '/deleteComment/:id',
+  passport.authenticate('jwt', { session: false }),
+  authorization(normalrole),
+  deleteCommentController
+);
 
 
 

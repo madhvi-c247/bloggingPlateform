@@ -23,18 +23,41 @@ const creatarticle = async (id: string, obj: articleInterface) => {
 
 // update Article :-
 
-const updateArticle = async function (obj: articleInterface, id: string) {
-  const update = await Articleschema.findByIdAndUpdate(id, {
-    $set: {
-      title: obj.title,
-      article: obj.article,
-      author: obj.author,
-      date: obj.date,
-      categories: obj.categories,
-    },
-  });
-  console.log('updating');
-  return update;
+const updateArticle = async function (
+  user: any,
+  obj: articleInterface,
+  id: string
+) {
+  // const update = await Articleschema.findByIdAndUpdate(id, {
+  //   $set: {
+  //     title: obj.title,
+  //     article: obj.article,
+  //     author: obj.author,
+  //     date: obj.date,
+  //     categories: obj.categories,
+  //   },
+  // });
+
+  // return update;
+  const Id = user._id.toString();
+  console.log(Id, id);
+  if (Id == id) {
+    const update = await Articleschema.findOneAndUpdate(
+      { author: id },
+      {
+        $set: {
+          title: obj.title,
+          article: obj.article,
+          date: obj.date,
+          categories: obj.categories,
+        },
+      }
+    );
+    console.log('------' + update);
+    return update;
+  } else {
+    throw new Error('User id is not correct');
+  }
 };
 
 interface getAllArticleInterface {
@@ -144,7 +167,7 @@ const getArticle = async (id: string) => {
       },
     },
   ]);
-  console.log(find);
+
   return find;
 };
 
@@ -173,17 +196,21 @@ const getByCategory = async (category: string) => {
       },
     },
   ]);
-  console.log(find);
+
   return find;
 };
- 
 
 // delete Article :-
 
-const deleteArticle = async (id: string) => {
-  const deleteArticle = await Articleschema.findByIdAndDelete(id);
+const deleteArticle = async (user: any, id: string) => {
+  const Id = user._id.toString();
 
-  return deleteArticle;
+  if (Id == id) {
+    const deletearticle = await Articleschema.findOneAndDelete({ author: id });
+    return deletearticle;
+  } else {
+    throw new Error('User id is not correct');
+  }
 };
 
 export {

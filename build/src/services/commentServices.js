@@ -17,32 +17,54 @@ const commentModel_1 = __importDefault(require("../model/commentModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Comment :-
-const createComment = (obj) => __awaiter(void 0, void 0, void 0, function* () {
-    yield commentModel_1.default.create({
-        userId: obj.userId,
-        articleId: obj.articleId,
-        comment: obj.comment,
-        date: obj.date,
-    });
-    return 'Comment created';
+const createComment = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
+    const Id = user._id.toString();
+    console.log(Id === obj.userId);
+    if (Id === obj.userId) {
+        yield commentModel_1.default.create({
+            userId: obj.userId,
+            articleId: obj.articleId,
+            comment: obj.comment,
+            date: obj.date,
+        });
+        return 'Comment created';
+    }
+    else {
+        throw new Error('User id is not correct');
+    }
+    //
 });
 exports.createComment = createComment;
 // update comment :-
-const updateComment = function (obj, id) {
+const updateComment = function (user, obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const update = yield commentModel_1.default.findByIdAndUpdate(id, {
-            $set: {
-                comment: obj.comment,
-            },
-        });
-        return update;
+        const Id = user._id.toString();
+        console.log(Id, id);
+        if (Id == id) {
+            const update = yield commentModel_1.default.findOneAndUpdate({ userId: id }, {
+                $set: {
+                    comment: obj.comment,
+                },
+            });
+            console.log('------' + update);
+            return update;
+        }
+        else {
+            throw new Error('User id is not correct');
+        }
     });
 };
 exports.updateComment = updateComment;
 // delete Comment :-
-const deleteComment = (id) => __awaiter(void 0, void 0, void 0, function* () {
-    const deletecomment = yield commentModel_1.default.findByIdAndDelete(id);
-    return deletecomment;
+const deleteComment = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+    const Id = user._id.toString();
+    if (Id == id) {
+        const deletecomment = yield commentModel_1.default.findOneAndDelete({ userId: id });
+        return deletecomment;
+    }
+    else {
+        throw new Error('User id is not correct');
+    }
 });
 exports.deleteComment = deleteComment;
 const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
@@ -83,8 +105,7 @@ const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* (
     const response = yield commentModel_1.default.aggregatePaginate(aggregateQuery, options)
         .then((result) => result)
         .catch((err) => console.log(err));
-    console.log(response);
-    // return response;
-    return aggregateQuery;
+    return response;
+    // return aggregateQuery;
 });
 exports.getComment = getComment;

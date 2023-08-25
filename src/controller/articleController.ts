@@ -27,7 +27,7 @@ const updateUserArticle = async (
   next: NextFunction
 ) => {
   try {
-    const result = await updateArticle(req.body, req.params.id);
+    const result = await updateArticle(req.user, req.body, req.params.id);
     console.log(req.body);
     return res.status(200).send(result);
   } catch (error) {
@@ -83,7 +83,7 @@ const deleteArticleController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await deleteArticle(req.params.id);
+    const result = await deleteArticle(req.user, req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {
