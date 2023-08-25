@@ -8,6 +8,7 @@ const ObjectId = mongoose.Types.ObjectId;
 // create Comment :-
 
 const createComment = async (obj: commentInterface) => {
+  // change obj.userId to authenticated user id
   await Commentschema.create({
     userId: obj.userId,
     articleId: obj.articleId,
@@ -20,6 +21,7 @@ const createComment = async (obj: commentInterface) => {
 // update comment :-
 
 const updateComment = async function (obj: commentInterface, id: string) {
+  //first compare authenticated user id and comment userId.
   const update = await Commentschema.findByIdAndUpdate(id, {
     $set: {
       comment: obj.comment,
