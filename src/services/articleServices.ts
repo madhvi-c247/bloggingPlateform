@@ -3,7 +3,7 @@ import { articleInterface, filterInterface } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 import { ParsedQs } from 'qs';
-
+import { log } from 'console';
 
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -23,16 +23,12 @@ const creatarticle = async (id: string, obj: articleInterface) => {
 
 // update Article :-
 
-const updateArticle = async function (
-  user: any,
-  obj: articleInterface,
-  id: string
-) {
+const updateArticle = async function (user: any, obj: articleInterface) {
   const Id = user._id.toString();
-  console.log(Id, id);
-  if (Id == id) {
+
+  if (Id == obj.author) {
     const update = await Articleschema.findOneAndUpdate(
-      { author: id },
+      { _id: obj.articleId },
       {
         $set: {
           title: obj.title,
@@ -191,11 +187,16 @@ const getByCategory = async (category: string) => {
 
 // delete Article :-
 
-const deleteArticle = async (user: any, id: string) => {
+const deleteArticle = async (
+  user: any,
+  ids: { userId: string; articleId: string }
+) => {
   const Id = user._id.toString();
 
-  if (Id == id) {
-    const deletearticle = await Articleschema.findOneAndDelete({ author: id });
+  if (Id == ids.userId) {
+    const deletearticle = await Articleschema.findOneAndDelete({
+      _id: ids.articleId,
+    });
     return deletearticle;
   } else {
     throw new Error('User id is not correct');

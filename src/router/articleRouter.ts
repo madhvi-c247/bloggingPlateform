@@ -6,7 +6,7 @@ import {
   deleteArticleController,
   getCategoryController,
   getAllArticleController,
-} from '../controller/articleController';
+} from '../controller/index';
 import multer from 'multer';
 import passport from '../config/passport';
 
@@ -19,7 +19,7 @@ const router = Router();
 router.post('/createArticle/:id', createUserArticle);
 
 router.put(
-  '/updateArticle/:id',
+  '/updateArticle',
   passport.authenticate('jwt', { session: false }),
   authorization(normalrole),
   updateUserArticle
@@ -28,9 +28,8 @@ router.put(
 router.get('/getArticle/:id', getUserArticle);
 
 router.delete(
-  '/deleteArticle/:id',
+  '/deleteArticle',
   passport.authenticate('jwt', { session: false }),
-  authorization(normalrole),
   deleteArticleController
 );
 

@@ -24,7 +24,7 @@ const createCommentController = (req, res, next) => __awaiter(void 0, void 0, vo
 exports.createCommentController = createCommentController;
 const updateCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.updateComment)(req.user, req.body, req.params.id);
+        const result = yield (0, commentServices_1.updateComment)(req.user, req.body);
         console.log(req.body);
         return res.status(200).send(result);
     }
@@ -57,7 +57,7 @@ exports.getCommentController = getCommentController;
 // };
 const deleteCommentController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, commentServices_1.deleteComment)(req.user, req.params.id);
+        const result = yield (0, commentServices_1.deleteComment)(req.user, req.body);
         console.log(result);
         return res.status(200).send(result);
     }

@@ -36,17 +36,15 @@ const createComment = (user, obj) => __awaiter(void 0, void 0, void 0, function*
 });
 exports.createComment = createComment;
 // update comment :-
-const updateComment = function (user, obj, id) {
+const updateComment = function (user, obj) {
     return __awaiter(this, void 0, void 0, function* () {
         const Id = user._id.toString();
-        console.log(Id, id);
-        if (Id == id) {
-            const update = yield commentModel_1.default.findOneAndUpdate({ userId: id }, {
+        if (Id == obj.userId) {
+            const update = yield commentModel_1.default.findOneAndUpdate({ _id: obj.commentId }, {
                 $set: {
                     comment: obj.comment,
                 },
             });
-            console.log('------' + update);
             return update;
         }
         else {
@@ -56,10 +54,12 @@ const updateComment = function (user, obj, id) {
 };
 exports.updateComment = updateComment;
 // delete Comment :-
-const deleteComment = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteComment = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
     const Id = user._id.toString();
-    if (Id == id) {
-        const deletecomment = yield commentModel_1.default.findOneAndDelete({ userId: id });
+    if (Id == obj.userId) {
+        const deletecomment = yield commentModel_1.default.findOneAndDelete({
+            _id: obj.commentId,
+        });
         return deletecomment;
     }
     else {

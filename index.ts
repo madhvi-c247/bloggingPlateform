@@ -1,25 +1,18 @@
 import express, { Express } from 'express';
-import UserRouter from './src/router/userRouter';
-import articleRouter from './src/router/articleRouter';
+import { commentRouter,UserRouter,articleRouter } from './src/router/index';
 import dbConnection from './src/config/db';
 import { port } from './src/config/env';
-import commentRouter from './src/router/commentRouter';
-import errorHandler from './src/middleware/errorHandler';
-import errorLast from './src/middleware/errorLast';
+import { errorHandler,errorLast } from './src/middleware/index';
 import ejs from 'ejs';
 
 const app: Express = express();
 
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
 
-app.get('/home', (req, res) => {
-  let animals = [{ name: 'Alligator' }, { name: 'Crocodile' }];
-  res.render('home', { animals: animals });
-});
-
-
-
-
+// app.get('/home', (req, res) => {
+//   let animals = [{ name: 'Alligator' }, { name: 'Crocodile' }];
+//   res.render('home', { animals: animals });
+// });
 dbConnection();
 app.use(express.json());
 app.use(express.urlencoded());
