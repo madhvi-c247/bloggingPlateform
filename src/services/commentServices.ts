@@ -1,5 +1,5 @@
 import Commentschema from '../model/commentModel';
-import { commentInterface, loginInterface } from '../interface/Interfaces';
+import { commentInterface, paging } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 import { log } from 'console';
@@ -8,18 +8,15 @@ const ObjectId = mongoose.Types.ObjectId;
 // create Comment :-
 
 const createComment = async (user: any, obj: commentInterface) => {
-  const Id = user._id.toString();
-  console.log(Id === obj.userId);
-  if (Id === obj.userId) {
-    await Commentschema.create({
-      userId: obj.userId,
+  const loginId = user._id.toString();
+  {
+    const created = await Commentschema.create({
+      userId: loginId,
       articleId: obj.articleId,
       comment: obj.comment,
       date: obj.date,
     });
-    return 'Comment created';
-  } else {
-    throw new Error('User id is not correct');
+    return created;
   }
 
   //
@@ -60,20 +57,6 @@ const deleteComment = async (user: any, obj: commentInterface) => {
     throw new Error('User id is not correct');
   }
 };
-
-// const getcommentid = async (id: string) => {
-//   const find = await Commentschema.find({ _id:id });
-
-//   return find;
-// };
-
-// get comments by article id
-
-interface paging {
-  id: string;
-  page: number;
-  limit: number;
-}
 
 const getComment = async (pagination: paging) => {
   let { id, page, limit } = pagination;
@@ -120,7 +103,6 @@ const getComment = async (pagination: paging) => {
     .catch((err: Error) => console.log(err));
 
   return response;
-  // return aggregateQuery;
 };
 
 // get comment by populate :-
@@ -133,10 +115,4 @@ const getComment = async (pagination: paging) => {
 //   return find;
 // };
 
-export {
-  createComment,
-  updateComment,
-  getComment,
-  deleteComment,
-  // getcommentid,
-};
+export { createComment, updateComment, getComment, deleteComment };

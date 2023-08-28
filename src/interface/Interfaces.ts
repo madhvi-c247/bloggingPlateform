@@ -1,5 +1,3 @@
-import * as core from 'express';
-
 interface articleInterface {
   articleId: String;
   title: string;
@@ -32,6 +30,16 @@ interface userInterface {
   validatePassword(candidatePassword: string, user: string): boolean;
 }
 
+interface user {
+  _id: Object;
+  name: string;
+  email: string;
+  password: string;
+  age: number;
+  number: number;
+  role: string;
+}
+
 interface queryInterface {
   search: string;
   page: string;
@@ -42,6 +50,16 @@ interface filterInterface {
   $or?: { [x: string]: { $regex: string; $options: string } }[];
 }
 
+interface getAllArticleInterface {
+  field: string;
+  sortDirection: number;
+}
+
+interface paging {
+  id: string;
+  page: number;
+  limit: number;
+}
 export {
   articleInterface,
   commentInterface,
@@ -49,5 +67,8 @@ export {
   userInterface,
   queryInterface,
   filterInterface,
+  getAllArticleInterface,
+  paging,
+  user,
   // query,
 };

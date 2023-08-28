@@ -3,7 +3,8 @@ import { commentRouter,UserRouter,articleRouter } from './src/router/index';
 import dbConnection from './src/config/db';
 import { port } from './src/config/env';
 import { errorHandler,errorLast } from './src/middleware/index';
-import ejs from 'ejs';
+import { versions } from './src/helper/constant';
+// import ejs from 'ejs';
 
 const app: Express = express();
 
@@ -17,12 +18,14 @@ dbConnection();
 app.use(express.json());
 app.use(express.urlencoded());
 
-app.use('/user', UserRouter);
-app.use('/article', articleRouter);
-app.use('/comment', commentRouter);
+app.use(`/${versions}/user`, UserRouter);
+app.use(`/${versions}/article`, articleRouter);
+app.use(`/${versions}/comment`, commentRouter);
 app.use(errorHandler);
 app.use(errorLast);
 
 app.listen(port, () => {
   console.log('server active');
 });
+
+export default app;

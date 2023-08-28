@@ -19,18 +19,14 @@ const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Comment :-
 const createComment = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
     const Id = user._id.toString();
-    console.log(Id === obj.userId);
-    if (Id === obj.userId) {
-        yield commentModel_1.default.create({
-            userId: obj.userId,
+    {
+        const created = yield commentModel_1.default.create({
+            userId: user._id,
             articleId: obj.articleId,
             comment: obj.comment,
             date: obj.date,
         });
-        return 'Comment created';
-    }
-    else {
-        throw new Error('User id is not correct');
+        return created;
     }
     //
 });
@@ -105,6 +101,5 @@ const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* (
         .then((result) => result)
         .catch((err) => console.log(err));
     return response;
-    // return aggregateQuery;
 });
 exports.getComment = getComment;

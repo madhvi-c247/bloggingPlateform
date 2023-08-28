@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllUser = exports.login = exports.deleteUser = exports.getUser = exports.updateUser = exports.creatUser = void 0;
 const userModel_1 = __importDefault(require("../model/userModel"));
-// import bcrypt from 'bcrypt';
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
@@ -36,7 +35,7 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!passwordMatch) {
             return res.status(400).json({ message: 'Invalid username or password' });
         }
-        const token = jsonwebtoken_1.default.sign({ email: user.email, name: user.name }, 'ZXCVBNM', {
+        const token = jsonwebtoken_1.default.sign({ email: user.email, name: user.name, age: user.age }, 'ZXCVBNM', {
             expiresIn: '1h',
         });
         res.json({ message: 'Logged in sucessful', token });
@@ -49,8 +48,8 @@ exports.login = login;
 // update User :-
 const updateUser = function (user, obj, id) {
     return __awaiter(this, void 0, void 0, function* () {
-        const Id = user._id.toString();
-        if (Id == id) {
+        const loginUserId = user._id.toString();
+        if (loginUserId == id) {
             try {
                 const result = yield userModel_1.default.findByIdAndUpdate(id, {
                     name: obj.name,
@@ -80,9 +79,8 @@ const getUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
     return getUser;
 });
 exports.getUser = getUser;
+//all user get (Admin)
 const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
-    // const find = await Userschema.find();
-    // return find;
     let { limit, page } = pagination;
     const aggregateQuery = userModel_1.default.aggregate([
         {
@@ -109,7 +107,6 @@ const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* (
 exports.getAllUser = getAllUser;
 // delete user :-
 const deleteUser = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
-    // const deleted= await Userschema.findByIdAndDelete(id);
     const Id = user._id.toString();
     if (Id == id) {
         const deleted = yield userModel_1.default.findOneAndDelete({ _id: id });

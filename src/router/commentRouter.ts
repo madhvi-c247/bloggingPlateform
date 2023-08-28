@@ -4,7 +4,6 @@ import {
   updateCommentController,
   getCommentController,
   deleteCommentController,
-  // getCommentidController,
 } from '../controller/index';
 import passport from '../config/passport';
 
@@ -14,7 +13,7 @@ const router = Router();
 router.post(
   '/createComment',
   passport.authenticate('jwt', { session: false }),
-  authorization(normalrole),
+
   createCommentController
 );
 
@@ -27,7 +26,7 @@ router.put(
 
 router.get('/getComment', getCommentController);
 
-// router.get('/getCommentid/:id', getCommentidController);
+
 
 router.delete(
   '/deleteComment',

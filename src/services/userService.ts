@@ -1,9 +1,8 @@
 import Userschema from '../model/userModel';
-// import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { userInterface, loginInterface } from '../interface/Interfaces';
-
+import { userInterface, loginInterface, paging } from '../interface/Interfaces';
+import { agent } from 'supertest';
 
 //create user :-
 
@@ -35,9 +34,13 @@ const login = async (req: Request, res: Response) => {
       return res.status(400).json({ message: 'Invalid username or password' });
     }
 
-    const token = Jwt.sign({ email: user.email, name: user.name }, 'ZXCVBNM', {
-      expiresIn: '1h',
-    });
+    const token = Jwt.sign(
+      { email: user.email, name: user.name, age: user.age },
+      'ZXCVBNM',
+      {
+        expiresIn: '1h',
+      }
+    );
 
     res.json({ message: 'Logged in sucessful', token });
   } catch (error) {
@@ -48,8 +51,8 @@ const login = async (req: Request, res: Response) => {
 // update User :-
 
 const updateUser = async function (user: any, obj: userInterface, id: string) {
-  const Id = user._id.toString();
-  if (Id == id) {
+  const loginUserId = user._id.toString();
+  if (loginUserId == id) {
     try {
       const result = await Userschema.findByIdAndUpdate(id, {
         name: obj.name,
@@ -81,14 +84,8 @@ const getUser = async (
 };
 
 //all user get (Admin)
-interface paging {
-  limit: number;
-  page: number;
-}
 
 const getAllUser = async (pagination: paging) => {
-  // const find = await Userschema.find();
-  // return find;
   let { limit, page } = pagination;
 
   const aggregateQuery = Userschema.aggregate([
@@ -118,7 +115,6 @@ const getAllUser = async (pagination: paging) => {
 // delete user :-
 
 const deleteUser = async (user: any, id: string) => {
-  // const deleted= await Userschema.findByIdAndDelete(id);
   const Id = user._id.toString();
 
   if (Id == id) {

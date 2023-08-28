@@ -14,7 +14,6 @@ const createCommentController = async (
 ) => {
   try {
     const result = await createComment(req.user, req.body);
-    // console.log('----------------------------------', req.body, req.user);
     return res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -49,19 +48,7 @@ const getCommentController = async (
   }
 };
 
-// const getCommentidController = async (
-//   req: Request,
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   try {
-//     const result = await getcommentid(req.params.id);
 
-//     return res.status(200).send(result);
-//   } catch (error) {
-//     next(error);
-//   }
-// };
 
 const deleteCommentController = async (
   req: Request,
@@ -82,5 +69,5 @@ export {
   updateCommentController,
   getCommentController,
   deleteCommentController,
-  // getCommentidController,
+
 };
