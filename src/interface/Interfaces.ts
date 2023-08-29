@@ -1,7 +1,7 @@
 import * as core from 'express';
 
 interface articleInterface {
-  // id:String
+  articleId: String;
   title: string;
   article: string;
   author: object;
@@ -10,6 +10,7 @@ interface articleInterface {
 }
 
 interface commentInterface {
+  commentId: string;
   articleId: object;
   userId: object;
   comment: string;

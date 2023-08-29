@@ -34,7 +34,7 @@ exports.loginController = loginController;
 const updateUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.updateUser)(req.user, req.body, req.params.id);
-        return res.status(200).send(result);
+        return res.status(200).send('update user');
     }
     catch (error) {
         next(error);

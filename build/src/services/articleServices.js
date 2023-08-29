@@ -29,12 +29,11 @@ const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* ()
 });
 exports.creatarticle = creatarticle;
 // update Article :-
-const updateArticle = function (user, obj, id) {
+const updateArticle = function (user, obj) {
     return __awaiter(this, void 0, void 0, function* () {
         const Id = user._id.toString();
-        console.log(Id, id);
-        if (Id == id) {
-            const update = yield articleModel_1.default.findOneAndUpdate({ author: id }, {
+        if (Id == obj.author) {
+            const update = yield articleModel_1.default.findOneAndUpdate({ _id: obj.articleId }, {
                 $set: {
                     title: obj.title,
                     article: obj.article,
@@ -164,10 +163,12 @@ const getByCategory = (category) => __awaiter(void 0, void 0, void 0, function* 
 });
 exports.getByCategory = getByCategory;
 // delete Article :-
-const deleteArticle = (user, id) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteArticle = (user, ids) => __awaiter(void 0, void 0, void 0, function* () {
     const Id = user._id.toString();
-    if (Id == id) {
-        const deletearticle = yield articleModel_1.default.findOneAndDelete({ author: id });
+    if (Id == ids.userId) {
+        const deletearticle = yield articleModel_1.default.findOneAndDelete({
+            _id: ids.articleId,
+        });
         return deletearticle;
     }
     else {

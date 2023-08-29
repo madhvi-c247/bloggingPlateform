@@ -27,7 +27,7 @@ const updateCommentController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await updateComment(req.user, req.body, req.params.id);
+    const result = await updateComment(req.user, req.body);
     console.log(req.body);
     return res.status(200).send(result);
   } catch (error) {
@@ -69,7 +69,7 @@ const deleteCommentController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await deleteComment(req.user, req.params.id);
+    const result = await deleteComment(req.user, req.body);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {

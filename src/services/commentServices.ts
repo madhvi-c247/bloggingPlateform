@@ -27,23 +27,19 @@ const createComment = async (user: any, obj: commentInterface) => {
 
 // update comment :-
 
-const updateComment = async function (
-  user: any,
-  obj: commentInterface,
-  id: string
-) {
+const updateComment = async function (user: any, obj: commentInterface) {
   const Id = user._id.toString();
-  console.log(Id, id);
-  if (Id == id) {
+
+  if (Id == obj.userId) {
     const update = await Commentschema.findOneAndUpdate(
-      { userId: id },
+      { _id: obj.commentId },
       {
         $set: {
           comment: obj.comment,
         },
       }
     );
-    console.log('------' + update);
+
     return update;
   } else {
     throw new Error('User id is not correct');
@@ -52,11 +48,13 @@ const updateComment = async function (
 
 // delete Comment :-
 
-const deleteComment = async (user: any, id: string) => {
+const deleteComment = async (user: any, obj: commentInterface) => {
   const Id = user._id.toString();
 
-  if (Id == id) {
-    const deletecomment = await Commentschema.findOneAndDelete({ userId: id });
+  if (Id == obj.userId) {
+    const deletecomment = await Commentschema.findOneAndDelete({
+      _id: obj.commentId,
+    });
     return deletecomment;
   } else {
     throw new Error('User id is not correct');
@@ -112,6 +110,7 @@ const getComment = async (pagination: paging) => {
       },
     },
   ]);
+
   const options: object = { id, page, limit };
   const response = await Commentschema.aggregatePaginate(
     aggregateQuery,

@@ -6,13 +6,13 @@ import {
   deleteUserController,
   loginController,
   getAllUserController,
-} from '../controller/usercontroller';
+} from '../controller/index';
 import errorValidator from '../middleware/validator';
 
 import passport from '../config/passport';
 
 import authorization from '../middleware/auth';
-import { adminrole, normalrole } from '../helper/constant';
+import { adminrole } from '../helper/constant';
 
 const router = Router();
 router.post('/createUser', createUserController);

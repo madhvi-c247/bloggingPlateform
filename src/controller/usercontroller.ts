@@ -42,7 +42,7 @@ const updateUserController = async (
   try {
     const result = await updateUser(req.user, req.body, req.params.id);
 
-    return res.status(200).send(result);
+    return res.status(200).send('update user');
   } catch (error) {
     next(error);
   }

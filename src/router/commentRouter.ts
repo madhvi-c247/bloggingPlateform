@@ -5,7 +5,7 @@ import {
   getCommentController,
   deleteCommentController,
   // getCommentidController,
-} from '../controller/commentController';
+} from '../controller/index';
 import passport from '../config/passport';
 
 import authorization from '../middleware/auth';
@@ -19,7 +19,7 @@ router.post(
 );
 
 router.put(
-  '/updateComment/:id',
+  '/updateComment',
   passport.authenticate('jwt', { session: false }),
   authorization(normalrole),
   updateCommentController
@@ -30,7 +30,7 @@ router.get('/getComment', getCommentController);
 // router.get('/getCommentid/:id', getCommentidController);
 
 router.delete(
-  '/deleteComment/:id',
+  '/deleteComment',
   passport.authenticate('jwt', { session: false }),
   authorization(normalrole),
   deleteCommentController
