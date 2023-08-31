@@ -1,5 +1,10 @@
 import Articleschema from '../model/articleModel';
-import { articleInterface, filterInterface } from '../interface/Interfaces';
+import {
+  articleInterface,
+  filterInterface,
+  getAllArticleInterface,
+  // user,
+} from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 import { ParsedQs } from 'qs';
@@ -45,10 +50,7 @@ const updateArticle = async function (user: any, obj: articleInterface) {
   }
 };
 
-interface getAllArticleInterface {
-  field: string;
-  sortDirection: number;
-}
+
 
 //get All Article
 

@@ -1,9 +1,14 @@
 import Userschema from '../model/userModel';
-// import bcrypt from 'bcrypt';
 import Jwt from 'jsonwebtoken';
 import { Request, Response } from 'express';
-import { userInterface, loginInterface } from '../interface/Interfaces';
-
+import {
+  userInterface,
+  loginInterface,
+  paging,
+  userreq,
+} from '../interface/Interfaces';
+import { agent } from 'supertest';
+import mongoose from 'mongoose';
 
 //create user :-
 
@@ -23,33 +28,34 @@ const login = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'User not found' });
     }
 
-    const passwordMatch = await user.validatePassword(
+    const passwordMatch =  user.validatePassword(
       loginObj.password,
       user.password
     );
 
     if (!passwordMatch) {
-      return res.status(400).json({ message: 'Invalid username or password' });
+      return res.status(401).json({ message: 'Password incorrect' });
     }
 
-    const token = Jwt.sign({ email: user.email, name: user.name }, 'ZXCVBNM', {
+    const token =  Jwt.sign({ email: user.email, name: user.name,age:user.age,id:user.id,number:user.number}, 'ZXCVBNM', {
       expiresIn: '1h',
     });
-
     res.json({ message: 'Logged in sucessful', token });
   } catch (error) {
-    return error;
-  }
-};
-
+   return res.status(401).json({message :"invalid details"})
+  }}
 // update User :-
 
-const updateUser = async function (user: any, obj: userInterface, id: string) {
-  const Id = user._id.toString();
-  if (Id == id) {
+const updateUser = async function (
+  user: userreq,
+  obj: userInterface,
+  id: string
+) {
+  const loginUserId = user._id!.toString();
+  if (loginUserId == id) {
     try {
       const result = await Userschema.findByIdAndUpdate(id, {
         name: obj.name,
@@ -81,14 +87,8 @@ const getUser = async (
 };
 
 //all user get (Admin)
-interface paging {
-  limit: number;
-  page: number;
-}
 
 const getAllUser = async (pagination: paging) => {
-  // const find = await Userschema.find();
-  // return find;
   let { limit, page } = pagination;
 
   const aggregateQuery = Userschema.aggregate([
@@ -111,15 +111,14 @@ const getAllUser = async (pagination: paging) => {
   const response = await Userschema.aggregatePaginate(aggregateQuery, options)
     .then((result) => result)
     .catch((err: Error) => console.log(err));
-  console.log(response);
+
   return response;
 };
 
 // delete user :-
 
-const deleteUser = async (user: any, id: string) => {
-  // const deleted= await Userschema.findByIdAndDelete(id);
-  const Id = user._id.toString();
+const deleteUser = async (user: userreq, id: string) => {
+  const Id = user._id!.toString();
 
   if (Id == id) {
     const deleted = await Userschema.findOneAndDelete({ _id: id });
@@ -129,4 +128,4 @@ const deleteUser = async (user: any, id: string) => {
   }
 };
 
-export { creatUser, updateUser, getUser, deleteUser, login, getAllUser };
+export { creatUser, updateUser, getUser, deleteUser, login, getAllUser }

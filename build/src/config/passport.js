@@ -24,6 +24,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = env_1.key;
 exports.default = passport_1.default.use(new JwtStrategy(opts, function (jwt_payload, done) {
     return __awaiter(this, void 0, void 0, function* () {
+        console.log(jwt_payload);
         const user = yield userModel_1.default.findOne({ email: jwt_payload.email });
         if (user) {
             return done(null, user);

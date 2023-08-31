@@ -21,7 +21,7 @@ router.post('/createArticle/:id', createUserArticle);
 router.put(
   '/updateArticle',
   passport.authenticate('jwt', { session: false }),
-  authorization(normalrole),
+
   updateUserArticle
 );
 
