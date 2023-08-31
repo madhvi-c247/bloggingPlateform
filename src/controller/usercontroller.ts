@@ -7,7 +7,8 @@ import {
   getAllUser,
 } from '../services/userService';
 import { Request, Response, NextFunction } from 'express';
-
+import { userreq } from '../interface/Interfaces';
+import { log } from 'console';
 const createUserController = async (
   req: Request,
   res: Response,
@@ -27,10 +28,12 @@ const loginController = async (
   next: NextFunction
 ) => {
   try {
-    console.log(login);
     return await login(req, res);
+    
   } catch (error) {
     next(error);
+    
+    
   }
 };
 
@@ -40,7 +43,8 @@ const updateUserController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await updateUser(req.user, req.body, req.params.id);
+    const requser: userreq = req.user!;
+    const result = await updateUser(requser, req.body, req.params.id);
 
     return res.status(200).send(result);
   } catch (error) {
@@ -82,7 +86,8 @@ const deleteUserController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await deleteUser(req.user, req.params.id);
+    const requser: userreq = req.user!;
+    const result = await deleteUser(requser, req.params.id);
     console.log(result);
     return res.status(200).send(result);
   } catch (error) {

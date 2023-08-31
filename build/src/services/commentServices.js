@@ -18,10 +18,10 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Comment :-
 const createComment = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
-    const Id = user._id.toString();
+    const loginId = user._id.toString();
     {
         const created = yield commentModel_1.default.create({
-            userId: user._id,
+            userId: loginId,
             articleId: obj.articleId,
             comment: obj.comment,
             date: obj.date,

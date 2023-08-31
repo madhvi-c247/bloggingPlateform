@@ -1,15 +1,22 @@
 import mongoose from 'mongoose';
-const id = mongoose.Types.ObjectId;
+
 const data = {
   user: [
     {
-      _id: id,
-      name: 'madhvi',
-      email: 'madhvi@gmail.com',
-      password: 'madhvi',
+      name: 'xyz',
+      email: 'xyz@gmail.com',
+      password: 'xyz',
       age: 20,
       number: 89898989,
       role: 'normal',
+    },
+  ],
+  article: [
+    {
+      title: 'title',
+      article: 'article',
+      author: mongoose.Types.ObjectId,
+      categories:'GK'
     },
   ],
 };

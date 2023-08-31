@@ -3,7 +3,7 @@ import {
   articleInterface,
   filterInterface,
   getAllArticleInterface,
-  user,
+  // user,
 } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';

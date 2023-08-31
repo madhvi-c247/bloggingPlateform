@@ -6,8 +6,9 @@ const errorLast = (
   res: Response,
   next: NextFunction
 ) => {
-  res.status(500);
-  res.send('Something went wrong!!!');
+  res.status(401);
+  // res.send('Something went wrong!!!');
+  res.send(err.message)
   next();
 };
 export default errorLast;

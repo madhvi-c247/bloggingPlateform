@@ -29,19 +29,19 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: loginObj.email,
         });
         if (!user) {
-            return res.status(400).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Invalid username or password' });
         }
         const passwordMatch = yield user.validatePassword(loginObj.password, user.password);
         if (!passwordMatch) {
-            return res.status(400).json({ message: 'Invalid username or password' });
+            return res.status(401).json({ message: 'Invalid username or password' });
         }
-        const token = jsonwebtoken_1.default.sign({ email: user.email, name: user.name, age: user.age }, 'ZXCVBNM', {
+        const token = jsonwebtoken_1.default.sign({ email: user.email, name: user.name }, 'ZXCVBNM', {
             expiresIn: '1h',
         });
-        res.json({ message: 'Logged in sucessful', token });
+        res.status(200).json({ message: 'Logged in sucessful', token });
     }
     catch (error) {
-        return error;
+        return res.status(401).json({ message: "invalid details" });
     }
 });
 exports.login = login;
@@ -101,7 +101,6 @@ const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* (
     const response = yield userModel_1.default.aggregatePaginate(aggregateQuery, options)
         .then((result) => result)
         .catch((err) => console.log(err));
-    console.log(response);
     return response;
 });
 exports.getAllUser = getAllUser;
