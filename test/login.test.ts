@@ -25,21 +25,21 @@ let UserId:ObjectId
 // dummy create User---------------------------------------
 
 describe('Usercreate',()=>{
-  // it('we can not create user ', (done: any) => {
-  //   request
-  //     .agent(app)
-  //     .post(`/${versions}/user/createUser`)
-  //     .send({ name: '', email: '',password:'',age: '', number: '',role: '' })
-  //     .expect(401)
+  it('we can not create user ', (done: any) => {
+    request
+      .agent(app)
+      .post(`/${versions}/user/createUser`)
+      .send({ name: '', email: '',password:'',age: '', number: '',role: '' })
+      .expect(401)
 
-  //     .then(
-  //       (res)=>{
-  //         expect(res.body.error)
-  //         done()
-  //       }
-  //       )
-  //     .catch((err) => done(err));
-  // });
+      .then(
+        (res)=>{
+          expect(res.body.error)
+          done()
+        }
+        )
+      .catch((err) => done(err));
+  });
 
 let data;
 
@@ -51,7 +51,7 @@ let data;
       .send({ name: 'pooja', email: 'pooja@gmail.com',password:'pooja',age: '21', number: '454676723',role: 'admin'})
       .expect(200)
       .then((res)=>{
-        console.log(res.body)
+        // console.log(res.body)
         expect(res.body.data);
         data=res.body.data
          UserId=res.body._id
@@ -96,7 +96,7 @@ it('email and password are correct so they will give us token', (done: any) => {
       .expect(200)
     
       .then((res)=>{
-        
+        // console.log(res.body)
         expect(res.body.token);
         token=res.body.token
          done()
@@ -109,7 +109,7 @@ it('email and password are correct so they will give us token', (done: any) => {
   });
 });
 
-//update user-----------------------------------------------------
+// update user-----------------------------------------------------
 
 const updateDetails = { age:28 };
 
@@ -178,24 +178,24 @@ it('get user', (done: any) => {
 })
 
 
-//dummy delete user-------------------------------------------------
+// dummy delete user-------------------------------------------------
 
-// describe ('Userdelete',()=>{
-// it('delete user', (done: any) => {
-//     request
-//       .agent(app)
-//       .delete(`/${versions}/user/deleteUser/${UserId}`)
+describe ('Userdelete',()=>{
+it('delete user', (done: any) => {
+    request
+      .agent(app)
+      .delete(`/${versions}/user/deleteUser/${UserId}`)
      
-//       .set('Authorization',`Bearer ${token}`)
-//       .expect(200)
+      .set('Authorization',`Bearer ${token}`)
+      .expect(200)
        
-//       .then(
-//         (res)=>{
-//           expect(res.body.message)
-//           done()
-//         }
-//         )
-//       .catch((err) => done(err));
-//   });
+      .then(
+        (res)=>{
+          expect(res.body.message)
+          done()
+        }
+        )
+      .catch((err) => done(err));
+  });
 
-// })
+})

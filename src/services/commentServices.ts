@@ -2,12 +2,11 @@ import Commentschema from '../model/commentModel';
 import { commentInterface, paging, userreq } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
-import { log } from 'console';
 const ObjectId = mongoose.Types.ObjectId;
 
 // create Comment :-
 
-const createComment = async (user: userreq, obj: commentInterface) => {
+const createComment = async (user: any, obj: commentInterface) => {
   const loginId = user._id!.toString();
   {
     const created = await Commentschema.create({
