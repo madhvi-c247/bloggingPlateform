@@ -66,6 +66,9 @@ const Userschema = new mongoose_1.Schema({
         enum: ['normal', 'admin'],
         default: 'normal',
     },
+    secret_question: {
+        type: Object
+    },
 });
 Userschema.pre(['save'], function (next) {
     const user = this;

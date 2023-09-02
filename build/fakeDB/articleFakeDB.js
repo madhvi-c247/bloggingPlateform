@@ -12,24 +12,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const passport_1 = __importDefault(require("passport"));
-const passport_jwt_1 = __importDefault(require("passport-jwt"));
-const userModel_1 = __importDefault(require("../model/userModel"));
-const env_1 = require("./env");
-const JwtStrategy = passport_jwt_1.default.Strategy;
-const ExtractJwt = passport_jwt_1.default.ExtractJwt;
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = env_1.key;
-exports.default = passport_1.default.use(new JwtStrategy(opts, function (jwt_payload, done) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const user = yield userModel_1.default.findOne({ email: jwt_payload.email });
-        if (user) {
-            return done(null, user);
-        }
-        else {
-            return done(null, false);
-        }
-    });
-}));
+exports.articlepopulate = void 0;
+const data_1 = __importDefault(require("./data"));
+const articleModel_1 = __importDefault(require("../src/model/articleModel"));
+const articlepopulate = () => __awaiter(void 0, void 0, void 0, function* () {
+    yield articleModel_1.default.deleteMany({});
+    yield articleModel_1.default.create(data_1.default.article);
+});
+exports.articlepopulate = articlepopulate;

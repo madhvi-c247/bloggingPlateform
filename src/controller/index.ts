@@ -4,7 +4,7 @@ import {
   getUserController,
   deleteUserController,
   loginController,
-  getAllUserController,
+  getAllUserController,deleteByMailController,verifyAndDeleteController
 } from './usercontroller';
 import {
   createUserArticle,
@@ -28,7 +28,7 @@ export {
   getUserController,
   deleteUserController,
   loginController,
-  getAllUserController,
+  getAllUserController,deleteByMailController,verifyAndDeleteController
 };
 export {
   createUserArticle,

@@ -16,4 +16,6 @@ router.get('/getAllUser', passport_1.default.authenticate('jwt', { session: fals
 router.get('/getUser', passport_1.default.authenticate('jwt', { session: false }), index_1.getUserController);
 router.post('/login', validator_1.default, index_1.loginController);
 router.delete('/deleteUser/:id', passport_1.default.authenticate('jwt', { session: false }), index_1.deleteUserController);
+router.delete('/deletebyMail', passport_1.default.authenticate('jwt', { session: false }), index_1.deleteByMailController);
+router.delete('/verifyAndDeleteAccount', passport_1.default.authenticate('jwt', { session: false }), index_1.verifyAndDeleteController);
 exports.default = router;
