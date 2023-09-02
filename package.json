@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "test": "cross-env NODE_ENV=testing mocha --require ts-node/register 'test/login.test.ts' --timeout 10000",
+    "test": "cross-env NODE_ENV=testing mocha --require ts-node/register 'test/comment.test.ts' --timeout 10000",
     "dev": "cross-env NODE_ENV=dev concurrently \"npx tsc --watch\" \"nodemon build/index.js\""
   },
   "author": "",

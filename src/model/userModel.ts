@@ -4,11 +4,6 @@ import bcrypt from 'bcrypt';
 import { error } from 'console';
 import mongoosePaginate from 'mongoose-aggregate-paginate-v2';
 const Userschema = new Schema<userInterface>({
-id:{
-type:mongoose.Schema.Types.ObjectId,
-ref:'User'
-},
-
   name: {
     type: String,
     required: true,

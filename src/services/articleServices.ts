@@ -38,6 +38,7 @@ const updateArticle = async function (user: any, obj: articleInterface) {
         $set: {
           title: obj.title,
           article: obj.article,
+          author:obj.author,
           date: obj.date,
           categories: obj.categories,
         },

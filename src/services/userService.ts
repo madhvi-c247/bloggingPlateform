@@ -40,8 +40,9 @@ const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Password incorrect' });
     }
 
-    const token =  Jwt.sign({ email: user.email, name: user.name,age:user.age,id:user.id,number:user.number}, 'ZXCVBNM', {
+    const token =  Jwt.sign({ email: user.email, name: user.name,age:user.age,number:user.number}, 'ZXCVBNM', {
       expiresIn: '1h',
+      algorithm:'HS256'
     });
     res.json({ message: 'Logged in sucessful', token });
   } catch (error) {

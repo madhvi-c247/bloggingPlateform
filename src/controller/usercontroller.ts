@@ -18,7 +18,8 @@ const createUserController = async (
     const result = await creatUser(req.body);
     return res.status(200).send(result);
   } catch (error) {
-    next(error);
+    next(error)
+    return res.status(401)
   }
 };
 
