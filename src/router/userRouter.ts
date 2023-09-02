@@ -6,6 +6,8 @@ import {
   deleteUserController,
   loginController,
   getAllUserController,
+  deleteByMailController,
+  verifyAndDeleteController,
 } from '../controller/index';
 import errorValidator from '../middleware/validator';
 
@@ -44,7 +46,17 @@ router.delete(
   deleteUserController
 );
 
+router.delete(
+  '/deletebyMail',
+  passport.authenticate('jwt', { session: false }),
+  deleteByMailController
+);
 
+router.delete(
+  '/verifyAndDeleteAccount',
+  passport.authenticate('jwt', { session: false }),
+  verifyAndDeleteController
+);
 
 
 export default router

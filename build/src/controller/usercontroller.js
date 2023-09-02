@@ -9,7 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getAllUserController = exports.loginController = exports.deleteUserController = exports.getUserController = exports.updateUserController = exports.createUserController = void 0;
+exports.verifyAndDeleteController = exports.deleteByMailController = exports.getAllUserController = exports.loginController = exports.deleteUserController = exports.getUserController = exports.updateUserController = exports.createUserController = void 0;
 const userService_1 = require("../services/userService");
 const createUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -18,6 +18,7 @@ const createUserController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
     catch (error) {
         next(error);
+        return res.status(401);
     }
 });
 exports.createUserController = createUserController;
@@ -26,8 +27,7 @@ const loginController = (req, res, next) => __awaiter(void 0, void 0, void 0, fu
         return yield (0, userService_1.login)(req, res);
     }
     catch (error) {
-        // next(error);
-        console.log(error);
+        next(error);
     }
 });
 exports.loginController = loginController;
@@ -45,7 +45,6 @@ exports.updateUserController = updateUserController;
 const getUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.getUser)(req.body);
-        console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -56,7 +55,6 @@ exports.getUserController = getUserController;
 const getAllUserController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const result = yield (0, userService_1.getAllUser)(req.body);
-        console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -68,7 +66,6 @@ const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 
     try {
         const requser = req.user;
         const result = yield (0, userService_1.deleteUser)(requser, req.params.id);
-        console.log(result);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -76,3 +73,25 @@ const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 
     }
 });
 exports.deleteUserController = deleteUserController;
+const deleteByMailController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        // const requser: userreq = req.user!
+        const result = yield (0, userService_1.deleteByMail)(req.user, req.body);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.deleteByMailController = deleteByMailController;
+const verifyAndDeleteController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const requser = req.user;
+        const result = yield (0, userService_1.verifyAndDelete)(requser);
+        return res.status(200).send(result);
+    }
+    catch (error) {
+        next(error);
+    }
+});
+exports.verifyAndDeleteController = verifyAndDeleteController;

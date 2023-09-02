@@ -9,7 +9,8 @@ import {
 } from '../interface/Interfaces';
 import { agent } from 'supertest';
 import mongoose from 'mongoose';
-
+import newmail from '../nodeMailer/mail';
+import { name } from 'ejs';
 //create user :-
 
 const creatUser = async (obj: userInterface) => {
@@ -31,7 +32,7 @@ const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'User not found' });
     }
 
-    const passwordMatch =  user.validatePassword(
+    const passwordMatch = user.validatePassword(
       loginObj.password,
       user.password
     );
@@ -40,14 +41,24 @@ const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'Password incorrect' });
     }
 
-    const token =  Jwt.sign({ email: user.email, name: user.name,age:user.age,number:user.number}, 'ZXCVBNM', {
-      expiresIn: '1h',
-      algorithm:'HS256'
-    });
+    const token = Jwt.sign(
+      {
+        email: user.email,
+        name: user.name,
+        age: user.age,
+        number: user.number,
+      },
+      'ZXCVBNM',
+      {
+        expiresIn: '1h',
+        algorithm: 'HS256',
+      }
+    );
     res.json({ message: 'Logged in sucessful', token });
   } catch (error) {
-   return res.status(401).json({message :"invalid details"})
-  }}
+    return res.status(401).json({ message: 'invalid details' });
+  }
+};
 // update User :-
 
 const updateUser = async function (
@@ -129,4 +140,37 @@ const deleteUser = async (user: userreq, id: string) => {
   }
 };
 
-export { creatUser, updateUser, getUser, deleteUser, login, getAllUser }
+// Delete by mail:
+
+const deleteByMail = async (user: any, obj: userInterface) => {
+  const passwordMatch = await user.validatePassword(
+    obj.password,
+    user.password
+  );
+
+  if (passwordMatch) {
+    if (user.secret_question.fathername === obj.secret_question) {
+      newmail(obj.email);
+      return 'mail sended';
+    }
+  } else {
+    return 'data incorrect';
+  }
+};
+
+const verifyAndDelete = async (user: userreq) => {
+  const deleted = await Userschema.findOneAndDelete({
+    password: user.password,
+  });
+  return deleted;
+};
+export {
+  creatUser,
+  updateUser,
+  getUser,
+  deleteUser,
+  login,
+  getAllUser,
+  deleteByMail,
+  verifyAndDelete,
+};

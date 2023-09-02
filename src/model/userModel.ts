@@ -1,5 +1,5 @@
 import mongoose, { Schema, AggregatePaginateModel } from 'mongoose';
-import { userInterface } from '../interface/Interfaces';
+import { userInterface, userreq } from '../interface/Interfaces';
 import bcrypt from 'bcrypt';
 import { error } from 'console';
 import mongoosePaginate from 'mongoose-aggregate-paginate-v2';
@@ -35,6 +35,10 @@ const Userschema = new Schema<userInterface>({
     type: String,
     enum: ['normal', 'admin'],
     default: 'normal',
+  },
+
+  secret_question: {
+    type: Object
   },
 });
 
@@ -87,6 +91,7 @@ Userschema.methods.validatePassword = async function (
 ) {
   return await bcrypt.compare(candidatePassword, user);
 };
+
 
 Userschema.plugin(mongoosePaginate);
 

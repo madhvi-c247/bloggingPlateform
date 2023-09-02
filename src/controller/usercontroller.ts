@@ -5,6 +5,8 @@ import {
   deleteUser,
   login,
   getAllUser,
+  deleteByMail,
+  verifyAndDelete,
 } from '../services/userService';
 import { Request, Response, NextFunction } from 'express';
 import { userreq } from '../interface/Interfaces';
@@ -18,8 +20,8 @@ const createUserController = async (
     const result = await creatUser(req.body);
     return res.status(200).send(result);
   } catch (error) {
-    next(error)
-    return res.status(401)
+    next(error);
+    return res.status(401);
   }
 };
 
@@ -30,11 +32,8 @@ const loginController = async (
 ) => {
   try {
     return await login(req, res);
-    
   } catch (error) {
     next(error);
-    
-    
   }
 };
 
@@ -60,7 +59,7 @@ const getUserController = async (
 ) => {
   try {
     const result = await getUser(req.body);
-    console.log(result);
+
     return res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -74,7 +73,7 @@ const getAllUserController = async (
 ) => {
   try {
     const result = await getAllUser(req.body);
-    console.log(result);
+
     return res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -89,13 +88,42 @@ const deleteUserController = async (
   try {
     const requser: userreq = req.user!;
     const result = await deleteUser(requser, req.params.id);
-    console.log(result);
+
     return res.status(200).send(result);
   } catch (error) {
     next(error);
   }
 };
 
+const deleteByMailController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    // const requser: userreq = req.user!
+    const result = await deleteByMail(req.user, req.body);
+
+    return res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
+
+const verifyAndDeleteController = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const requser: userreq = req.user!;
+    const result = await verifyAndDelete(requser);
+
+    return res.status(200).send(result);
+  } catch (error) {
+    next(error);
+  }
+};
 export {
   createUserController,
   updateUserController,
@@ -103,4 +131,6 @@ export {
   deleteUserController,
   loginController,
   getAllUserController,
+  deleteByMailController,
+  verifyAndDeleteController,
 };

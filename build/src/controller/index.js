@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteCommentController = exports.getCommentController = exports.updateCommentController = exports.createCommentController = exports.getAllArticleController = exports.getCategoryController = exports.deleteArticleController = exports.getUserArticle = exports.updateUserArticle = exports.createUserArticle = exports.getAllUserController = exports.loginController = exports.deleteUserController = exports.getUserController = exports.updateUserController = exports.createUserController = void 0;
+exports.deleteCommentController = exports.getCommentController = exports.updateCommentController = exports.createCommentController = exports.getAllArticleController = exports.getCategoryController = exports.deleteArticleController = exports.getUserArticle = exports.updateUserArticle = exports.createUserArticle = exports.verifyAndDeleteController = exports.deleteByMailController = exports.getAllUserController = exports.loginController = exports.deleteUserController = exports.getUserController = exports.updateUserController = exports.createUserController = void 0;
 const usercontroller_1 = require("./usercontroller");
 Object.defineProperty(exports, "createUserController", { enumerable: true, get: function () { return usercontroller_1.createUserController; } });
 Object.defineProperty(exports, "updateUserController", { enumerable: true, get: function () { return usercontroller_1.updateUserController; } });
@@ -8,6 +8,8 @@ Object.defineProperty(exports, "getUserController", { enumerable: true, get: fun
 Object.defineProperty(exports, "deleteUserController", { enumerable: true, get: function () { return usercontroller_1.deleteUserController; } });
 Object.defineProperty(exports, "loginController", { enumerable: true, get: function () { return usercontroller_1.loginController; } });
 Object.defineProperty(exports, "getAllUserController", { enumerable: true, get: function () { return usercontroller_1.getAllUserController; } });
+Object.defineProperty(exports, "deleteByMailController", { enumerable: true, get: function () { return usercontroller_1.deleteByMailController; } });
+Object.defineProperty(exports, "verifyAndDeleteController", { enumerable: true, get: function () { return usercontroller_1.verifyAndDeleteController; } });
 const articleController_1 = require("./articleController");
 Object.defineProperty(exports, "createUserArticle", { enumerable: true, get: function () { return articleController_1.createUserArticle; } });
 Object.defineProperty(exports, "updateUserArticle", { enumerable: true, get: function () { return articleController_1.updateUserArticle; } });

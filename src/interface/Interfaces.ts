@@ -28,6 +28,7 @@ interface userInterface {
   age: number;
   number: number;
   role: string;
+  secret_question:object;
   validatePassword(candidatePassword: string, user: string): boolean;
 }
 

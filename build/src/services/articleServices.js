@@ -37,6 +37,7 @@ const updateArticle = function (user, obj) {
                 $set: {
                     title: obj.title,
                     article: obj.article,
+                    author: obj.author,
                     date: obj.date,
                     categories: obj.categories,
                 },
