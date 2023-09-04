@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteComment = exports.getComment = exports.updateComment = exports.createComment = void 0;
 const commentModel_1 = __importDefault(require("../model/commentModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const ioredis_1 = __importDefault(require("ioredis"));
+const redisclient = new ioredis_1.default();
 const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Comment :-
 const createComment = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
@@ -65,41 +67,48 @@ const deleteComment = (user, obj) => __awaiter(void 0, void 0, void 0, function*
 exports.deleteComment = deleteComment;
 const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
     let { id, page, limit } = pagination;
-    const aggregateQuery = commentModel_1.default.aggregate([
-        { $match: { articleId: new ObjectId(id) } },
-        // Article id
-        {
-            $lookup: {
-                from: 'articles',
-                localField: 'articleId',
-                foreignField: '_id',
-                as: 'article_name',
+    const cachedData = yield redisclient.get(`allcomments?page${page}?limit${limit}`);
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+    else {
+        const aggregateQuery = commentModel_1.default.aggregate([
+            { $match: { articleId: new ObjectId(id) } },
+            // Article id
+            {
+                $lookup: {
+                    from: 'articles',
+                    localField: 'articleId',
+                    foreignField: '_id',
+                    as: 'article_name',
+                },
             },
-        },
-        { $unwind: '$article_name' },
-        //user id
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'userId',
-                foreignField: '_id',
-                as: 'user',
+            { $unwind: '$article_name' },
+            //user id
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'userId',
+                    foreignField: '_id',
+                    as: 'user',
+                },
             },
-        },
-        { $unwind: '$user' },
-        {
-            $project: {
-                _id: 0,
-                article: '$article_name.article',
-                name: '$user.name',
-                comment: 1,
+            { $unwind: '$user' },
+            {
+                $project: {
+                    _id: 0,
+                    article: '$article_name.article',
+                    name: '$user.name',
+                    comment: 1,
+                },
             },
-        },
-    ]);
-    const options = { id, page, limit };
-    const response = yield commentModel_1.default.aggregatePaginate(aggregateQuery, options)
-        .then((result) => result)
-        .catch((err) => console.log(err));
-    return response;
+        ]);
+        const options = { id, page, limit };
+        const response = yield commentModel_1.default.aggregatePaginate(aggregateQuery, options)
+            .then((result) => result)
+            .catch((err) => console.log(err));
+        redisclient.set(`allcomments?page${page}?limit${limit}`, JSON.stringify(response));
+        return response;
+    }
 });
 exports.getComment = getComment;
