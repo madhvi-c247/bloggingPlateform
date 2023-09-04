@@ -16,8 +16,8 @@ const nodemailer_1 = __importDefault(require("nodemailer"));
 const transporter = nodemailer_1.default.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'madhvi.s@chapter247.com',
-        pass: 'madhvi@c247',
+        user: 'xyz@gmail.com',
+        pass: 'xyz',
     },
 });
 function newmail(email) {
