@@ -7,6 +7,7 @@ import {
   getAllUser,
   deleteByMail,
   verifyAndDelete,
+
 } from '../services/userService';
 import { Request, Response, NextFunction } from 'express';
 import { userreq } from '../interface/Interfaces';
@@ -124,6 +125,8 @@ const verifyAndDeleteController = async (
     next(error);
   }
 };
+
+
 export {
   createUserController,
   updateUserController,

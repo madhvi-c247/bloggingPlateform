@@ -8,6 +8,7 @@ import {
   getAllUserController,
   deleteByMailController,
   verifyAndDeleteController,
+
 } from '../controller/index';
 import errorValidator from '../middleware/validator';
 

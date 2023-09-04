@@ -9,7 +9,9 @@ import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 import { ParsedQs } from 'qs';
 import { log } from 'console';
-
+import Redis from 'ioredis';
+import articleModel from '../model/articleModel';
+const redisclient = new Redis();
 const ObjectId = mongoose.Types.ObjectId;
 
 // create Article :-
@@ -38,7 +40,7 @@ const updateArticle = async function (user: any, obj: articleInterface) {
         $set: {
           title: obj.title,
           article: obj.article,
-          author:obj.author,
+          author: obj.author,
           date: obj.date,
           categories: obj.categories,
         },
@@ -50,8 +52,6 @@ const updateArticle = async function (user: any, obj: articleInterface) {
     throw new Error('User id is not correct');
   }
 };
-
-
 
 //get All Article
 
@@ -83,53 +83,68 @@ const getAllArticle = async (
     filterQuery.$or = or;
   }
 
-  const aggregateQuery = Articleschema.aggregate([
-    { $match: filterQuery },
+  const cachedData = await redisclient.get(
+    `allArticles?search${search}?page${page}?limit${limit}`
+  );
 
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'author',
-        foreignField: '_id',
-        as: 'user',
-      },
-    },
-    { $unwind: '$user' },
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  } else {
+    const aggregateQuery = Articleschema.aggregate([
+      { $match: filterQuery },
 
-    {
-      $project: {
-        _id: 0,
-        title: {
-          $toLower: '$title',
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'author',
+          foreignField: '_id',
+          as: 'user',
         },
-        article: '$article',
-        author: '$user.name',
-        date: '$date',
-        categories: '$categories',
       },
-    },
-    { $sort: sort },
-    // { $limit: parseInt(limit) },
-    // { $skip: parseInt(page) },
-  ]);
-  console.log(aggregateQuery);
+      { $unwind: '$user' },
 
-  const options: object = {
-    search,
-    page,
-    limit,
-  };
+      {
+        $project: {
+          _id: 0,
+          title: {
+            $toLower: '$title',
+          },
+          article: '$article',
+          author: '$user.name',
+          date: '$date',
+          categories: '$categories',
+        },
+      },
+      { $sort: sort },
+      // { $limit: parseInt(limit) },
+      // { $skip: parseInt(page) },
+    ]);
 
-  const response = await Articleschema.aggregatePaginate(
-    aggregateQuery,
-    options
-  )
-    .then((result) => result)
-    .catch((err: Error) => console.log(err));
-  console.log(response);
-  return response;
+    console.log(aggregateQuery);
+
+    const options: object = {
+      search,
+      page,
+      limit,
+    };
+
+    const response = await Articleschema.aggregatePaginate(
+      aggregateQuery,
+      options
+    )
+      .then((result) => result)
+      .catch((err: Error) => console.log(err));
+
+    redisclient.set(
+      `allArticles?search${search}?page${page}?limit${limit}`,
+      JSON.stringify(response)
+    );
+    console.log(response);
+
+    // await redisclient.setex(articleCachesKey, 5, JSON.stringify(response));
+    return response;
+  }
 };
-
 // get Article:-
 
 const getArticle = async (id: string) => {

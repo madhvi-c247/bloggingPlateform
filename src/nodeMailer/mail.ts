@@ -25,4 +25,5 @@ async function newmail(email: string) {
   }
 }
 
+
 export default newmail;

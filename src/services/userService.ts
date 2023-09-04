@@ -7,10 +7,10 @@ import {
   paging,
   userreq,
 } from '../interface/Interfaces';
-import { agent } from 'supertest';
-import mongoose from 'mongoose';
+
 import newmail from '../nodeMailer/mail';
-import { name } from 'ejs';
+import Redis from 'ioredis';
+const redisclient = new Redis();
 //create user :-
 
 const creatUser = async (obj: userInterface) => {
@@ -99,34 +99,44 @@ const getUser = async (
 };
 
 //all user get (Admin)
+const userCachesKey = 'allUsers';
 
 const getAllUser = async (pagination: paging) => {
   let { limit, page } = pagination;
 
-  const aggregateQuery = Userschema.aggregate([
-    {
-      $project: {
-        _id: 0,
-        name: '$name',
-        email: '$email',
-        age: '$age',
-        number: '$number',
-        role: '$role',
+  const cachedData = await redisclient.get(
+    `allUsers?page${page}?limit${limit}`
+  );
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  } else {
+    const aggregateQuery = Userschema.aggregate([
+      {
+        $project: {
+          _id: 0,
+          name: '$name',
+          email: '$email',
+          age: '$age',
+          number: '$number',
+          role: '$role',
+        },
       },
-    },
-  ]);
-  const options: object = {
-    page,
-    limit,
-  };
+    ]);
+    const options: object = {
+      page,
+      limit,
+    };
 
-  const response = await Userschema.aggregatePaginate(aggregateQuery, options)
-    .then((result) => result)
-    .catch((err: Error) => console.log(err));
-
-  return response;
+    const response = await Userschema.aggregatePaginate(aggregateQuery, options)
+      .then((result) => result)
+      .catch((err: Error) => console.log(err));
+    redisclient.set(
+      `allUsers?page${page}?limit${limit}`,
+      JSON.stringify(aggregateQuery)
+    );
+    return aggregateQuery;
+  }
 };
-
 // delete user :-
 
 const deleteUser = async (user: userreq, id: string) => {

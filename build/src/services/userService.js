@@ -16,6 +16,8 @@ exports.verifyAndDelete = exports.deleteByMail = exports.getAllUser = exports.lo
 const userModel_1 = __importDefault(require("../model/userModel"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mail_1 = __importDefault(require("../nodeMailer/mail"));
+const ioredis_1 = __importDefault(require("ioredis"));
+const redisclient = new ioredis_1.default();
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
     const create = yield userModel_1.default.create(obj);
@@ -87,28 +89,36 @@ const getUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUser = getUser;
 //all user get (Admin)
+const userCachesKey = 'allUsers';
 const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
     let { limit, page } = pagination;
-    const aggregateQuery = userModel_1.default.aggregate([
-        {
-            $project: {
-                _id: 0,
-                name: '$name',
-                email: '$email',
-                age: '$age',
-                number: '$number',
-                role: '$role',
+    const cachedData = yield redisclient.get(`allUsers?page${page}?limit${limit}`);
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+    else {
+        const aggregateQuery = userModel_1.default.aggregate([
+            {
+                $project: {
+                    _id: 0,
+                    name: '$name',
+                    email: '$email',
+                    age: '$age',
+                    number: '$number',
+                    role: '$role',
+                },
             },
-        },
-    ]);
-    const options = {
-        page,
-        limit,
-    };
-    const response = yield userModel_1.default.aggregatePaginate(aggregateQuery, options)
-        .then((result) => result)
-        .catch((err) => console.log(err));
-    return response;
+        ]);
+        const options = {
+            page,
+            limit,
+        };
+        const response = yield userModel_1.default.aggregatePaginate(aggregateQuery, options)
+            .then((result) => result)
+            .catch((err) => console.log(err));
+        redisclient.set(`allUsers?page${page}?limit${limit}`, JSON.stringify(aggregateQuery));
+        return aggregateQuery;
+    }
 });
 exports.getAllUser = getAllUser;
 // delete user :-

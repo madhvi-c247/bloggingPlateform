@@ -15,6 +15,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.getAllArticle = exports.getByCategory = exports.deleteArticle = exports.getArticle = exports.updateArticle = exports.creatarticle = void 0;
 const articleModel_1 = __importDefault(require("../model/articleModel"));
 const mongoose_1 = __importDefault(require("mongoose"));
+const ioredis_1 = __importDefault(require("ioredis"));
+const redisclient = new ioredis_1.default();
 const ObjectId = mongoose_1.default.Types.ObjectId;
 // create Article :-
 const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* () {
@@ -70,44 +72,52 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
         });
         filterQuery.$or = or;
     }
-    const aggregateQuery = articleModel_1.default.aggregate([
-        { $match: filterQuery },
-        {
-            $lookup: {
-                from: 'users',
-                localField: 'author',
-                foreignField: '_id',
-                as: 'user',
-            },
-        },
-        { $unwind: '$user' },
-        {
-            $project: {
-                _id: 0,
-                title: {
-                    $toLower: '$title',
+    const cachedData = yield redisclient.get(`allArticles?search${search}?page${page}?limit${limit}`);
+    if (cachedData) {
+        return JSON.parse(cachedData);
+    }
+    else {
+        const aggregateQuery = articleModel_1.default.aggregate([
+            { $match: filterQuery },
+            {
+                $lookup: {
+                    from: 'users',
+                    localField: 'author',
+                    foreignField: '_id',
+                    as: 'user',
                 },
-                article: '$article',
-                author: '$user.name',
-                date: '$date',
-                categories: '$categories',
             },
-        },
-        { $sort: sort },
-        // { $limit: parseInt(limit) },
-        // { $skip: parseInt(page) },
-    ]);
-    console.log(aggregateQuery);
-    const options = {
-        search,
-        page,
-        limit,
-    };
-    const response = yield articleModel_1.default.aggregatePaginate(aggregateQuery, options)
-        .then((result) => result)
-        .catch((err) => console.log(err));
-    console.log(response);
-    return response;
+            { $unwind: '$user' },
+            {
+                $project: {
+                    _id: 0,
+                    title: {
+                        $toLower: '$title',
+                    },
+                    article: '$article',
+                    author: '$user.name',
+                    date: '$date',
+                    categories: '$categories',
+                },
+            },
+            { $sort: sort },
+            // { $limit: parseInt(limit) },
+            // { $skip: parseInt(page) },
+        ]);
+        console.log(aggregateQuery);
+        const options = {
+            search,
+            page,
+            limit,
+        };
+        const response = yield articleModel_1.default.aggregatePaginate(aggregateQuery, options)
+            .then((result) => result)
+            .catch((err) => console.log(err));
+        redisclient.set(`allArticles?search${search}?page${page}?limit${limit}`, JSON.stringify(response));
+        console.log(response);
+        // await redisclient.setex(articleCachesKey, 5, JSON.stringify(response));
+        return response;
+    }
 });
 exports.getAllArticle = getAllArticle;
 // get Article:-

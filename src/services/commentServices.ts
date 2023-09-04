@@ -2,6 +2,8 @@ import Commentschema from '../model/commentModel';
 import { commentInterface, paging, userreq } from '../interface/Interfaces';
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
+import Redis from 'ioredis';
+const redisclient = new Redis();
 const ObjectId = mongoose.Types.ObjectId;
 
 // create Comment :-
@@ -59,51 +61,59 @@ const deleteComment = async (user: any, obj: commentInterface) => {
 
 const getComment = async (pagination: paging) => {
   let { id, page, limit } = pagination;
-
-  const aggregateQuery = Commentschema.aggregate([
-    { $match: { articleId: new ObjectId(id) } },
-    // Article id
-    {
-      $lookup: {
-        from: 'articles',
-        localField: 'articleId', // in which feild we want details
-        foreignField: '_id', // from where you get id
-        as: 'article_name',
+  const cachedData = await redisclient.get(
+    `allcomments?page${page}?limit${limit}`
+  );
+  if (cachedData) {
+    return JSON.parse(cachedData);
+  } else {
+    const aggregateQuery = Commentschema.aggregate([
+      { $match: { articleId: new ObjectId(id) } },
+      // Article id
+      {
+        $lookup: {
+          from: 'articles',
+          localField: 'articleId', // in which feild we want details
+          foreignField: '_id', // from where you get id
+          as: 'article_name',
+        },
       },
-    },
-    { $unwind: '$article_name' },
+      { $unwind: '$article_name' },
 
-    //user id
-    {
-      $lookup: {
-        from: 'users',
-        localField: 'userId',
-        foreignField: '_id',
-        as: 'user',
+      //user id
+      {
+        $lookup: {
+          from: 'users',
+          localField: 'userId',
+          foreignField: '_id',
+          as: 'user',
+        },
       },
-    },
-    { $unwind: '$user' },
-    {
-      $project: {
-        _id: 0,
-        article: '$article_name.article',
-        name: '$user.name',
-        comment: 1,
+      { $unwind: '$user' },
+      {
+        $project: {
+          _id: 0,
+          article: '$article_name.article',
+          name: '$user.name',
+          comment: 1,
+        },
       },
-    },
-  ]);
+    ]);
 
-  const options: object = { id, page, limit };
-  const response = await Commentschema.aggregatePaginate(
-    aggregateQuery,
-    options
-  )
-    .then((result) => result)
-    .catch((err: Error) => console.log(err));
-
-  return response;
+    const options: object = { id, page, limit };
+    const response = await Commentschema.aggregatePaginate(
+      aggregateQuery,
+      options
+    )
+      .then((result) => result)
+      .catch((err: Error) => console.log(err));
+    redisclient.set(
+      `allcomments?page${page}?limit${limit}`,
+      JSON.stringify(response)
+    );
+    return response;
+  }
 };
-
 // get comment by populate :-
 // const getComment = async (id:string) => {
 //   const find = await Commentschema.find({ articleId: id}).populate(
