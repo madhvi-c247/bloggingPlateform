@@ -74,7 +74,6 @@ const getAllUserController = async (
 ) => {
   try {
     const result = await getAllUser(req.body);
-
     return res.status(200).send(result);
   } catch (error) {
     next(error);
@@ -102,7 +101,6 @@ const deleteByMailController = async (
   next: NextFunction
 ) => {
   try {
-    // const requser: userreq = req.user!
     const result = await deleteByMail(req.user, req.body);
 
     return res.status(200).send(result);

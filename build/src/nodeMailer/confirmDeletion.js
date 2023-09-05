@@ -20,16 +20,14 @@ const transporter = nodemailer_1.default.createTransport({
         pass: 'madhvi@c247',
     },
 });
-function newmail(email, token) {
+function deletemail(email) {
     return __awaiter(this, void 0, void 0, function* () {
-        const path = 'http://localhost:3000/v1/user/verifyAndDeleteAccount';
         try {
             const info = yield transporter.sendMail({
                 from: 'madhvi.s@chapter247.com',
                 to: email,
-                subject: 'Confirmation mail',
-                html: `Please confirm, you want to delete your account :- 
-      <br><br><br>token for login =<a href=${token}>${token}</a>`,
+                subject: 'Account Deleted',
+                text: `Deletetion Successful!!!!`,
             });
             console.log('Message sent: %s', info.messageId);
         }
@@ -38,4 +36,4 @@ function newmail(email, token) {
         }
     });
 }
-exports.default = newmail;
+exports.default = deletemail;

@@ -7,7 +7,7 @@ const errorValidator = [
   async (req: Request, res: Response, next: NextFunction) => {
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      return res.send({ errors: result['errors'][0] });
+      return res.send({ errors: 'data is invalid' });
     }
     next();
   },

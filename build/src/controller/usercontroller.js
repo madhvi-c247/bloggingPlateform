@@ -75,7 +75,6 @@ const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 
 exports.deleteUserController = deleteUserController;
 const deleteByMailController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        // const requser: userreq = req.user!
         const result = yield (0, userService_1.deleteByMail)(req.user, req.body);
         return res.status(200).send(result);
     }

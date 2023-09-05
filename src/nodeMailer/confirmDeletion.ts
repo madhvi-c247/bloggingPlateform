@@ -8,16 +8,14 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-async function newmail(email: string, token: string) {
-  const path = 'http://localhost:3000/v1/user/verifyAndDeleteAccount';
+async function deletemail(email: string) {
   try {
     const info = await transporter.sendMail({
       from: 'madhvi.s@chapter247.com',
       to: email,
-      subject: 'Confirmation mail',
+      subject: 'Account Deleted',
 
-      html: `Please confirm, you want to delete your account :- 
-      <br><br><br>token for login =<a href=${token}>${token}</a>`,
+      text: `Deletetion Successful!!!!`,
     });
 
     console.log('Message sent: %s', info.messageId);
@@ -26,5 +24,4 @@ async function newmail(email: string, token: string) {
   }
 }
 
-
-export default newmail;
+export default deletemail;

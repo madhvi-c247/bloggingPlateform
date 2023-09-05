@@ -9,16 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validatePassword = exports.validateEmail = void 0;
 const express_validator_1 = require("express-validator");
 const express_validator_2 = require("express-validator");
-const errorValidator = [
-    (0, express_validator_1.body)('email').notEmpty() && (0, express_validator_1.body)('password').notEmpty(),
+const emailRegex = /^([a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$/;
+const passwordRegex = /((?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*_=+-]).{8,16})$/;
+const validateEmail = [
+    (0, express_validator_1.body)('email').notEmpty().matches(emailRegex),
     (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const result = (0, express_validator_2.validationResult)(req);
         if (!result.isEmpty()) {
-            return res.send({ errors: 'data is invalid' });
+            return res.send({ errors: 'email is not correct' });
         }
         next();
     }),
 ];
-exports.default = errorValidator;
+exports.validateEmail = validateEmail;
+const validatePassword = [
+    (0, express_validator_1.body)('password').notEmpty().matches(passwordRegex),
+    (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+        const result = (0, express_validator_2.validationResult)(req);
+        if (!result.isEmpty()) {
+            return res.send({ errors: 'password is not correct' });
+        }
+        next();
+    }),
+];
+exports.validatePassword = validatePassword;

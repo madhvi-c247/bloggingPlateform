@@ -10,13 +10,19 @@ const opts: any = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = key;
 
+
 export default passport.use(
-  new JwtStrategy(opts, async function (jwt_payload, done) {
-    const user = await userModel.findOne({ email: jwt_payload.email });
-    if (user) {
-      return done(null, user);
-    } else {
-      return done(null, false);
+  new JwtStrategy(opts, async (jwt_payload, done) => {
+    console.log('console first');
+    try {
+      const user = await userModel.findOne({ email: jwt_payload.email });
+      if (user) {
+        return done(null, user);
+      } else {
+        return done(null, false, { message: 'Unauthorized' });
+      }
+    } catch (error) {
+      return done(error);
     }
   })
 );
