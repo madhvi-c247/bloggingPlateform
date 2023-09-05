@@ -7,10 +7,11 @@ import {
   paging,
   userreq,
 } from '../interface/Interfaces';
-
 import newmail from '../nodeMailer/mail';
+import deletemail from '../nodeMailer/confirmDeletion';
 import Redis from 'ioredis';
 const redisclient = new Redis();
+
 //create user :-
 
 const creatUser = async (obj: userInterface) => {
@@ -32,29 +33,27 @@ const login = async (req: Request, res: Response) => {
       return res.status(401).json({ message: 'User not found' });
     }
 
-    const passwordMatch = user.validatePassword(
+    const passwordMatch = await user.validatePassword(
       loginObj.password,
       user.password
     );
 
     if (!passwordMatch) {
       return res.status(401).json({ message: 'Password incorrect' });
+    } else {
+      const token = Jwt.sign(
+        {
+          email: user.email,
+          name: user.name,
+        },
+        'ZXCVBNM',
+        {
+          expiresIn: '1h',
+          algorithm: 'HS256',
+        }
+      );
+      res.json({ message: 'Logged in sucessful', token });
     }
-
-    const token = Jwt.sign(
-      {
-        email: user.email,
-        name: user.name,
-        age: user.age,
-        number: user.number,
-      },
-      'ZXCVBNM',
-      {
-        expiresIn: '1h',
-        algorithm: 'HS256',
-      }
-    );
-    res.json({ message: 'Logged in sucessful', token });
   } catch (error) {
     return res.status(401).json({ message: 'invalid details' });
   }
@@ -134,7 +133,7 @@ const getAllUser = async (pagination: paging) => {
       `allUsers?page${page}?limit${limit}`,
       JSON.stringify(aggregateQuery)
     );
-    return aggregateQuery;
+    return response;
   }
 };
 // delete user :-
@@ -153,26 +152,43 @@ const deleteUser = async (user: userreq, id: string) => {
 // Delete by mail:
 
 const deleteByMail = async (user: any, obj: userInterface) => {
-  const passwordMatch = await user.validatePassword(
-    obj.password,
-    user.password
-  );
-
-  if (passwordMatch) {
-    if (user.secret_question.fathername === obj.secret_question) {
-      newmail(obj.email);
-      return 'mail sended';
+  try {
+    const passwordMatch = await user.validatePassword(
+      obj.password,
+      user.password
+    );
+    const token = Jwt.sign(
+      {
+        email: user.email,
+        name: user.name,
+      },
+      'ZXCVBNM',
+      {
+        expiresIn: '1h',
+        algorithm: 'HS256',
+      }
+    );
+    if (passwordMatch) {
+      if (user.secret_question.fathername === obj.secret_question) {
+        newmail(user.email, token);
+        return { email: 'mail sended' };
+      } else {
+        return { error: 'security question incorrect ' };
+      }
+    } else {
+      return { error: 'password incorrect' };
     }
-  } else {
-    return 'data incorrect';
+  } catch (error) {
+    return { error: 'unauthorized' };
   }
 };
 
-const verifyAndDelete = async (user: userreq) => {
+const verifyAndDelete = async (user: any) => {
   const deleted = await Userschema.findOneAndDelete({
     password: user.password,
   });
-  return deleted;
+  deletemail(user.email);
+  return { deleted: 'your account deleted' };
 };
 export {
   creatUser,

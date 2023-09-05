@@ -16,6 +16,7 @@ exports.verifyAndDelete = exports.deleteByMail = exports.getAllUser = exports.lo
 const userModel_1 = __importDefault(require("../model/userModel"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const mail_1 = __importDefault(require("../nodeMailer/mail"));
+const confirmDeletion_1 = __importDefault(require("../nodeMailer/confirmDeletion"));
 const ioredis_1 = __importDefault(require("ioredis"));
 const redisclient = new ioredis_1.default();
 //create user :-
@@ -34,20 +35,20 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
         if (!user) {
             return res.status(401).json({ message: 'User not found' });
         }
-        const passwordMatch = user.validatePassword(loginObj.password, user.password);
+        const passwordMatch = yield user.validatePassword(loginObj.password, user.password);
         if (!passwordMatch) {
             return res.status(401).json({ message: 'Password incorrect' });
         }
-        const token = jsonwebtoken_1.default.sign({
-            email: user.email,
-            name: user.name,
-            age: user.age,
-            number: user.number,
-        }, 'ZXCVBNM', {
-            expiresIn: '1h',
-            algorithm: 'HS256',
-        });
-        res.json({ message: 'Logged in sucessful', token });
+        else {
+            const token = jsonwebtoken_1.default.sign({
+                email: user.email,
+                name: user.name,
+            }, 'ZXCVBNM', {
+                expiresIn: '1h',
+                algorithm: 'HS256',
+            });
+            res.json({ message: 'Logged in sucessful', token });
+        }
     }
     catch (error) {
         return res.status(401).json({ message: 'invalid details' });
@@ -117,7 +118,7 @@ const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* (
             .then((result) => result)
             .catch((err) => console.log(err));
         redisclient.set(`allUsers?page${page}?limit${limit}`, JSON.stringify(aggregateQuery));
-        return aggregateQuery;
+        return response;
     }
 });
 exports.getAllUser = getAllUser;
@@ -135,15 +136,30 @@ const deleteUser = (user, id) => __awaiter(void 0, void 0, void 0, function* () 
 exports.deleteUser = deleteUser;
 // Delete by mail:
 const deleteByMail = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
-    const passwordMatch = yield user.validatePassword(obj.password, user.password);
-    if (passwordMatch) {
-        if (user.secret_question.fathername === obj.secret_question) {
-            (0, mail_1.default)(obj.email);
-            return 'mail sended';
+    try {
+        const passwordMatch = yield user.validatePassword(obj.password, user.password);
+        const token = jsonwebtoken_1.default.sign({
+            email: user.email,
+            name: user.name,
+        }, 'ZXCVBNM', {
+            expiresIn: '1h',
+            algorithm: 'HS256',
+        });
+        if (passwordMatch) {
+            if (user.secret_question.fathername === obj.secret_question) {
+                (0, mail_1.default)(user.email, token);
+                return { email: 'mail sended' };
+            }
+            else {
+                return { error: 'security question incorrect ' };
+            }
+        }
+        else {
+            return { error: 'password incorrect' };
         }
     }
-    else {
-        return 'data incorrect';
+    catch (error) {
+        return { error: 'unauthorized' };
     }
 });
 exports.deleteByMail = deleteByMail;
@@ -151,6 +167,7 @@ const verifyAndDelete = (user) => __awaiter(void 0, void 0, void 0, function* ()
     const deleted = yield userModel_1.default.findOneAndDelete({
         password: user.password,
     });
-    return deleted;
+    (0, confirmDeletion_1.default)(user.email);
+    return { deleted: 'your account deleted' };
 });
 exports.verifyAndDelete = verifyAndDelete;

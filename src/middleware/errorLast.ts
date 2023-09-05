@@ -7,7 +7,7 @@ const errorLast = (
   next: NextFunction
 ) => {
   res.status(401);
-  // res.send('Something went wrong!!!');
+  res.send('Something went wrong!!!');
   res.send(err.message)
   next();
 };

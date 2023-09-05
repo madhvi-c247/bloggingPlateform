@@ -13,12 +13,17 @@ import {
 import errorValidator from '../middleware/validator';
 
 import passport from '../config/passport';
-
+import { validateEmail, validatePassword } from '../middleware/regexValidator';
 import authorization from '../middleware/auth';
 import { adminrole } from '../helper/constant';
 
 const router = Router();
-router.post('/createUser', createUserController);
+router.post(
+  '/createUser',
+  validateEmail,
+  validatePassword,
+  createUserController
+);
 
 router.put(
   '/updateUser/:id',
