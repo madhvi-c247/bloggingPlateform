@@ -21,8 +21,8 @@ const createUserController = async (
     const result = await creatUser(req.body);
     return res.status(200).send(result);
   } catch (error) {
-    next(error);
-    return res.status(401);
+    // next(error);
+    return res.status(409).json({ message: 'your account already exist' });
   }
 };
 
@@ -101,7 +101,7 @@ const deleteByMailController = async (
   next: NextFunction
 ) => {
   try {
-    const result = await deleteByMail(req.user, req.body);
+    const result = await deleteByMail(req.user, req.body, res);
 
     return res.status(200).send(result);
   } catch (error) {
@@ -115,8 +115,7 @@ const verifyAndDeleteController = async (
   next: NextFunction
 ) => {
   try {
-    const requser: userreq = req.user!;
-    const result = await verifyAndDelete(requser);
+    const result = await verifyAndDelete(req.user);
 
     return res.status(200).send(result);
   } catch (error) {

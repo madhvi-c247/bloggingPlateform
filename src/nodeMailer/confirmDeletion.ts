@@ -1,10 +1,10 @@
 import nodemailer from 'nodemailer';
-
+import { email_password } from '../config/env';
 const transporter = nodemailer.createTransport({
   service: 'Gmail',
   auth: {
     user: 'madhvi.s@chapter247.com',
-    pass: 'madhvi@c247',
+    pass: email_password,
   },
 });
 

@@ -3,7 +3,6 @@ import {
   updateComment,
   getComment,
   deleteComment,
-  // getcommentid,
 } from '../services/commentServices';
 import { NextFunction, Request, Response } from 'express';
 

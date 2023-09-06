@@ -8,9 +8,7 @@ import {
 import mongoose from 'mongoose';
 import { ObjectId } from 'mongoose';
 import { ParsedQs } from 'qs';
-import { log } from 'console';
 import Redis from 'ioredis';
-import articleModel from '../model/articleModel';
 const redisclient = new Redis();
 const ObjectId = mongoose.Types.ObjectId;
 
@@ -25,7 +23,7 @@ const creatarticle = async (id: string, obj: articleInterface) => {
     categories: obj.categories,
   });
 
-  return article;
+  return { done: 'Article creation successful!!!' };
 };
 
 // update Article :-
@@ -47,13 +45,13 @@ const updateArticle = async function (user: any, obj: articleInterface) {
       }
     );
 
-    return update;
+    return { done: 'Updation successful!!!' };
   } else {
     throw new Error('User id is not correct');
   }
 };
 
-//get All Article
+//get All Article:-
 
 const getAllArticle = async (
   sortobj: getAllArticleInterface,
@@ -141,11 +139,10 @@ const getAllArticle = async (
     );
     console.log(response);
 
-    // await redisclient.setex(articleCachesKey, 5, JSON.stringify(response));
     return response;
   }
 };
-// get Article:-
+// get Article by perticular id:-
 
 const getArticle = async (id: string) => {
   const find = await Articleschema.aggregate([
@@ -215,7 +212,7 @@ const deleteArticle = async (
     const deletearticle = await Articleschema.findOneAndDelete({
       _id: ids.articleId,
     });
-    return deletearticle;
+    return { deleted: 'your article deleted!!!' };
   } else {
     throw new Error('User id is not correct');
   }

@@ -28,4 +28,97 @@ const validatePassword = [
     next();
   },
 ];
-export { validateEmail, validatePassword };
+
+const fieldEmptyError = [
+  body('name').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(404).send({ error: 'write your name' });
+    }
+    next();
+  },
+
+  body('email').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(404).send({ error: 'write your email' });
+    }
+    next();
+  },
+
+  body('age').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ error: 'write your age' });
+    }
+    next();
+  },
+
+  body('number').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ error: 'write your number' });
+    }
+    next();
+  },
+
+  body('role').notEmpty().withMessage('write your role'),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ error: 'write your role' });
+    }
+    next();
+  },
+];
+
+const mailValidator = [
+  body('password').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ errors: 'enter your password' });
+    }
+    next();
+  },
+
+  body('secret_question').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ errors: 'enter your sequrity question' });
+    }
+    next();
+  },
+];
+
+const loginValidator = [
+  body('email').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ errors: 'enter your email' });
+    }
+    next();
+  },
+  body('password').notEmpty(),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const result = validationResult(req);
+    if (!result.isEmpty()) {
+      return res.status(400).send({ errors: 'enter your password' });
+    }
+    next();
+  },
+];
+
+export {
+  validateEmail,
+  validatePassword,
+  fieldEmptyError,
+  mailValidator,
+  loginValidator,
+};

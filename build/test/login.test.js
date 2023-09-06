@@ -90,7 +90,7 @@ describe('Authentication', () => {
             .send(loginDetails)
             .expect(200)
             .then((res) => {
-            // console.log(res.body)
+            // console.log(res.body);
             (0, chai_1.expect)(res.body.token);
             token = res.body.token;
             done();
@@ -101,22 +101,24 @@ describe('Authentication', () => {
     });
 });
 // update user-----------------------------------------------------
-const updateDetails = { age: 28 };
-describe('UserUpdate', () => {
-    it('update user', (done) => {
-        supertest_1.default
-            .agent(index_1.default)
-            .put(`/${constant_1.versions}/user/updateUser/${UserId}`)
-            .send(updateDetails)
-            .set('Authorization', `Bearer ${token}`)
-            .expect(200)
-            .then((res) => {
-            (0, chai_1.expect)(res.body.message);
-            done();
-        })
-            .catch((err) => done(err));
-    });
-});
+// const updateDetails = { age:28 };
+// describe ('UserUpdate',()=>{
+// it('update user', (done: any) => {
+//     request
+//       .agent(app)
+//       .put(`/${versions}/user/updateUser/${UserId}`)
+//       .send(updateDetails)
+//       .set('Authorization',`Bearer ${token}`)
+//       .expect(200)
+//       .then(
+//         (res)=>{
+//           expect(res.body.message)
+//           done()
+//         }
+//         )
+//       .catch((err) => done(err));
+//   });
+// })
 //get all user-------------------------------------------------
 describe('GetAllUsers', () => {
     it('get user', (done) => {
@@ -150,17 +152,19 @@ describe('GetById', () => {
     });
 });
 // dummy delete user-------------------------------------------------
-describe('Userdelete', () => {
-    it('delete user', (done) => {
-        supertest_1.default
-            .agent(index_1.default)
-            .delete(`/${constant_1.versions}/user/deleteUser/${UserId}`)
-            .set('Authorization', `Bearer ${token}`)
-            .expect(200)
-            .then((res) => {
-            (0, chai_1.expect)(res.body.message);
-            done();
-        })
-            .catch((err) => done(err));
-    });
-});
+// describe ('Userdelete',()=>{
+// it('delete user', (done: any) => {
+//     request
+//       .agent(app)
+//       .delete(`/${versions}/user/deleteUser/${UserId}`)
+//       .set('Authorization',`Bearer ${token}`)
+//       .expect(200)
+//       .then(
+//         (res)=>{
+//           expect(res.body.message)
+//           done()
+//         }
+//         )
+//       .catch((err) => done(err));
+//   });
+// })

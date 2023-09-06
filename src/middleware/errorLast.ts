@@ -8,7 +8,7 @@ const errorLast = (
 ) => {
   res.status(401);
   res.send('Something went wrong!!!');
-  res.send(err.message)
+  res.send(err.message);
   next();
 };
 export default errorLast;

@@ -21,7 +21,6 @@ import {
   updateCommentController,
   getCommentController,
   deleteCommentController,
-  // getCommentidController,
 } from './commentController';
 
 export {
@@ -47,5 +46,4 @@ export {
   updateCommentController,
   getCommentController,
   deleteCommentController,
-  // getCommentidController,
 };

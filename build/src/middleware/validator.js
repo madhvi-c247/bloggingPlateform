@@ -16,7 +16,7 @@ const errorValidator = [
     (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
         const result = (0, express_validator_2.validationResult)(req);
         if (!result.isEmpty()) {
-            return res.send({ errors: 'data is invalid' });
+            return res.send({ errors: 'please fill data on both the fields ' });
         }
         next();
     }),

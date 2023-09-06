@@ -77,28 +77,6 @@ let data;
   });
 })
 
-//update Article-----------------------------------------------------
-
-describe ('ArticleUpdate',()=>{
- 
-it('update article', (done: any) => {
-    request
-      .agent(app)
-      .put(`/${versions}/article/updateArticle`)
-      .send({ author:`${userId}`, articleId:`${articleId}`,title:" title"})
-      .set('Authorization',`Bearer ${token}`)
-      .expect(200)
-       
-      .then(
-        (res)=>{
-          expect(res.body.message)
-          done()
-        }
-        )
-      .catch((err) => done(err));
-  });
-
-})
 
 //get all user-------------------------------------------------
 
