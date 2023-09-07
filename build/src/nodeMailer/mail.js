@@ -17,8 +17,9 @@ const env_1 = require("../config/env");
 const transport = nodemailer_1.default.createTransport({
     service: 'Gmail',
     auth: {
-        user: 'madhvi.s@chapter247.com',
-        pass: env_1.email_password,
+        user: 'xyz@gmail.com',
+        pass: 'xyz',
+
     },
 });
 // var transport = nodemailer.createTransport({
