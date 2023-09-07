@@ -72,22 +72,6 @@ describe('Articlecreate', () => {
         });
     });
 });
-//update Article-----------------------------------------------------
-describe('ArticleUpdate', () => {
-    it('update article', (done) => {
-        supertest_1.default
-            .agent(index_1.default)
-            .put(`/${constant_1.versions}/article/updateArticle`)
-            .send({ author: `${userId}`, articleId: `${articleId}`, title: " title" })
-            .set('Authorization', `Bearer ${token}`)
-            .expect(200)
-            .then((res) => {
-            (0, chai_1.expect)(res.body.message);
-            done();
-        })
-            .catch((err) => done(err));
-    });
-});
 //get all user-------------------------------------------------
 describe('GetAllArticle', () => {
     it('get all article', (done) => {

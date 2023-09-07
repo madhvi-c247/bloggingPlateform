@@ -13,23 +13,32 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
-const transporter = nodemailer_1.default.createTransport({
+const env_1 = require("../config/env");
+const transport = nodemailer_1.default.createTransport({
     service: 'Gmail',
     auth: {
         user: 'xyz@gmail.com',
         pass: 'xyz',
+
     },
 });
+// var transport = nodemailer.createTransport({
+//   host: 'sandbox.smtp.mailtrap.io',
+//   port: 2525,
+//   auth: {
+//     user: 'e5d4573b0b01a3',
+//     pass: '723522395ab00d',
+//   },
+// });
 function newmail(email, token) {
     return __awaiter(this, void 0, void 0, function* () {
         const path = 'http://localhost:3000/v1/user/verifyAndDeleteAccount';
         try {
-            const info = yield transporter.sendMail({
+            const info = yield transport.sendMail({
                 from: 'madhvi.s@chapter247.com',
                 to: email,
                 subject: 'Confirmation mail',
-                html: `Please confirm, you want to delete your account :- 
-      <br><br><br>token for login =<a href=${token}>${token}</a>`,
+                html: `Please confirm, you want to delete your account <a href='http://localhost:3000/v1/user/verifyAndDeleteAccount?token=${token}'>click here to confirm</a>`,
             });
             console.log('Message sent: %s', info.messageId);
         }

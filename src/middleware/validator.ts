@@ -7,7 +7,7 @@ const errorValidator = [
   async (req: Request, res: Response, next: NextFunction) => {
     const result = validationResult(req);
     if (!result.isEmpty()) {
-      return res.send({ errors: 'data is invalid' });
+      return res.send({ errors: 'please fill data on both the fields ' });
     }
     next();
   },

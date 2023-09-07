@@ -17,8 +17,8 @@ const createUserController = (req, res, next) => __awaiter(void 0, void 0, void 
         return res.status(200).send(result);
     }
     catch (error) {
-        next(error);
-        return res.status(401);
+        // next(error);
+        return res.status(409).json({ message: 'your account already exist' });
     }
 });
 exports.createUserController = createUserController;
@@ -75,7 +75,7 @@ const deleteUserController = (req, res, next) => __awaiter(void 0, void 0, void 
 exports.deleteUserController = deleteUserController;
 const deleteByMailController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const result = yield (0, userService_1.deleteByMail)(req.user, req.body);
+        const result = yield (0, userService_1.deleteByMail)(req.user, req.body, res);
         return res.status(200).send(result);
     }
     catch (error) {
@@ -85,8 +85,7 @@ const deleteByMailController = (req, res, next) => __awaiter(void 0, void 0, voi
 exports.deleteByMailController = deleteByMailController;
 const verifyAndDeleteController = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const requser = req.user;
-        const result = yield (0, userService_1.verifyAndDelete)(requser);
+        const result = yield (0, userService_1.verifyAndDelete)(req.user);
         return res.status(200).send(result);
     }
     catch (error) {

@@ -4,3 +4,4 @@ export const DB_URL = process.env.DB_URL ?? '';
 export const DB_URL_TESTING = process.env.DB_URL_TESTING ?? '';
 export const port = process.env.port;
 export const key = 'ZXCVBNM';
+export const email_password = process.env.EMAIL_PASSWORD ?? '';

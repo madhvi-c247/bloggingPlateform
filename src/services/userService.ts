@@ -16,7 +16,7 @@ const redisclient = new Redis();
 
 const creatUser = async (obj: userInterface) => {
   const create = await Userschema.create(obj);
-  return create;
+  return { created: 'your account created' };
 };
 
 // Login user :-
@@ -30,7 +30,7 @@ const login = async (req: Request, res: Response) => {
     });
 
     if (!user) {
-      return res.status(401).json({ message: 'User not found' });
+      return res.status(406).json({ message: 'Email Id is not correct' });
     }
 
     const passwordMatch = await user.validatePassword(
@@ -39,7 +39,7 @@ const login = async (req: Request, res: Response) => {
     );
 
     if (!passwordMatch) {
-      return res.status(401).json({ message: 'Password incorrect' });
+      return res.status(406).json({ message: 'Password incorrect' });
     } else {
       const token = Jwt.sign(
         {
@@ -98,7 +98,6 @@ const getUser = async (
 };
 
 //all user get (Admin)
-const userCachesKey = 'allUsers';
 
 const getAllUser = async (pagination: paging) => {
   let { limit, page } = pagination;
@@ -149,9 +148,9 @@ const deleteUser = async (user: userreq, id: string) => {
   }
 };
 
-// Delete by mail:
+// Delete by mail:-
 
-const deleteByMail = async (user: any, obj: userInterface) => {
+const deleteByMail = async (user: any, obj: userInterface, res: Response) => {
   try {
     const passwordMatch = await user.validatePassword(
       obj.password,
@@ -173,10 +172,10 @@ const deleteByMail = async (user: any, obj: userInterface) => {
         newmail(user.email, token);
         return { email: 'mail sended' };
       } else {
-        return { error: 'security question incorrect ' };
+        return res.status(406).json({ error: 'security question not match' });
       }
     } else {
-      return { error: 'password incorrect' };
+      return res.status(406).json({ error: 'password not match' });
     }
   } catch (error) {
     return { error: 'unauthorized' };
@@ -185,10 +184,10 @@ const deleteByMail = async (user: any, obj: userInterface) => {
 
 const verifyAndDelete = async (user: any) => {
   const deleted = await Userschema.findOneAndDelete({
-    password: user.password,
+    email: user.email,
   });
   deletemail(user.email);
-  return { deleted: 'your account deleted' };
+  return { deleted: 'your account has been deleted' };
 };
 export {
   creatUser,

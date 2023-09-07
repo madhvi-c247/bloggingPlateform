@@ -15,20 +15,16 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const passport_1 = __importDefault(require("passport"));
 const passport_jwt_1 = __importDefault(require("passport-jwt"));
 const userModel_1 = __importDefault(require("../model/userModel"));
-const env_1 = require("./env");
 const JwtStrategy = passport_jwt_1.default.Strategy;
 const ExtractJwt = passport_jwt_1.default.ExtractJwt;
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const opts = {};
-opts.jwtFromRequest = ExtractJwt.fromExtractors([
-    ExtractJwt.fromUrlQueryParameter('token'),
-    ExtractJwt.fromAuthHeaderAsBearerToken(),
-]);
-opts.secretOrKey = env_1.key;
-exports.default = passport_1.default.use(new JwtStrategy(opts, (jwt_payload, done) => __awaiter(void 0, void 0, void 0, function* () {
-    console.log('console first');
+opts.jwtFromRequest = ExtractJwt.fromUrlQueryParameter('token');
+opts.secretOrKey = 'ZXCVBNM';
+const mailPassport = passport_1.default.use(new JwtStrategy(opts, (jwt_payload, done) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const user = yield userModel_1.default.findOne({ email: jwt_payload.email });
+        console.log('jwt----', jwt_payload);
         if (user) {
             return done(null, user);
         }
@@ -40,3 +36,4 @@ exports.default = passport_1.default.use(new JwtStrategy(opts, (jwt_payload, don
         return done(error);
     }
 })));
+exports.default = mailPassport;

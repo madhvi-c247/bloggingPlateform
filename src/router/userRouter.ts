@@ -10,10 +10,15 @@ import {
   verifyAndDeleteController,
 
 } from '../controller/index';
-import errorValidator from '../middleware/validator';
-
+// import errorValidator from '../middleware/validator';
 import passport from '../config/passport';
-import { validateEmail, validatePassword } from '../middleware/regexValidator';
+import {
+  validateEmail,
+  validatePassword,
+  fieldEmptyError,
+  mailValidator,
+  loginValidator,
+} from '../middleware/regexValidator';
 import authorization from '../middleware/auth';
 import { adminrole } from '../helper/constant';
 
@@ -22,6 +27,7 @@ router.post(
   '/createUser',
   validateEmail,
   validatePassword,
+  fieldEmptyError,
   createUserController
 );
 
@@ -44,7 +50,7 @@ router.get(
   getUserController
 );
 
-router.post('/login', errorValidator, loginController);
+router.post('/login', loginValidator, loginController);
 
 router.delete(
   '/deleteUser/:id',
@@ -52,13 +58,14 @@ router.delete(
   deleteUserController
 );
 
-router.delete(
+router.post(
   '/deletebyMail',
   passport.authenticate('jwt', { session: false }),
+  mailValidator,
   deleteByMailController
 );
 
-router.delete(
+router.get(
   '/verifyAndDeleteAccount',
   passport.authenticate('jwt', { session: false }),
   verifyAndDeleteController

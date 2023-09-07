@@ -27,7 +27,7 @@ const creatarticle = (id, obj) => __awaiter(void 0, void 0, void 0, function* ()
         date: obj.date,
         categories: obj.categories,
     });
-    return article;
+    return { done: 'Article creation successful!!!' };
 });
 exports.creatarticle = creatarticle;
 // update Article :-
@@ -44,7 +44,7 @@ const updateArticle = function (user, obj) {
                     categories: obj.categories,
                 },
             });
-            return update;
+            return { done: 'Updation successful!!!' };
         }
         else {
             throw new Error('User id is not correct');
@@ -52,7 +52,7 @@ const updateArticle = function (user, obj) {
     });
 };
 exports.updateArticle = updateArticle;
-//get All Article
+//get All Article:-
 const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, function* () {
     let sort = {};
     const field = sortobj.field;
@@ -115,12 +115,11 @@ const getAllArticle = (sortobj, query) => __awaiter(void 0, void 0, void 0, func
             .catch((err) => console.log(err));
         redisclient.set(`allArticles?search${search}?page${page}?limit${limit}`, JSON.stringify(response));
         console.log(response);
-        // await redisclient.setex(articleCachesKey, 5, JSON.stringify(response));
         return response;
     }
 });
 exports.getAllArticle = getAllArticle;
-// get Article:-
+// get Article by perticular id:-
 const getArticle = (id) => __awaiter(void 0, void 0, void 0, function* () {
     const find = yield articleModel_1.default.aggregate([
         { $match: { _id: new ObjectId(id) } },
@@ -180,7 +179,7 @@ const deleteArticle = (user, ids) => __awaiter(void 0, void 0, void 0, function*
         const deletearticle = yield articleModel_1.default.findOneAndDelete({
             _id: ids.articleId,
         });
-        return deletearticle;
+        return { deleted: 'your article deleted!!!' };
     }
     else {
         throw new Error('User id is not correct');

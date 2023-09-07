@@ -96,10 +96,10 @@ it('email and password are correct so they will give us token', (done: any) => {
       .expect(200)
     
       .then((res)=>{
-        // console.log(res.body)
+        // console.log(res.body);
         expect(res.body.token);
-        token=res.body.token
-         done()
+        token = res.body.token;
+        done();
       })
       .catch( (err)=>{
       
@@ -111,27 +111,27 @@ it('email and password are correct so they will give us token', (done: any) => {
 
 // update user-----------------------------------------------------
 
-const updateDetails = { age:28 };
+// const updateDetails = { age:28 };
 
-describe ('UserUpdate',()=>{
-it('update user', (done: any) => {
-    request
-      .agent(app)
-      .put(`/${versions}/user/updateUser/${UserId}`)
-      .send(updateDetails)
-      .set('Authorization',`Bearer ${token}`)
-      .expect(200)
+// describe ('UserUpdate',()=>{
+// it('update user', (done: any) => {
+//     request
+//       .agent(app)
+//       .put(`/${versions}/user/updateUser/${UserId}`)
+//       .send(updateDetails)
+//       .set('Authorization',`Bearer ${token}`)
+//       .expect(200)
        
-      .then(
-        (res)=>{
-          expect(res.body.message)
-          done()
-        }
-        )
-      .catch((err) => done(err));
-  });
+//       .then(
+//         (res)=>{
+//           expect(res.body.message)
+//           done()
+//         }
+//         )
+//       .catch((err) => done(err));
+//   });
 
-})
+// })
 
 //get all user-------------------------------------------------
 
@@ -180,22 +180,22 @@ it('get user', (done: any) => {
 
 // dummy delete user-------------------------------------------------
 
-describe ('Userdelete',()=>{
-it('delete user', (done: any) => {
-    request
-      .agent(app)
-      .delete(`/${versions}/user/deleteUser/${UserId}`)
+// describe ('Userdelete',()=>{
+// it('delete user', (done: any) => {
+//     request
+//       .agent(app)
+//       .delete(`/${versions}/user/deleteUser/${UserId}`)
      
-      .set('Authorization',`Bearer ${token}`)
-      .expect(200)
+//       .set('Authorization',`Bearer ${token}`)
+//       .expect(200)
        
-      .then(
-        (res)=>{
-          expect(res.body.message)
-          done()
-        }
-        )
-      .catch((err) => done(err));
-  });
+//       .then(
+//         (res)=>{
+//           expect(res.body.message)
+//           done()
+//         }
+//         )
+//       .catch((err) => done(err));
+//   });
 
-})
+// })

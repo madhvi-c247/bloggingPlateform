@@ -28,7 +28,7 @@ const createComment = (user, obj) => __awaiter(void 0, void 0, void 0, function*
             comment: obj.comment,
             date: obj.date,
         });
-        return created;
+        return { done: 'your comment created!!!' };
     }
     //
 });
@@ -43,7 +43,7 @@ const updateComment = function (user, obj) {
                     comment: obj.comment,
                 },
             });
-            return update;
+            return { successful: 'your updation successfully done!!!' };
         }
         else {
             throw new Error('User id is not correct');
@@ -58,13 +58,14 @@ const deleteComment = (user, obj) => __awaiter(void 0, void 0, void 0, function*
         const deletecomment = yield commentModel_1.default.findOneAndDelete({
             _id: obj.commentId,
         });
-        return deletecomment;
+        return { deleted: 'your comment deleted' };
     }
     else {
         throw new Error('User id is not correct');
     }
 });
 exports.deleteComment = deleteComment;
+// get comment by Article Id :-
 const getComment = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
     let { id, page, limit } = pagination;
     const cachedData = yield redisclient.get(`allcomments?page${page}?limit${limit}`);

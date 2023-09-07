@@ -22,7 +22,7 @@ const redisclient = new ioredis_1.default();
 //create user :-
 const creatUser = (obj) => __awaiter(void 0, void 0, void 0, function* () {
     const create = yield userModel_1.default.create(obj);
-    return create;
+    return { created: 'your account created' };
 });
 exports.creatUser = creatUser;
 // Login user :-
@@ -33,11 +33,11 @@ const login = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
             email: loginObj.email,
         });
         if (!user) {
-            return res.status(401).json({ message: 'User not found' });
+            return res.status(406).json({ message: 'Email Id is not correct' });
         }
         const passwordMatch = yield user.validatePassword(loginObj.password, user.password);
         if (!passwordMatch) {
-            return res.status(401).json({ message: 'Password incorrect' });
+            return res.status(406).json({ message: 'Password incorrect' });
         }
         else {
             const token = jsonwebtoken_1.default.sign({
@@ -90,7 +90,6 @@ const getUser = (authUser) => __awaiter(void 0, void 0, void 0, function* () {
 });
 exports.getUser = getUser;
 //all user get (Admin)
-const userCachesKey = 'allUsers';
 const getAllUser = (pagination) => __awaiter(void 0, void 0, void 0, function* () {
     let { limit, page } = pagination;
     const cachedData = yield redisclient.get(`allUsers?page${page}?limit${limit}`);
@@ -134,8 +133,8 @@ const deleteUser = (user, id) => __awaiter(void 0, void 0, void 0, function* () 
     }
 });
 exports.deleteUser = deleteUser;
-// Delete by mail:
-const deleteByMail = (user, obj) => __awaiter(void 0, void 0, void 0, function* () {
+// Delete by mail:-
+const deleteByMail = (user, obj, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const passwordMatch = yield user.validatePassword(obj.password, user.password);
         const token = jsonwebtoken_1.default.sign({
@@ -151,11 +150,11 @@ const deleteByMail = (user, obj) => __awaiter(void 0, void 0, void 0, function* 
                 return { email: 'mail sended' };
             }
             else {
-                return { error: 'security question incorrect ' };
+                return res.status(406).json({ error: 'security question not match' });
             }
         }
         else {
-            return { error: 'password incorrect' };
+            return res.status(406).json({ error: 'password not match' });
         }
     }
     catch (error) {
@@ -165,9 +164,9 @@ const deleteByMail = (user, obj) => __awaiter(void 0, void 0, void 0, function* 
 exports.deleteByMail = deleteByMail;
 const verifyAndDelete = (user) => __awaiter(void 0, void 0, void 0, function* () {
     const deleted = yield userModel_1.default.findOneAndDelete({
-        password: user.password,
+        email: user.email,
     });
     (0, confirmDeletion_1.default)(user.email);
-    return { deleted: 'your account deleted' };
+    return { deleted: 'your account has been deleted' };
 });
 exports.verifyAndDelete = verifyAndDelete;

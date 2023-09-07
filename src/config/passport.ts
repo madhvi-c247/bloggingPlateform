@@ -7,9 +7,11 @@ const ExtractJwt = passportJWT.ExtractJwt;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const opts: any = {};
-opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.jwtFromRequest = ExtractJwt.fromExtractors([
+  ExtractJwt.fromUrlQueryParameter('token'),
+  ExtractJwt.fromAuthHeaderAsBearerToken(),
+]);
 opts.secretOrKey = key;
-
 
 export default passport.use(
   new JwtStrategy(opts, async (jwt_payload, done) => {
@@ -19,7 +21,7 @@ export default passport.use(
       if (user) {
         return done(null, user);
       } else {
-        return done(null, false, { message: 'Unauthorized' });
+        return done(null, false);
       }
     } catch (error) {
       return done(error);

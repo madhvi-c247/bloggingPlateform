@@ -17,7 +17,7 @@ const createComment = async (user: any, obj: commentInterface) => {
       comment: obj.comment,
       date: obj.date,
     });
-    return created;
+    return { done: 'your comment created!!!' };
   }
 
   //
@@ -38,7 +38,7 @@ const updateComment = async function (user: any, obj: commentInterface) {
       }
     );
 
-    return update;
+    return { successful: 'your updation successfully done!!!' };
   } else {
     throw new Error('User id is not correct');
   }
@@ -53,11 +53,13 @@ const deleteComment = async (user: any, obj: commentInterface) => {
     const deletecomment = await Commentschema.findOneAndDelete({
       _id: obj.commentId,
     });
-    return deletecomment;
+    return { deleted: 'your comment deleted' };
   } else {
     throw new Error('User id is not correct');
   }
 };
+
+// get comment by Article Id :-
 
 const getComment = async (pagination: paging) => {
   let { id, page, limit } = pagination;
